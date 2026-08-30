@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortxut icon" href="/logo.png">
+    <title>使用教程</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- 主容器 -->
+    <main class="w-full max-w-2xl bg-white rounded-xl shadow-lg overflow-hidden">
+        
+        <!-- 页面标题 -->
+        <header class="bg-blue-600 text-white p-6 text-center">
+            <h1 class="text-2xl font-bold">使用教程</h1>
+            <!-- 新增：标题下方的注释 -->
+            <p class="text-blue-100 text-sm mt-2">视频中的黑屏是因为在输入密码，不准录入视频，请勿曲解！</p>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="p-6">
+            <!-- 教程版块容器 -->
+            <div class="flex flex-col md:flex-row gap-8">
+                
+                <!-- 版块一：未登录用户指南 (增加了背景色) -->
+                <section class="flex-1 flex flex-col items-center bg-blue-50 p-4 rounded-lg">
+                    <p class="text-gray-700 text-center mb-4 font-medium">未登录用户，请先注册并登录</p>
+                    <video class="w-full h-auto rounded-lg shadow-sm" autoplay loop muted playsinline>
+                        <source src="video/1.mp4" type="video/mp4">
+                        您的浏览器不支持 video 标签。
+                    </video>
+                </section>
+
+                <!-- 版块二：已登录用户指南 (增加了背景色) -->
+                <section class="flex-1 flex flex-col items-center bg-green-50 p-4 rounded-lg">
+                    <p class="text-gray-700 text-center mb-4 font-medium">已登录用户，可以发布动态或评论</p>
+                    <video class="w-full h-auto rounded-lg shadow-sm" autoplay loop muted playsinline>
+                        <source src="video/2.mp4" type="video/mp4">
+                        您的浏览器不支持 video 标签。
+                    </video>
+                </section>
+
+            </div>
+
+            <!-- 新增：使用技巧区域 -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <h2 class="text-lg font-bold text-gray-800 mb-2">难以察觉的使用技巧：</h2>
+                <ul class="list-disc list-inside text-gray-700 space-y-1">
+                    <li>双击每条动态可以查看详情；</li>
+                    <li>点击“最新”“表白区”“八卦区”也可以刷新噢~</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 底部按钮 -->
+        <footer class="px-6 pb-6">
+            <a href="login-service.php" class="block w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-center transition-colors">
+                我已学会
+            </a>
+        </footer>
+
+    </main>
+
+</body>
+</html>

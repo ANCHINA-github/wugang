@@ -1,0 +1,25 @@
+# .htaccess 文件内容
+# 1. 开启文件上传（等价于 php.ini 中的 file_uploads=On）
+php_flag file_uploads On
+
+# 2. 设置单个上传文件大小（单位：字节，示例为 20MB）
+php_value upload_max_filesize 20M
+
+# 3. 设置POST请求总大小（必须大于 upload_max_filesize，示例为 25MB）
+php_value post_max_size 25M
+
+# 4. 设置脚本最大执行时间（秒）
+php_value max_execution_time 60
+
+# 5. 设置临时上传目录（需确保该目录存在且有权限）
+php_value upload_tmp_dir "D:/xampp/tmp"
+
+# 对 .json 文件或 PHP 返回的 JSON 设置正确的 Content-Type
+<FilesMatch "\.(php|json)$">
+    Header set Content-Type application/json; charset=UTF-8
+</FilesMatch>
+
+# 允许跨域读取 JSON（如果是前后端分离场景）
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE"
+Header set Access-Control-Allow-Headers "Content-Type"
