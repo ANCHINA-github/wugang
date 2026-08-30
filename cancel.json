@@ -1,0 +1,58 @@
+[
+    {
+        "uid": "0000000001",
+        "pname": "账号已注销",
+        "portrait": "portrait-img\/c89.jpg",
+        "apply_time": "2026-07-29 07:21:27",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000001",
+        "pname": "账号已注销",
+        "portrait": "portrait-img\/c89.jpg",
+        "apply_time": "2026-07-29 07:27:06",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000001",
+        "pname": "账号已注销",
+        "portrait": "portrait-img\/c89.jpg",
+        "apply_time": "2026-07-29 07:27:26",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000001",
+        "pname": "账号已注销",
+        "portrait": "portrait-img\/c89.jpg",
+        "apply_time": "2026-07-29 07:29:53",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000002",
+        "pname": "太犹豫被人打",
+        "portrait": "portrait-img\/c21.jpg",
+        "apply_time": "2026-07-29 07:31:09",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000002",
+        "pname": "太犹豫被人打",
+        "portrait": "portrait-img\/c21.jpg",
+        "apply_time": "2026-07-29 07:33:11",
+        "status": "pending"
+    },
+    {
+        "uid": "0000000023",
+        "pname": "我的轻舟是我自己",
+        "portrait": "portrait-img\/c24.jpg",
+        "apply_time": "2026-07-29 11:45:32",
+        "status": "pending"
+    },
+    {
+        "uid": "2721096800",
+        "pname": "段游",
+        "portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
+        "apply_time": "2026-07-31 05:18:08",
+        "status": "pending"
+    }
+]

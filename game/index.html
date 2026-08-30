@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEBULA CORE — 游戏启动器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', 'Orbitron', 'Poppins', 'Rajdhani', system-ui, sans-serif;
+            background: #05070a;
+        }
+
+        /* ========= 科幻动态背景 (非移动星空，而是科技纹理 + 光晕) ========= */
+        .cyber-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(circle at 20% 30%, #0a0f1a, #020304);
+        }
+
+        /* 动态扫描网格 */
+        .grid-overlay {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* 光晕射线 */
+        .light-ray {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 40% 50%, rgba(0, 200, 255, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            animation: breathe 6s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+            100% { opacity: 0.4; transform: scale(1); }
+        }
+
+        /* 闪烁星辰粒子 (静态但带光晕，不移动，纯粹装饰) */
+        .star-glint {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px rgba(0, 255, 255, 0.8);
+            opacity: 0;
+            animation: twinkle 4s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* ========= 板块通用样式 (游戏感进阶) ========= */
+        .section {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1), visibility 1.2s;
+            backdrop-filter: blur(3px);
+        }
+
+        .section.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Logo 容器 — 科幻徽章 */
+        .logo-frame {
+            position: relative;
+            width: 320px;
+            max-width: 65vw;
+            filter: drop-shadow(0 0 20px rgba(0, 255, 255, 0.5));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .core-svg {
+            width: 100%;
+            display: block;
+        }
+
+        /* 游戏名称巨型艺术字 */
+        .game-title {
+            text-align: center;
+            transform: scale(0.98);
+            transition: transform 0.3s;
+        }
+
+        .game-name-glow {
+            font-size: clamp(2.8rem, 12vw, 5.8rem);
+            font-weight: 900;
+            font-family: 'Orbitron', 'Segoe UI', monospace;
+            background: linear-gradient(135deg, #FFFFFF, #00e0ff, #7a2eff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 0.12em;
+            text-shadow: 0 0 18px rgba(0, 200, 255, 0.6);
+            margin-bottom: 0.3em;
+            animation: titlePulse 2.5s infinite alternate;
+        }
+
+        @keyframes titlePulse {
+            0% { text-shadow: 0 0 5px cyan; opacity: 0.95; }
+            100% { text-shadow: 0 0 25px #0af, 0 0 5px white; opacity: 1; }
+        }
+
+        .game-sub {
+            font-size: clamp(0.9rem, 4vw, 1.3rem);
+            color: #aaf0ff;
+            letter-spacing: 6px;
+            font-weight: 300;
+            border-top: 1px solid rgba(0, 255, 255, 0.5);
+            display: inline-block;
+            padding-top: 12px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* 全屏提示板 — 玻璃质感 + 霓虹边框 */
+        .fullscreen-card {
+            background: rgba(8, 12, 25, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(0, 255, 255, 0.6);
+            border-radius: 42px;
+            padding: 2.2rem 3rem;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0, 200, 255, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            transition: all 0.3s;
+            width: 80%;
+            max-width: 620px;
+            margin: 0 20px;
+        }
+
+        .fullscreen-card p {
+            color: #fff;
+            font-size: clamp(1.2rem, 5vw, 1.9rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #fff, #aaf0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .fullscreen-card small {
+            display: block;
+            color: #9cdbff;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        /* 科幻按钮 */
+        .cyber-btn {
+            margin-top: 32px;
+            padding: 14px 42px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(90deg, #0a1f2e, #00a6c4);
+            border: none;
+            border-radius: 60px;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.2s;
+            box-shadow: 0 0 12px rgba(0, 230, 250, 0.5);
+            letter-spacing: 2px;
+        }
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+
+        .cyber-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 24px #0af;
+            background: linear-gradient(90deg, #0a3b4e, #00e0ff);
+        }
+
+        /* 版权 科技风 */
+        .copyright-cyber {
+            position: absolute;
+            bottom: 20px;
+            right: 25px;
+            color: rgba(150, 220, 255, 0.5);
+            font-size: 11px;
+            font-family: monospace;
+            z-index: 30;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 14px;
+            border-radius: 30px;
+            backdrop-filter: blur(4px);
+            letter-spacing: 1px;
+            pointer-events: none;
+            border-left: 2px solid cyan;
+        }
+
+        /* 响应式适配: 电脑端足够大 */
+        @media (min-width: 1200px) {
+            .logo-frame { width: 420px; }
+            .cyber-btn { padding: 18px 56px; font-size: 1.5rem; }
+            .fullscreen-card { padding: 2.8rem 4rem; max-width: 720px; }
+        }
+
+        @media (max-width: 700px) {
+            .fullscreen-card { padding: 1.5rem 1.8rem; }
+            .cyber-btn { padding: 12px 26px; font-size: 1rem; }
+            .game-name-glow { letter-spacing: 4px; }
+        }
+
+        /* 入场时的额外微动效 */
+        .section.active .logo-frame {
+            animation: logoFloat 3s ease-in-out infinite, logoReveal 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes logoReveal {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .section.active .game-title {
+            animation: titleRise 0.8s ease-out;
+        }
+
+        @keyframes titleRise {
+            from { opacity: 0; transform: translateY(40px); filter: blur(8px);}
+            to { opacity: 1; transform: translateY(0); filter: blur(0);}
+        }
+
+        .section.active .fullscreen-card {
+            animation: cardGlow 0.7s ease;
+        }
+
+        @keyframes cardGlow {
+            0% { opacity: 0; transform: scale(0.92); box-shadow: 0 0 0px cyan; }
+            100% { opacity: 1; transform: scale(1); box-shadow: 0 0 30px rgba(0,255,255,0.3); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cyber-bg">
+    <div class="grid-overlay"></div>
+    <div class="light-ray"></div>
+    <!-- 静态闪烁星尘 仅装饰，不移动 -->
+</div>
+
+<!-- 版块 1: 工作室/品牌 LOGO 科幻核心 -->
+<div id="step-logo" class="section">
+    <div class="logo-frame">
+        <svg class="core-svg" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0af" />
+                    <stop offset="100%" stop-color="#f0f" />
+                </linearGradient>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                    <feMerge>
+                        <feMergeNode in="offsetblur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+            <circle cx="100" cy="100" r="78" stroke="url(#ringGrad)" stroke-width="2.5" fill="none" stroke-dasharray="6 4" />
+            <circle cx="100" cy="100" r="62" stroke="cyan" stroke-width="1.8" fill="none" stroke-opacity="0.7" />
+            <path d="M100 35 L100 165 M35 100 L165 100" stroke="white" stroke-width="3" stroke-linecap="round" stroke-opacity="0.9"/>
+            <path d="M100 48 L120 70 L100 92 L80 70 L100 48Z" fill="white" fill-opacity="0.95">
+                <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" />
+            </path>
+            <circle cx="100" cy="100" r="12" fill="white" filter="url(#glow)">
+                <animate attributeName="r" values="10;14;10" dur="2.2s" repeatCount="indefinite" />
+            </circle>
+            <text x="100" y="180" text-anchor="middle" fill="cyan" font-size="12" font-weight="bold" letter-spacing="2">NEBULA WORKS</text>
+        </svg>
+    </div>
+</div>
+
+<!-- 版块 2: 游戏名称 超酷风格 -->
+<div id="step-name" class="section">
+    <div class="game-title">
+        <div class="game-name-glow">星 骸 纪 元</div>
+        <div class="game-sub">STELLAR RUIN · 2069</div>
+    </div>
+</div>
+
+<!-- 版块 3: 全屏引导 赛博控制台 -->
+<div id="step-fullscreen" class="section">
+    <div class="fullscreen-card">
+        <p>◆ 启 动 超 维 界 面 ◆</p>
+        <small>全屏模式释放完整沉浸感 | 建议开启</small>
+        <button class="cyber-btn" id="fullscreen-trigger">⛭ 进 入 全 屏 ⛭</button>
+    </div>
+</div>
+
+<div class="copyright-cyber">© 2077 深空矩阵 | 星骸纪元 · 即将登录</div>
+
+<script>
+    (function(){
+        // ---------------- 生成静态装饰星尘 (仅装饰，无动画位移) ----------------
+        const bgContainer = document.querySelector('.cyber-bg');
+        const STAR_COUNT = 180;
+        for(let i = 0; i < STAR_COUNT; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star-glint');
+            const size = Math.random() * 3 + 1;
+            const left = Math.random() * 100;
+            const top = Math.random() * 100;
+            const delay = Math.random() * 5;
+            const duration = Math.random() * 3 + 2;
+            star.style.cssText = `
+                position: absolute;
+                left: ${left}%;
+                top: ${top}%;
+                width: ${size}px;
+                height: ${size}px;
+                background: radial-gradient(circle, #fff, cyan);
+                border-radius: 50%;
+                opacity: ${Math.random() * 0.6 + 0.2};
+                filter: blur(0.5px);
+                animation: twinkle ${duration}s infinite alternate;
+                animation-delay: ${delay}s;
+                pointer-events: none;
+                z-index: 1;
+            `;
+            bgContainer.appendChild(star);
+        }
+
+        // 增加额外科技光晕线条
+        const glowLine = document.createElement('div');
+        glowLine.style.position = 'absolute';
+        glowLine.style.bottom = '10%';
+        glowLine.style.left = '0';
+        glowLine.style.width = '100%';
+        glowLine.style.height = '2px';
+        glowLine.style.background = 'linear-gradient(90deg, transparent, cyan, #f0f, transparent)';
+        glowLine.style.filter = 'blur(4px)';
+        glowLine.style.opacity = '0.5';
+        glowLine.style.pointerEvents = 'none';
+        bgContainer.appendChild(glowLine);
+
+        // ---------- 流程控制 (淡入淡出 + 高级过渡) ----------
+        const steps = ['step-logo', 'step-name', 'step-fullscreen'];
+        let currentIdx = 0;
+        let isTransitioning = false;
+        let redirectLock = false;
+        const TARGET_GAME = "game.html";   // 游戏实际入口
+
+        // 获取元素
+        const logoSection = document.getElementById('step-logo');
+        const nameSection = document.getElementById('step-name');
+        const fullSection = document.getElementById('step-fullscreen');
+
+        // 优雅切换下一板块 (自动淡出淡入)
+        function goToNextStep() {
+            if (isTransitioning || currentIdx >= steps.length) return;
+            const currentId = steps[currentIdx];
+            const currentEl = document.getElementById(currentId);
+
+            // 全屏板块特殊处理: 如果已经是全屏模式则跳过直接启动
+            if (currentId === 'step-fullscreen') {
+                const isFull = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+                if (isFull || window.innerWidth === screen.width && window.innerHeight === screen.height) {
+                    // 如果已全屏直接完成启动
+                    finishAndLaunch();
+                    return;
+                }
+            }
+
+            // 激活当前板块
+            currentEl.classList.add('active');
+
+            // 前两个板块：停留后淡出再下一块
+            if (currentIdx < 2) {
+                const STAY_MS = 2800;      // 展示时间2.8秒
+                const FADE_OUT_MS = 1100;   // 淡出动画时长
+
+                setTimeout(() => {
+                    // 移除active触发淡出
+                    currentEl.classList.remove('active');
+                    setTimeout(() => {
+                        // 淡出完毕，索引+1，递归下一板块
+                        currentIdx++;
+                        isTransitioning = false;
+                        goToNextStep();
+                    }, FADE_OUT_MS);
+                }, STAY_MS);
+            } 
+            // 第三板块(全屏) 不自动跳，等待用户点击全屏按钮或全屏事件
+            else {
+                // 什么也不做，等待用户交互
+                // 绑定按钮事件 (如果还没绑定)
+                const btn = document.getElementById('fullscreen-trigger');
+                if (btn && !btn._listenerAttached) {
+                    const newBtn = btn.cloneNode(true);
+                    btn.parentNode.replaceChild(newBtn, btn);
+                    newBtn._listenerAttached = true;
+                    newBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        requestFullAndProceed();
+                    });
+                }
+            }
+        }
+
+        // 全屏请求 + 跳转游戏
+        function requestFullAndProceed() {
+            if (redirectLock) return;
+            const elem = document.documentElement;
+            const requestMethod = elem.requestFullscreen || elem.webkitRequestFullScreen || elem.mozRequestFullScreen || elem.msRequestFullscreen;
+            if (requestMethod) {
+                requestMethod.call(elem).catch(err => console.warn("全屏请求失败", err));
+            }
+            // 移除全屏板块的active，淡出效果
+            if (fullSection && fullSection.classList.contains('active')) {
+                fullSection.classList.remove('active');
+            }
+            // 延迟跳转，给予全屏动画和视觉反馈
+            setTimeout(() => {
+                finishAndLaunch();
+            }, 750);
+        }
+
+        function finishAndLaunch() {
+            if (redirectLock) return;
+            redirectLock = true;
+            // 添加最终淡出所有板块的过渡，避免生硬跳转
+            for (let id of steps) {
+                const sec = document.getElementById(id);
+                if(sec) sec.style.transition = 'opacity 0.5s ease';
+                if(sec && sec.classList.contains('active')) sec.classList.remove('active');
+            }
+            setTimeout(() => {
+                window.location.href = TARGET_GAME;
+            }, 380);
+        }
+
+        // 监听全屏变化 (用户手动F11或浏览器全屏时自动完成启动)
+        function onFullscreenChangeGlobal() {
+            const isNowFull = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
+            if (isNowFull && fullSection && fullSection.classList.contains('active')) {
+                // 当前显示全屏引导且用户激活了全屏 -> 优雅完成
+                fullSection.classList.remove('active');
+                setTimeout(() => {
+                    finishAndLaunch();
+                }, 400);
+            }
+            // 额外保险：如果当前已经在全屏板块后全屏完成则启动
+            if (isNowFull && currentIdx === 2 && !redirectLock) {
+                if(fullSection) fullSection.classList.remove('active');
+                setTimeout(finishAndLaunch, 300);
+            }
+        }
+
+        document.addEventListener('fullscreenchange', onFullscreenChangeGlobal);
+        document.addEventListener('webkitfullscreenchange', onFullscreenChangeGlobal);
+        document.addEventListener('mozfullscreenchange', onFullscreenChangeGlobal);
+
+        // 初始启动 (页面加载后)
+        window.addEventListener('load', () => {
+            // 保证所有板块初始无active
+            [logoSection, nameSection, fullSection].forEach(sec => sec && sec.classList.remove('active'));
+            // 微小延迟让背景装饰稳定，然后启动流程
+            setTimeout(() => {
+                isTransitioning = false;
+                goToNextStep();
+            }, 280);
+        });
+
+        // 额外: 如果用户在logo或名称阶段意外点击（不影响流程），防止全屏按钮提前绑定错误
+        // 确保全屏按钮最终绑定健壮
+        const ensureFullscreenButton = () => {
+            const btn = document.getElementById('fullscreen-trigger');
+            if(btn && !btn._finalListener) {
+                btn._finalListener = true;
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if(redirectLock) return;
+                    requestFullAndProceed();
+                });
+            }
+        };
+        setTimeout(ensureFullscreenButton, 500);
+        
+        // 增加鼠标动态光效 提升游戏感 (非必要但炫)
+        const ray = document.querySelector('.light-ray');
+        if(ray) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth) * 100;
+                const y = (e.clientY / window.innerHeight) * 100;
+                ray.style.background = `radial-gradient(ellipse at ${x}% ${y}%, rgba(0, 230, 255, 0.2) 0%, transparent 70%)`;
+            });
+        }
+        
+        // 手动修正文本阴影
+        console.log("游戏风格启动器已激活 — 星骸纪元");
+    })();
+</script>
+</body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <!--user-scalable=no：锁住页面，不让用户缩放;viewport-fit=cover：页面全屏渲染，覆盖手机刘海 / 状态栏区域。-->
+    <link rel="shortcut icon" href="/a.svg">
+    <title>豪都</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="/repository/awesome/css/all.min.css" onerror="this.href='https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css'">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(to right,#FFBCBD,#8BEEDE );
+        }
+
+        /* 开屏页 */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10002;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, background-color 0.3s ease;
+            pointer-events: auto;
+        }
+
+        .app-logo {
+            background-image: url('/a.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 80px;
+            height: 80px;
+            background-color: #ffffff00;
+            border-radius: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: logoFadeIn 0.8s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 唯一iframe，只保留一个id：target-page 修复重复ID问题 */
+        #target-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        @keyframes logoFadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .splash-hidden {
+            display: none !important;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            #splash-screen { background-color: #121212; }
+            body,html {
+                background: #121212;
+            }
+            .app-logo {
+                background-color: #ffffff;
+            }
+            p {
+                color: #e0e0e0;
+            }
+            span {
+                color: #e0e0e0;
+            }
+            .icon {
+                color: #e0e0e0;
+            }
+        }
+
+        /* 液态玻璃底部栏 */
+        .glass-bottom-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 21pt;
+            height: 62pt;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            transform: translateY(0);
+            will-change: transform;
+            pointer-events: auto;
+        }
+
+        .glass-bottom-bar.hidden {
+            transform: translateY(130%); /* %向下移动几倍自身高度 */
+        }
+
+        .bar-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 18px;
+            padding: 0 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .capsule {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background: linear-gradient(45deg, rgba(255,255,255,0.8) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.8) 100%);
+            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px double rgba(51,51,51,0.08);
+            border-radius: 60px;
+            height: 54pt;
+            backdrop-filter: blur(2px);
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 11pt;
+            font-weight: 500;
+            color: #1c1c1e;
+            cursor: pointer;
+            z-index: 3;
+            transition: transform 0.05s linear;
+            border-radius: 40px;
+            padding: 6px 0;
+        }
+        .tab-item i { font-size: 20pt; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)); }
+        .tab-item span { font-size: 10pt; font-weight: 500; }
+        .tab-item:active { background: rgba(0,0,0,0.05); }
+        .tab-item.active { color: #000000c4; }
+
+        .slider-bg {
+            position: absolute;
+            top: 5px;
+            bottom: 5px;
+            background: rgba(80,80,90,0.16);
+            border-radius: 50px;
+            transition: left 0.28s cubic-bezier(0.2,0.9,0.4,1.2), width 0.28s cubic-bezier(0.2,0.9,0.4,1.2);
+            backdrop-filter: blur(3px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 圆形加号按钮 */
+        .search-circle {
+            width: 52pt;
+            height: 52pt;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.8) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.8) 100%);
+            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px double rgba(51,51,51,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.12s ease;
+            flex-shrink: 0;
+            backdrop-filter: blur(2px);
+        }
+        .search-circle:active {
+            transform: scale(0.94);
+        }
+        .search-circle i {
+            font-size: 28pt;
+            color: #e0e0e0;
+            filter: drop-shadow(0 1px 1px rgba(255,255,255,0.6));
+        }
+
+        @media (max-width: 520px) {
+            .glass-bottom-bar { bottom: 18pt; }
+            .capsule { height: 50pt; }
+            .tab-item i { font-size: 18pt; }
+            .tab-item span { font-size: 9pt; }
+            .search-circle { width: 48pt; height: 48pt; }
+            .search-circle i { font-size: 26pt; }
+        }
+        @media (max-width: 420px) {
+            .capsule { height: 46pt; }
+            .tab-item i { font-size: 16pt; }
+            .tab-item span { font-size: 8.5pt; }
+            .search-circle { width: 44pt; height: 44pt; }
+            .search-circle i { font-size: 24pt; }
+        }
+    </style>
+    <script>
+        // 时间戳函数：用于静态资源缓存刷新
+        function getVer() {
+            return Date.now();
+        }
+
+        // 核心函数：切换iframe页面，仅内部刷新，父页面不跳转
+        function switchFramePage(url) {
+            const frame = document.getElementById('target-page');
+            frame.src = url + "?v=" + getVer();
+        }
+    </script>
+</head>
+<body>
+    <div id="splash-screen">
+        <div class="app-logo"></div>
+        <p style="font-size: small;">初次加载需要一些时间，稍候...</p>
+    </div>
+
+    <!-- 只保留唯一 id="target-page"，删除重复ID -->
+    <iframe id="target-page" src="core.php" frameborder="0"></iframe>
+
+    <!-- 底部导航栏：全部改为调用 switchFramePage，只切换iframe，不整页跳转 -->
+    <div class="glass-bottom-bar" id="bottomBar">
+        <div class="bar-container">
+            <div class="capsule" id="capsuleContainer">
+                <div class="slider-bg" id="sliderBg"></div>
+   
+                <div class="tab-item" data-tab="circle" onclick="switchFramePage('core.php')">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <span>首页</span>
+                </div>
+                <!-- 我的 -->
+                <div class="tab-item" data-tab="profile" onclick="switchFramePage('profile.php')">
+                    <div class="icon"><i class="fas fa-user"></i></div>
+                    <span>我的</span>
+                </div>
+            </div>
+            <div class="search-circle" id="searchCircle">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+    </div>
+
+<script>
+(function() {
+    const splash = document.getElementById('splash-screen');
+    const targetPage = document.getElementById('target-page');
+    const minDisplayTime = 800;
+    const startTime = Date.now();
+    let bottomBarInitialized = false;
+
+    function initBottomBarAndScroll() {
+        if (bottomBarInitialized) return;
+        bottomBarInitialized = true;
+
+        const capsule = document.getElementById('capsuleContainer');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const sliderBg = document.getElementById('sliderBg');
+        const searchCircle = document.getElementById('searchCircle');
+        const bottomBar = document.getElementById('bottomBar');
+
+        if (!capsule || !sliderBg || tabItems.length === 0) return;
+
+        let activeIndex = 0;
+        function setActiveTab(index, fromClick = false) {
+            if (index === activeIndex && fromClick) {
+                const current = tabItems[activeIndex];
+                if (current) {
+                    current.style.transform = 'scale(0.97)';
+                    setTimeout(() => { if (current) current.style.transform = ''; }, 100);
+                }
+                return;
+            }
+            activeIndex = index;
+            tabItems.forEach(item => item.classList.remove('active'));
+            tabItems[activeIndex].classList.add('active');
+            updateSliderPosition();
+            if (fromClick) {
+                const clicked = tabItems[activeIndex];
+                if (clicked) {
+                    clicked.style.background = 'rgba(0, 0, 0, 0.05)';
+                    setTimeout(() => { if (clicked) clicked.style.background = ''; }, 120);
+                }
+            }
+        }
+
+        function updateSliderPosition() {
+            if (!capsule || !sliderBg || !tabItems[activeIndex]) return;
+            const activeItem = tabItems[activeIndex];
+            const capsuleRect = capsule.getBoundingClientRect();
+            const itemRect = activeItem.getBoundingClientRect();
+            let leftOffset = itemRect.left - capsuleRect.left;
+            let itemWidth = itemRect.width;
+            const pad = 3;
+            sliderBg.style.left = (leftOffset + pad) + 'px';
+            sliderBg.style.width = (itemWidth - pad * 2) + 'px';
+        }
+
+        tabItems.forEach((item, idx) => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setActiveTab(idx, true);
+            });
+        });
+
+        // 加号按钮逻辑
+        if (searchCircle) {
+            searchCircle.addEventListener('click', () => {
+                const icon = searchCircle.querySelector('i');
+                if (icon) {
+                    icon.style.transform = 'scale(0.9)';
+                    setTimeout(() => { if (icon) icon.style.transform = ''; }, 120);
+                }
+                const iframe = document.getElementById('target-page');
+                if (iframe && iframe.contentWindow) {
+                    try {
+                        iframe.contentWindow.callPublishModal();
+                    } catch (e) {
+                        console.warn('调用内部发帖弹窗失败');
+                    }
+                }
+            });
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateSliderPosition, 100);
+        });
+        const resizeObserver = new ResizeObserver(updateSliderPosition);
+        resizeObserver.observe(capsule);
+        setActiveTab(0);
+
+        // iframe滚动控制 隐藏/显示底部栏
+        if (targetPage && bottomBar) {
+            let isHidden = false;
+            let lastScrollTop = 0;
+            let ticking = false;
+
+            function setBarVisible(visible) {
+                if (!bottomBar) return;
+                if (!visible && !isHidden) {
+                    bottomBar.classList.add('hidden');
+                    isHidden = true;
+                } else if (visible && isHidden) {
+                    bottomBar.classList.remove('hidden');
+                    isHidden = false;
+                }
+            }
+            function forceShowBar() {
+                if (bottomBar && isHidden) {
+                    bottomBar.classList.remove('hidden');
+                    isHidden = false;
+                }
+            }
+
+            function attachIframeScroll() {
+                try {
+                    const iframeDoc = targetPage.contentDocument || targetPage.contentWindow.document;
+                    if (!iframeDoc) return false;
+                    const iframeWin = targetPage.contentWindow;
+                    if (!iframeWin) return false;
+
+                    const style = iframeDoc.createElement('style');
+                    style.textContent = `body { padding-bottom: 85pt !important; margin: 0; min-height: 100%; }`;
+                    iframeDoc.head.appendChild(style);
+
+                    function onScroll() {
+                        const currentScroll = iframeWin.pageYOffset || iframeDoc.documentElement.scrollTop || iframeDoc.body.scrollTop || 0;
+                        if (currentScroll <= 0) {
+                            forceShowBar();
+                            lastScrollTop = currentScroll;
+                            return;
+                        }
+                        const delta = currentScroll - lastScrollTop;
+                        if (delta > 8 && !isHidden) setBarVisible(false);
+                        else if (delta < -5 && isHidden) setBarVisible(true);
+                        lastScrollTop = currentScroll;
+                    }
+
+                    iframeWin.addEventListener('scroll', () => {
+                        if (ticking) return;
+                        requestAnimationFrame(() => { onScroll(); ticking = false; });
+                        ticking = true;
+                    });
+                    iframeWin.addEventListener('scrollend', () => {
+                        const top = iframeWin.pageYOffset || iframeDoc.documentElement.scrollTop || 0;
+                        if (top <= 2) forceShowBar();
+                        updateSliderPosition();
+                    });
+                    forceShowBar();
+                    lastScrollTop = iframeWin.pageYOffset || 0;
+                    return true;
+                } catch(e) {
+                    console.warn("iframe滚动监听受限");
+                    return false;
+                }
+            }
+
+            if (targetPage.contentDocument && targetPage.contentDocument.readyState === 'complete') {
+                attachIframeScroll();
+            } else {
+                targetPage.addEventListener('load', () => setTimeout(attachIframeScroll, 100));
+            }
+        }
+    }
+
+    targetPage.onload = function() {
+        const elapsed = Date.now() - startTime;
+        const waitTime = Math.max(0, minDisplayTime - elapsed);
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            targetPage.style.opacity = '1';
+            setTimeout(() => {
+                splash.classList.add('splash-hidden');
+                initBottomBarAndScroll();
+            }, 500);
+        }, waitTime);
+    };
+
+    setTimeout(() => {
+        if (!splash.classList.contains('splash-hidden')) {
+            splash.style.opacity = '0';
+            targetPage.style.opacity = '1';
+            setTimeout(() => {
+                splash.classList.add('splash-hidden');
+                initBottomBarAndScroll();
+            }, 500);
+        }
+    }, 3000);
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const publishBtn = document.getElementById('publishPostBtn');
+    if (publishBtn) {
+        publishBtn.onclick = function(){
+            switchFramePage('core.php');
+            const iframe = document.getElementById('target-page');
+            if (iframe && iframe.contentWindow) {
+                setTimeout(() => {
+                    iframe.contentWindow.location.hash = 'anchina1';
+                }, 300);
+            }
+        };
+    }
+});
+</script>
+</body>
+</html>

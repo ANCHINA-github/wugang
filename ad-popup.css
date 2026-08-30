@@ -1,0 +1,73 @@
+.ad-popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        display: none;
+        animation: fadeIn 0.25s ease;
+    }
+
+    /* ===== 弹窗容器：白色背景、圆角、阴影 ===== */
+    .ad-popup-content {
+        position: relative;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 20px 20px 18px;
+        max-width: 90%;
+        max-height: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        box-sizing: border-box;
+        z-index: 10001;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    /* ===== 广告图片：自适应宽度，点击区域 ===== */
+    .ad-popup-image {
+        display: block;
+        max-width: 100%;
+        max-height: 60vh;
+        height: auto;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-bottom: 14px;
+    }
+
+    /* ===== 关闭按钮：正下方中央，纯色按钮 ===== */
+    .ad-popup-close {
+        position: static;
+        display: inline-block;
+        padding: 8px 36px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #ffffff;
+        background: #e74c3c;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        user-select: none;
+        line-height: 1.5;
+    }
+    .ad-popup-close:hover {
+        background: #c0392b;
+    }
+
+    /* ===== 淡入动画（保留基础效果） ===== */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }

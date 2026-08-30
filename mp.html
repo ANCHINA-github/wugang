@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="shortcut icon" href="./logo.png" type="image/x-icon">
-    <title>安的小屋 | 寻找小屋好友</title>
+    <title>武冈 | 实时好友档案</title>
     <style>
         /* 重置默认样式 */
         * {
@@ -22,25 +22,28 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-                width: 100%;
-    overflow-x: hidden;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         body > video {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    object-fit: cover;
-    filter: brightness(0.6);
-}
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
 
-        /* 导航栏样式 */
+        /* ===== 导航栏 - 玻璃效果 ===== */
         .navbar {
-            background-color: #ffffffbe;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background-color: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding: 12px 16px;
             display: flex;
             align-items: center;
@@ -54,27 +57,75 @@
             font-size: 18px;
             font-weight: 600;
             color: #2c3e50;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .refresh-btn {
+            background-color: rgba(52, 152, 219, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .refresh-btn:hover {
+            background-color: rgba(41, 128, 185, 0.9);
+            transform: scale(1.02);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.96);
+        }
+
+        .refresh-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
         }
 
         .back-btn {
-            background-color: #3498db;
+            background-color: rgba(52, 152, 219, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             color: #fff;
             border: none;
-            border-radius: 6px;
-            padding: 8px 16px;
+            border-radius: 30px;
+            padding: 8px 20px;
             font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, transform 0.2s;
             display: flex;
             align-items: center;
             gap: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .back-btn:hover {
-            background-color: #2980b9;
+            background-color: rgba(41, 128, 185, 0.9);
+            transform: scale(1.02);
         }
 
-        /* 高级搜索框高级样式 */
+        /* ===== 搜索框区域 ===== */
         .search-container {
             max-width: 1200px;
             margin: 16px auto 0;
@@ -85,22 +136,30 @@
             position: relative;
             width: 100%;
             max-width: 600px;
-            margin: 0 auto; /* 居中显示 */
+            margin: 0 auto;
         }
 
         .search-input {
             width: 100%;
-            padding: 14px 20px 14px 50px; /* 左侧留空间放图标 */
-            border: 2px solid #e0e0e0;
-            border-radius: 30px; /* 圆角更圆润 */
+            padding: 14px 20px 14px 50px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 40px;
             font-size: 15px;
             outline: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #ffffffbb;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
+            font-weight: 500;
         }
 
-        /* 搜索图标样式 */
+        .search-input::placeholder {
+            color: rgba(44, 62, 80, 0.7);
+            font-weight: 400;
+        }
+
         .search-icon {
             position: absolute;
             left: 18px;
@@ -108,24 +167,30 @@
             transform: translateY(-50%);
             width: 20px;
             height: 20px;
-            color: #999;
+            color: rgba(44, 62, 80, 0.8);
             transition: all 0.3s ease;
         }
 
-        /* 清除按钮样式 */
         .clear-btn {
             position: absolute;
             right: 18px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
+            background: rgba(255,255,255,0.3);
             border: none;
-            color: #999;
+            color: #2c3e50;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 22px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
 
         .clear-btn.visible {
@@ -133,30 +198,67 @@
             visibility: visible;
         }
 
-        /* 聚焦状态效果 */
+        .clear-btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
         .search-input:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
-            transform: translateY(-2px); /* 轻微上浮 */
+            border-color: rgba(52, 152, 219, 0.8);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2), 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
-        .search-input:focus + .search-icon {
-            color: #3498db;
-            transform: translateY(-50%) scale(1.1); /* 图标变色并放大 */
+        /* 更新信息条 */
+        .update-info {
+            max-width: 1200px;
+            margin: 12px auto 0;
+            padding: 0 16px;
+            text-align: right;
+            font-size: 12px;
+            color: rgba(44, 62, 80, 0.75);
+            text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        /* 悬浮状态效果 */
-        .search-wrapper:hover .search-input:not(:focus) {
-            border-color: #b0c4de;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        .last-update-time {
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(8px);
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-block;
         }
 
-        /* 输入内容时的动画 */
-        .search-input:not(:placeholder-shown) {
-            border-color: #d0e1f9;
+        .auto-refresh-badge {
+            background: rgba(52, 152, 219, 0.3);
+            backdrop-filter: blur(8px);
+            padding: 4px 12px;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        /* 名片容器样式 */
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 4px #2ecc71;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(0.8);}
+            100% { opacity: 1; transform: scale(1.2);}
+        }
+
+        /* 名片容器 */
         .card-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -167,30 +269,36 @@
             flex: 1;
         }
 
-        /* 名片核心样式 - 调整为横向布局 */
+        /* 名片卡片 - 玻璃效果 */
         .user-card {
-            background-color: #ffffffa1;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
             padding: 16px;
-            transition: transform 0.3s ease;
-            display: flex; /* 使用flex布局 */
-            align-items: center; /* 垂直居中对齐 */
-            gap: 16px; /* 头像和信息区域的间距 */
+            transition: transform 0.3s ease, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .user-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
         }
 
-        /* 头像样式 - 固定在左侧 */
         .portrait-wrapper {
             width: 60px;
             height: 60px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid #eee;
-            flex-shrink: 0; /* 防止头像在空间不足时被压缩 */
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         .portrait-img {
@@ -201,276 +309,424 @@
         }
 
         .portrait-img[src=""] {
-            background-color: #e0e0e0;
+            background-color: rgba(224, 224, 224, 0.5);
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: center;
+            background-size: 60%;
         }
 
-        /* 用户信息样式 - 位于头像右侧 */
         .user-info {
-            flex-grow: 1; /* 占据剩余所有空间 */
-            text-align: left; /* 文字左对齐 */
+            flex-grow: 1;
+            text-align: left;
         }
 
         .user-name {
             font-size: 18px;
             font-weight: 600;
-            color: #333;
+            color: #2c3e50;
             margin-bottom: 4px;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.3);
         }
 
         .user-detail {
             font-size: 13px;
-            color: #666;
+            color: #34495e;
             margin-bottom: 2px;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.2);
         }
 
-        /* 加载/错误/无结果提示 */
         .status提示 {
             text-align: center;
             font-size: 15px;
-            color: #666;
+            color: #2c3e50;
             padding: 40px 0;
             width: 100%;
-            grid-column: 1 / -1; /* 确保提示信息横跨所有列 */
+            grid-column: 1 / -1;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.3);
         }
 
-        /* 页脚样式 */
         .footer {
-            background-color: #ffffffb0;
+            background-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             padding: 16px;
             text-align: center;
             font-size: 13px;
-            color: #999;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            color: #2c3e50;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
             margin-top: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        /* 媒体查询：小屏手机 */
+        /* 深色模式 */
+        @media (prefers-color-scheme: dark) {
+            body > video { filter: brightness(0.4); }
+            .navbar { background-color: rgba(20, 20, 30, 0.35); border-bottom: 1px solid rgba(255, 255, 255, 0.15); }
+            .logo { color: #ecf0f1; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+            .refresh-btn, .back-btn { background-color: rgba(52, 152, 219, 0.6); border: 1px solid rgba(255,255,255,0.2); }
+            .refresh-btn:hover, .back-btn:hover { background-color: rgba(52, 152, 219, 0.8); }
+            .search-input { background-color: rgba(0, 0, 0, 0.3); border: 2px solid rgba(255, 255, 255, 0.2); color: #f0f0f0; }
+            .search-input::placeholder { color: rgba(220, 220, 220, 0.7); }
+            .search-icon { color: rgba(255, 255, 255, 0.8); }
+            .clear-btn { background: rgba(50, 50, 70, 0.6); color: #fff; }
+            .clear-btn:hover { background: rgba(70, 70, 90, 0.8); }
+            .search-input:focus { border-color: rgba(52, 152, 219, 0.8); background-color: rgba(0, 0, 0, 0.4); }
+            .user-card { background-color: rgba(20, 20, 30, 0.35); border: 1px solid rgba(255, 255, 255, 0.15); }
+            .user-card:hover { background-color: rgba(30, 30, 40, 0.5); border-color: rgba(255, 255, 255, 0.25); }
+            .user-name { color: #ecf0f1; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+            .user-detail { color: #b0bec5; text-shadow: none; }
+            .portrait-wrapper { border-color: rgba(255, 255, 255, 0.3); }
+            .status提示 { color: #ecf0f1; text-shadow: 0 1px 3px rgba(0,0,0,0.5); }
+            .footer { background-color: rgba(20, 20, 30, 0.35); color: #b0bec5; border-top: 1px solid rgba(255, 255, 255, 0.15); }
+            .update-info { color: rgba(220, 220, 240, 0.8); }
+            .last-update-time, .auto-refresh-badge { background: rgba(0,0,0,0.4); }
+        }
+
         @media (max-width: 480px) {
-            .navbar {
-                padding: 10px 12px;
-            }
-
-            .logo {
-                font-size: 16px;
-            }
-
-            .back-btn {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
-
-            .search-input {
-                padding: 12px 18px 12px 45px;
-                font-size: 14px;
-            }
-
-            .search-icon {
-                width: 18px;
-                height: 18px;
-                left: 16px;
-            }
-            
-            .card-container {
-                grid-template-columns: 1fr; /* 手机上每行只显示一张卡片 */
-            }
-
-            .user-card {
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .portrait-wrapper {
-                width: 50px;
-                height: 50px;
-            }
-
-            .user-name {
-                font-size: 16px;
-            }
-
-            .user-detail {
-                font-size: 12px;
-            }
-        }
-
-        /* 媒体查询：大屏PC */
-        @media (min-width: 1200px) {
-            .search-container, .card-container {
-                padding: 0 20px;
-            }
+            .navbar { padding: 10px 12px; }
+            .logo { font-size: 16px; }
+            .back-btn { padding: 6px 16px; font-size: 13px; }
+            .refresh-btn { width: 32px; height: 32px; }
+            .search-input { padding: 12px 18px 12px 45px; font-size: 14px; }
+            .card-container { grid-template-columns: 1fr; }
+            .user-card { padding: 12px; gap: 12px; }
+            .portrait-wrapper { width: 50px; height: 50px; }
+            .user-name { font-size: 16px; }
+            .user-detail { font-size: 12px; }
+            .update-info { font-size: 10px; justify-content: space-between; }
         }
     </style>
+        <script>
+        // 获取版本时间戳的函数
+function getVer() {
+    return Date.now();
+}
+    </script>
 </head>
 <body>
-        <video autoplay loop muted playsinline>
+    <video autoplay loop muted playsinline>
         <source src="background.mp4" type="video/mp4">
         您的浏览器不支持视频播放，请升级浏览器。
     </video>
     
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="logo">
-            <img src="/a.svg" alt="logo" style="height:24px; vertical-align: middle; margin-right:8px;">
+            <img src="/a.svg" alt="logo" style="height:24px; vertical-align: middle; filter: brightness(0.9);">
+            <span>安的小屋</span>
         </div>
-        <button class="back-btn" id="backBtn">
-            返回
-        </button>
+        <div class="navbar-actions">
+            <button class="refresh-btn" title="刷新" onclick="location.href='mp.html?v=' + Date.now()">
+                <svg class="refresh-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                </svg>
+            </button>
+            <button class="back-btn" id="backBtn">返回</button>
+        </div>
     </nav>
 
-    <!-- 搜索框区域（带高级样式） -->
     <div class="search-container">
         <div class="search-wrapper">
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="search-input"
-                placeholder="搜索ID/昵称（支持模糊匹配）..."
-            >
-            <!-- 搜索图标 -->
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索昵称（实时模糊匹配）...">
             <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
             </svg>
-            <!-- 清除按钮 -->
             <button class="clear-btn" id="clearBtn">×</button>
         </div>
     </div>
 
-    <!-- 名片容器 -->
-    <div class="card-container" id="cardContainer">
-        <!-- 加载提示 -->
-        <div class="status提示" id="status提示">正在加载用户数据...</div>
+    <!-- 实时状态栏 -->
+    <div class="update-info">
+        <div class="auto-refresh-badge">
+            <span class="live-dot"></span>
+            <span>自动刷新 30s</span>
+        </div>
+        <div class="last-update-time" id="lastUpdateLabel">上次更新: --:--:--</div>
     </div>
 
-    <!-- 页脚 -->
+    <div class="card-container" id="cardContainer">
+        <div class="status提示" id="status提示">正在加载好友数据...</div>
+    </div>
+
     <footer class="footer">
-       安的小屋 | 2026
+        安的小屋 | 实时档案 · 心之所向
     </footer>
 
-    <script>
-        // 获取DOM元素
-        const cardContainer = document.getElementById('cardContainer');
-        const status提示 = document.getElementById('status提示');
-        const backBtn = document.getElementById('backBtn');
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearBtn');
-        
-        // 保存原始用户列表，用于搜索过滤
-        let originalUserList = [];
+<script>
+    // DOM 元素
+    const cardContainer = document.getElementById('cardContainer');
+    const status提示Div = document.getElementById('status提示');
+    const backBtn = document.getElementById('backBtn');
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearBtn');
+    const lastUpdateLabel = document.getElementById('lastUpdateLabel');
 
-        // 返回按钮点击事件
-        backBtn.addEventListener('click', () => {
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                alert('暂无上一页可返回');
-            }
+    // ---------- 核心数据 ----------
+    let originalUserList = [];          // 打乱后的列表（用于渲染/搜索）
+    let rawDataList = [];               // 原始未打乱的数据（保存服务端最新原始顺序，用于对比变化）
+    let lastDataSignature = '';         // 上一次数据签名 (基于原始数据稳定排序后的JSON)
+    let currentKeyword = '';            // 当前搜索词
+    let pollingTimer = null;             // 轮询定时器
+    let isRefreshing = false;            // 防止并发刷新
+
+    // 工具函数: 打乱数组 (Fisher-Yates)
+    function shuffleArray(arr) {
+        const array = [...arr];
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    // 生成数据签名: 将原始用户数组按照稳定规则排序后转为JSON字符串，用于比对数据是否真有变化
+    function generateDataSignature(userArray) {
+        if (!Array.isArray(userArray) || userArray.length === 0) return 'empty';
+        // 深拷贝并排序: 按 pname + gender + portrait 排序，确保顺序无关性，只比对内容
+        const sortedCopy = [...userArray].sort((a, b) => {
+            const keyA = `${a.pname || ''}|${a.gender || ''}|${a.portrait || ''}`;
+            const keyB = `${b.pname || ''}|${b.gender || ''}|${b.portrait || ''}`;
+            return keyA.localeCompare(keyB);
         });
+        return JSON.stringify(sortedCopy);
+    }
 
-        // 清除按钮点击事件
+    // 渲染名片 (不改变全局数据，仅根据传入列表展示)
+    function renderCards(userList) {
+        if (!cardContainer) return;
+        cardContainer.innerHTML = '';
+
+        if (!Array.isArray(userList) || userList.length === 0) {
+            cardContainer.innerHTML = '<div class="status提示">✨ 没有找到匹配的好友，试试其他昵称吧~</div>';
+            return;
+        }
+
+        userList.forEach(user => {
+            const { pname, gender, portrait } = user;
+            const card = document.createElement('div');
+            card.className = 'user-card';
+            card.innerHTML = `
+                <div class="portrait-wrapper">
+                    <img class="portrait-img" src="${portrait || ''}" alt="${pname || '用户头像'}">
+                </div>
+                <div class="user-info">
+                    <div class="user-name">${escapeHtml(pname) || '无名用户'}</div>
+                    <div class="user-detail">${gender ? '⚥ ' + escapeHtml(gender) : '🌈 神秘性别'}</div>
+                </div>
+            `;
+            cardContainer.appendChild(card);
+        });
+    }
+
+    // 简单防XSS
+    function escapeHtml(str) {
+        if (!str) return str;
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+            return c;
+        });
+    }
+
+    // 应用搜索过滤 (基于全局 originalUserList 和 currentKeyword)
+    function applyFilter() {
+        if (!currentKeyword.trim()) {
+            renderCards(originalUserList);
+            return;
+        }
+        const lowerKeyword = currentKeyword.toLowerCase().trim();
+        const filtered = originalUserList.filter(user => {
+            const pname = (user.pname || '').toLowerCase();
+            return pname.includes(lowerKeyword);
+        });
+        renderCards(filtered);
+    }
+
+    // 更新全局数据: 传入新原始数据，决定是否需要刷新展示
+    function updateDataAndRender(newRawData, updateTimestamp = true) {
+        if (!newRawData || !Array.isArray(newRawData)) return false;
+        
+        // 生成新签名
+        const newSignature = generateDataSignature(newRawData);
+        const hasChanged = (newSignature !== lastDataSignature);
+        
+        if (hasChanged) {
+            // 数据内容有变化 -> 重新打乱并保存
+            rawDataList = [...newRawData];
+            originalUserList = shuffleArray(newRawData);
+            lastDataSignature = newSignature;
+            // 重新应用搜索词过滤渲染
+            applyFilter();
+            if (updateTimestamp) {
+                updateTimeLabel();
+            }
+            return true;
+        } else {
+            // 数据无变化，但不影响显示，如果当前展示为空但数据非空? 避免状态异常
+            if (originalUserList.length === 0 && newRawData.length > 0) {
+                // 极端情况: 原本无数据现在有数据 (重新初始化)
+                rawDataList = [...newRawData];
+                originalUserList = shuffleArray(newRawData);
+                applyFilter();
+                if (updateTimestamp) updateTimeLabel();
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // 更新时间戳
+    function updateTimeLabel() {
+        if (lastUpdateLabel) {
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+            lastUpdateLabel.innerText = `上次更新: ${timeStr}`;
+        }
+    }
+
+    // 从服务器拉取最新数据 (核心fetch)
+    async function fetchLatestData(showLoadingEffect = false) {
+        if (isRefreshing) return null;
+        isRefreshing = true;
+        
+        // 可选加载提示（但避免闪烁，仅当手动刷新时短暂显示状态）
+        if (showLoadingEffect) {
+            const originalHtml = cardContainer.innerHTML;
+            if (!cardContainer.querySelector('.status提示') && originalUserList.length === 0) {
+                cardContainer.innerHTML = '<div class="status提示">🔄 正在同步最新数据...</div>';
+            }
+        }
+        
+        try {
+            // 加上时间戳参数避免缓存
+            const url = `./root.json?t=${Date.now()}`;
+            const response = await fetch(url, {
+                cache: 'no-cache',
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            const freshData = await response.json();
+            if (!Array.isArray(freshData)) {
+                throw new Error('数据格式异常：期望数组');
+            }
+            
+            // 更新数据并刷新视图
+            const changed = updateDataAndRender(freshData, true);
+            // 无变化时也更新时间标签(表示已检查过)
+            if (!changed) {
+                updateTimeLabel();
+            }
+            return freshData;
+        } catch (error) {
+            console.error('实时更新失败:', error);
+            if (showLoadingEffect && originalUserList.length === 0) {
+                cardContainer.innerHTML = `<div class="status提示" style="color: #e53935;">⚠️ 加载失败: ${error.message}<br>点击刷新重试</div>`;
+            } else if (originalUserList.length === 0) {
+                cardContainer.innerHTML = `<div class="status提示" style="color: #e53935;">无法连接数据源，稍后将重试</div>`;
+            }
+            return null;
+        } finally {
+            isRefreshing = false;
+        }
+    }
+
+    // 手动刷新：强制拉取并应用最新数据 (不清除搜索词)
+    async function manualRefresh() {
+        if (isRefreshing) {
+            // 轻提示风格（不打扰）
+            if (lastUpdateLabel) lastUpdateLabel.style.opacity = '0.6';
+            setTimeout(() => { if(lastUpdateLabel) lastUpdateLabel.style.opacity = '1'; }, 500);
+            return;
+        }
+        // 手动刷新时显示旋转反馈（改变刷新图标简单动画）
+        const refreshIcon = document.querySelector('.refresh-icon');
+        if (refreshIcon) {
+            refreshIcon.style.transform = 'rotate(360deg)';
+            refreshIcon.style.transition = 'transform 0.5s ease';
+            setTimeout(() => { if(refreshIcon) refreshIcon.style.transform = ''; }, 500);
+        }
+        await fetchLatestData(true);
+        // 确保搜索框关键词重新生效
+        applyFilter();
+    }
+
+    // 轮询刷新 (自动)
+    async function autoRefresh() {
+        if (!document.hidden) {  // 页面可见时刷新，节省资源
+            await fetchLatestData(false);
+            // 重新保证搜索过滤
+            applyFilter();
+        }
+    }
+
+    // 启动轮询 (30秒)
+    function startPolling() {
+        if (pollingTimer) clearInterval(pollingTimer);
+        pollingTimer = setInterval(() => {
+            autoRefresh();
+        }, 30000); // 30秒实时拉取最新账户数据
+    }
+
+    function stopPolling() {
+        if (pollingTimer) {
+            clearInterval(pollingTimer);
+            pollingTimer = null;
+        }
+    }
+
+    // 监听页面可见性变化，优化性能（隐藏时减少不必要的刷新，但保留定时器，实际不请求）
+    function handleVisibilityChange() {
+        if (document.hidden) {
+            // 页面隐藏时, 不做额外操作，但定时器还在但是请求会跳过visible检测
+        } else {
+            // 页面重新可见时，立即刷新一次获取最新数据
+            autoRefresh();
+        }
+    }
+
+    // 初始化 & 加载数据
+    async function init() {
+        startPolling();
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        // 首次加载数据
+        const firstData = await fetchLatestData(true);
+        if (firstData && firstData.length) {
+            // 已经通过 updateDataAndRender 渲染完成
+        }
+        // 同步搜索框事件
+        searchInput.addEventListener('input', (e) => {
+            currentKeyword = e.target.value;
+            clearBtn.classList.toggle('visible', currentKeyword.length > 0);
+            applyFilter();
+        });
         clearBtn.addEventListener('click', () => {
             searchInput.value = '';
+            currentKeyword = '';
             clearBtn.classList.remove('visible');
-            searchCards('');
-            // 触发输入框动画重置
+            applyFilter();
             searchInput.focus();
-            setTimeout(() => searchInput.blur(), 100);
+            setTimeout(() => searchInput.blur(), 80);
         });
-
-        // 监听搜索框输入，控制清除按钮显示/隐藏
-        searchInput.addEventListener('input', (e) => {
-            const value = e.target.value.trim();
-            if (value) {
-                clearBtn.classList.add('visible');
-            } else {
-                clearBtn.classList.remove('visible');
-            }
-            searchCards(value);
+        backBtn.addEventListener('click', () => {
+            if (window.history.length > 1) window.history.back();
+            else alert('暂无上一页可返回');
         });
+        // 初始清除按钮状态
+        if (searchInput.value.trim() !== '') clearBtn.classList.add('visible');
+        else clearBtn.classList.remove('visible');
+    }
 
-        /**
-         * 渲染名片列表
-         * @param {Array} userList - 要渲染的用户列表
-         */
-        function renderCards(userList) {
-            // 清空容器
-            cardContainer.innerHTML = '';
+    // 优雅退出时清除定时器
+    window.addEventListener('beforeunload', () => {
+        stopPolling();
+    });
 
-            // 无匹配数据时显示提示
-            if (!Array.isArray(userList) || userList.length === 0) {
-                cardContainer.innerHTML = '<div class="status提示">未找到匹配的用户数据</div>';
-                return;
-            }
-
-            // 循环渲染每个用户的名片
-            userList.forEach(user => {
-                const { pname, id, gender, portrait } = user;
-
-                const card = document.createElement('div');
-                card.className = 'user-card';
-
-                card.innerHTML = `
-                    <div class="portrait-wrapper">
-                        <img class="portrait-img" src="${portrait || ''}" alt="${pname || '用户头像'}">
-                    </div>
-                    <div class="user-info">
-                        <div class="user-name">${pname || '未知用户名'}</div>
-                        <div class="user-detail">ID：${id || '未知ID'}</div>
-                        <div class="user-detail">性别：${gender || '未知性别'}</div>
-                    </div>
-                `;
-
-                cardContainer.appendChild(card);
-            });
-        }
-
-        /**
-         * 搜索过滤函数
-         * @param {String} keyword - 搜索关键词
-         */
-        function searchCards(keyword) {
-            // 无关键词时显示全部
-            if (!keyword.trim()) {
-                renderCards(originalUserList);
-                return;
-            }
-
-            // 不区分大小写模糊匹配ID或昵称
-            const lowerKeyword = keyword.toLowerCase().trim();
-            const filteredList = originalUserList.filter(user => {
-                const pname = (user.pname || '').toLowerCase();
-                const id = (user.id || '').toLowerCase();
-                return pname.includes(lowerKeyword) || id.includes(lowerKeyword);
-            });
-
-            renderCards(filteredList);
-        }
-
-        // 读取并渲染JSON数据
-        async function loadUserData() {
-            try {
-                const response = await fetch('./root.json');
-                
-                if (!response.ok) {
-                    throw new Error(`请求失败：${response.status} ${response.statusText}`);
-                }
-
-                originalUserList = await response.json();
-                
-                // 初始渲染全部数据
-                renderCards(originalUserList);
-
-            } catch (error) {
-                // 显示加载错误
-                cardContainer.innerHTML = `<div class="status提示" style="color: #e53935;">加载失败：${error.message}</div>`;
-                console.error('加载用户数据出错：', error);
-            }
-        }
-
-        // 页面加载完成后执行
-        window.addEventListener('DOMContentLoaded', loadUserData);
-    </script>
+    init();
+</script>
 </body>
 </html>

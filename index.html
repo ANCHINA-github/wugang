@@ -2,594 +2,495 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <!--仅对当前HTML有效，对页面里的CSS/JS/图片无效-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <!--user-scalable=no：锁住页面，不让用户缩放;viewport-fit=cover：页面全屏渲染，覆盖手机刘海 / 状态栏区域。-->
+    <meta name="description" content="武冈学生个人圈">
+    <meta name="keywords" content="个人博客、武冈、规范交流">
+    <meta name="author" content="段游孤独一生">
+    <meta property="og:url" content="http://an.kijk.top/">
+    <meta property="og:title" content="武冈 | 学生个人圈">
+    <meta property="og:description" content="武冈学生个人圈，分享和交流。">
+    <meta property="og:image" content="http://an.kijk.top/a.svg">
+    <meta property="og:image:alt" content="武冈 | 网站封面图">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="武冈">
+    <meta name="wechat:share:image" content="http://an.kijk.top/a.svg">
     <link rel="shortcut icon" href="/a.svg">
-    <title>安的小屋 | 动态通行证</title>
-    <!-- Font Awesome 6 免费图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preload" as="image" href="./a.svg" fetchpriority="high">
+    <!---- 预加载网站图标，提升首屏加载速度-->
+    <title>武冈 | 学生圈</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="/repository/awesome/css/all.min.css" onerror="this.href='https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css'">
+<script>
+(function () {
+    var version = '1.0.0'; // 每次更新文件改这个数字就行
+
+    function loadCSS(href) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href + '?v=' + version;
+        document.head.appendChild(link);
+    }
+
+    function loadJS(src) {
+        var script = document.createElement('script');
+        script.src = src + '?v=' + version;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+
+    window.loadCSS = loadCSS;
+    window.loadJS = loadJS;
+})();
+</script>
+    <!--link rel="stylesheet" href="ad-popup.css"-->
     <style>
-        /* === 全局重置，柔和自然色调 === */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            
         }
 
-        body {
-            /* 背景海报 – 请确保 poster.webp 在同目录下 */
-            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f5 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body > video {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    object-fit: cover;
-    filter: brightness(0.6);
-}
-
-        /* === 真正的毛玻璃卡片 === */
-        .verify-box {
-            max-width: 460px;
+        body, html {
             width: 100%;
-            background: rgba(255, 255, 255, 0.6);   /* 半透白 – 毛玻璃核心 */
-            backdrop-filter: blur(20px);            /* 模糊背景，玻璃质感 */
-            -webkit-backdrop-filter: blur(20px);    /* 兼容 Safari */
-            box-shadow: 0 20px 35px -8px rgba(0, 20, 45, 0.2), 0 5px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 36px;
-            padding: 36px 28px;
-            transition: all 0.2s ease;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            background: #FFFBD6;
         }
 
-        h2 {
-            font-size: 1.9rem;
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            color: #0a2c3d;
-            margin-bottom: 8px;
+        /* 开屏页 */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #FFFBD6;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid rgba(69, 123, 157, 0.2);
-            padding-bottom: 18px;
-        }
-
-        h2 i {
-            color: #2a7f6e;
-            font-size: 1.8rem;
-        }
-
-        .desc {
-            color: #1e3b47;
-            font-size: 0.98rem;
-            margin: 8px 0 16px 0;
-            font-weight: 450;
-            background: rgba(217, 233, 240, 0.3);
-            padding: 6px 12px;
-            border-radius: 40px;
-            backdrop-filter: blur(4px);
-            display: inline-block;
-        }
-
-        /* 验证码行：数字 + 刷新按钮 */
-        .code-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(237, 242, 247, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 6px 6px 6px 20px;
-            margin: 15px 0 12px;
-            border: 1px solid rgba(203, 213, 225, 0.6);
-            box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.02);
-        }
-
-        .verify-code {
-            font-size: 2.1rem;
-            font-weight: 700;
-            font-family: 'Fira Mono', 'Courier New', monospace;
-            letter-spacing: 8px;
-            color: #0d3b4c;
-            text-shadow: 0 2px 5px rgba(13, 59, 76, 0.1);
-            background: transparent;
-            line-height: 1.2;
-        }
-
-        .refresh-btn {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(4px);
-            border: none;
-            color: #2c5f73;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            font-size: 1.3rem;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-        }
-
-        .refresh-btn:hover {
-            background: rgba(240, 247, 250, 0.9);
-            color: #0e4b5e;
-            transform: rotate(30deg) scale(0.95);
-            border-color: #7fa6b3;
-        }
-
-        .refresh-btn:active {
-            transform: rotate(60deg) scale(0.9);
-        }
-
-        /* 倒计时设计 – 轻量毛玻璃 */
-        .countdown {
-            background: rgba(234, 240, 243, 0.7);
-            backdrop-filter: blur(8px);
-            padding: 10px 18px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            color: #1e5061;
-            font-weight: 550;
-            display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin: 4px 0 18px 0;
-            border: 0.5px solid rgba(189, 211, 219, 0.6);
+            z-index: 10002;
+            opacity: 1;
+            transition: opacity 0.5s ease-out, background-color 0.3s ease;
+            pointer-events: auto;
         }
 
-        .countdown i {
-            color: #1f6c7a;
-            font-size: 0.85rem;
+        .app-logo {
+            background-image: url('/a.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 80px;
+            height: 80px;
+            background-color: #ffffff00;
+            border-radius: 20px;
+            opacity: 0;
+            transform: scale(0.8);
+            animation: logoFadeIn 0.8s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
 
-        /* 输入框 + 按钮 组合 */
-        .input-group {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            margin: 24px 0 12px;
-        }
-
-        .input-code {
-            flex: 1 1 200px;
-            padding: 16px 20px;
-            font-size: 1.2rem;
-            border: 1.5px solid rgba(215, 224, 229, 0.8);
-            border-radius: 48px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(8px);
-            transition: 0.2s;
-            font-weight: 500;
-            letter-spacing: 2px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.01);
-            color: #0a2a35;
-        }
-
-        .input-code:focus {
-            border-color: #3d8f9b;
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(69, 123, 157, 0.12);
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .input-code::placeholder {
-            color: #5f7e8c;
-            font-weight: 300;
-            font-size: 0.98rem;
-            letter-spacing: 1px;
-        }
-
-        .verify-btn {
-            background: #1f6e7c;
+        /* 唯一iframe，只保留一个id：target-page 修复重复ID问题 */
+        #target-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
             border: none;
-            padding: 16px 32px;
-            font-size: 1.16rem;
-            font-weight: 600;
-            color: white;
-            border-radius: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: 0.15s;
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            box-shadow: 0 10px 18px -10px #0a3a44;
-            letter-spacing: 1px;
+            z-index: 9998;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
         }
 
-        .verify-btn i {
-            font-size: 1.1rem;
+        @keyframes logoFadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        .verify-btn:hover {
-            background: #0e4e5c;
-            transform: scale(0.98);
-            box-shadow: 0 6px 12px -6px #083138;
-        }
-
-        /* 提示消息 — 优雅毛玻璃 */
-        .msg {
-            margin-top: 18px;
-            padding: 12px 20px;
-            border-radius: 100px;
-            font-weight: 500;
-            font-size: 0.98rem;
-            text-align: center;
-            transition: 0.2s;
-            background: rgba(241, 247, 250, 0.7);
-            backdrop-filter: blur(8px);
-            border: 0.5px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .msg.success {
-            background: rgba(219, 241, 238, 0.75);
-            color: #146b5e;
-            border-color: rgba(158, 207, 199, 0.6);
-        }
-
-        .msg.error {
-            background: rgba(255, 234, 229, 0.75);
-            color: #b13b3b;
-            border-color: rgba(251, 185, 175, 0.6);
-        }
-
-        /* 成功覆盖层 —— 醒目、清爽（也带毛玻璃） */
-        .success-overlay {
-            background: rgba(229, 246, 240, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
-            padding: 42px 24px;
-            margin-top: 20px;
-            text-align: center;
-            border: 1px solid rgba(69, 184, 160, 0.6);
-            box-shadow: 0 8px 20px -8px #1a6355;
-            animation: fadeInUp 0.3s ease;
-        }
-
-        .success-overlay i {
-            font-size: 3.6rem;
-            color: #0f7666;
-            margin-bottom: 12px;
-        }
-
-        .success-overlay h3 {
-            font-size: 2.1rem;
-            font-weight: 650;
-            color: #0b5345;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .success-overlay p {
-            font-size: 1.1rem;
-            color: #155a4b;
-            opacity: 0.9;
-            font-weight: 450;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0.5; transform: translateY(12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 辅助布局 */
-        .hidden {
+        .splash-hidden {
             display: none !important;
         }
 
-        .flex-row {
+        @media (prefers-color-scheme: dark) {
+            #splash-screen { background-color: #121212; }
+            body,html {
+                background: #121212;
+            }
+            .app-logo {
+                background-color: #ffffff;
+            }
+            p {
+                color: #e0e0e0;
+            }
+            span {
+                color: #e0e0e0;
+            }
+            .icon {
+                color: #e0e0e0;
+            }
+        }
+
+        /* 液态玻璃底部栏 */
+        .glass-bottom-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 21pt;
+            height: 62pt;
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            transform: translateY(0);
+            will-change: transform;
+            pointer-events: auto;
+        }
+
+        .glass-bottom-bar.hidden {
+            transform: translateY(130%); /* %向下移动几倍自身高度 */
+        }
+
+        .bar-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 18px;
+            padding: 0 4px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 14px;
         }
 
-        /* 针对小屏幕 */
-        @media (max-width: 480px) {
-            .verify-box { padding: 28px 18px; }
-            .verify-code { font-size: 1.8rem; letter-spacing: 4px; }
-            .verify-btn { padding: 14px 24px; }
-        }
-
-        /* 模拟标签（mock模式小标记） */
-        .mock-badge {
-            background: rgba(255, 232, 197, 0.8);
-            backdrop-filter: blur(4px);
-            color: #8a6900;
-            padding: 4px 12px;
+        .capsule {
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background: linear-gradient(45deg, rgba(255,255,255,0.8) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.8) 100%);
+            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px double rgba(51,51,51,0.08);
             border-radius: 60px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            margin-left: 10px;
-            border: 0.5px solid rgba(255, 200, 100, 0.5);
+            height: 54pt;
+            backdrop-filter: blur(2px);
+        }
+
+        .tab-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            font-size: 11pt;
+            font-weight: 500;
+            color: #1c1c1e;
+            cursor: pointer;
+            z-index: 3;
+            transition: transform 0.05s linear;
+            border-radius: 40px;
+            padding: 6px 0;
+        }
+        .tab-item i { font-size: 20pt; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)); }
+        .tab-item span { font-size: 10pt; font-weight: 500; }
+        .tab-item:active { background: rgba(0,0,0,0.05); }
+        .tab-item.active { color: #000000c4; }
+
+        .slider-bg {
+            position: absolute;
+            top: 5px;
+            bottom: 5px;
+            background: rgba(80,80,90,0.16);
+            border-radius: 50px;
+            transition: left 0.28s cubic-bezier(0.2,0.9,0.4,1.2), width 0.28s cubic-bezier(0.2,0.9,0.4,1.2);
+            backdrop-filter: blur(3px);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 圆形加号按钮 */
+        .search-circle {
+            width: 52pt;
+            height: 52pt;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(255,255,255,0.8) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.8) 100%);
+            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px double rgba(51,51,51,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.12s ease;
+            flex-shrink: 0;
+            backdrop-filter: blur(2px);
+        }
+        .search-circle:active {
+            transform: scale(0.94);
+        }
+        .search-circle i {
+            font-size: 28pt;
+            color: #e0e0e0;
+            filter: drop-shadow(0 1px 1px rgba(255,255,255,0.6));
+        }
+
+        @media (max-width: 520px) {
+            .glass-bottom-bar { bottom: 18pt; }
+            .capsule { height: 50pt; }
+            .tab-item i { font-size: 18pt; }
+            .tab-item span { font-size: 9pt; }
+            .search-circle { width: 48pt; height: 48pt; }
+            .search-circle i { font-size: 26pt; }
+        }
+        @media (max-width: 420px) {
+            .capsule { height: 46pt; }
+            .tab-item i { font-size: 16pt; }
+            .tab-item span { font-size: 8.5pt; }
+            .search-circle { width: 44pt; height: 44pt; }
+            .search-circle i { font-size: 24pt; }
         }
     </style>
+    <script>
+        // 时间戳函数：用于静态资源缓存刷新
+        function getVer() {
+            return Date.now();
+        }
+
+        // 核心函数：切换iframe页面，仅内部刷新，父页面不跳转
+        function switchFramePage(url) {
+            const frame = document.getElementById('target-page');
+            frame.src = url + "?v=" + getVer();
+        }
+    </script>
 </head>
 <body>
-        <video autoplay loop muted playsinline poster="./poster.webp">
-        <source src="background.mp4" type="video/mp4">
-        您的浏览器不支持视频播放，请升级浏览器。
-    </video>
-    
-    <div class="verify-box" id="verifyBox">
-        <h2>
-            <i class="fas fa-shield-alt"></i> 动态通行证
-        </h2>
-        <div class="desc">
-            <i class="fas fa-clock" style="margin-right: 6px;"></i> 30秒动态刷新 · 6位数字
-        </div>
-
-        <!-- 验证码显示区域 + 手动刷新按钮 -->
-        <div class="code-wrapper" id="codeWrapper">
-            <span class="verify-code" id="verifyCode">——</span>
-            <button class="refresh-btn" id="refreshBtn" title="手动刷新验证码">
-                <i class="fas fa-rotate"></i>
-            </button>
-        </div>
-
-        <!-- 倒计时条 -->
-        <div class="countdown" id="countdownBox">
-            <i class="fas fa-hourglass-half"></i>
-            <span id="countdownText">距离下次刷新还有：30秒</span>
-        </div>
-
-        <!-- 正常验证输入区域（会被覆盖隐藏） -->
-        <div id="verificationPanel">
-            <div class="input-group">
-                <input type="text" class="input-code" id="inputCode" placeholder="输入6位验证码" maxlength="6" inputmode="numeric" autocomplete="off">
-                <button class="verify-btn" id="verifyBtn">
-                    <i class="fas fa-check-circle"></i> 验证
-                </button>
-            </div>
-        </div>
-
-        <!-- 消息提示（成功/失败） -->
-        <div class="msg" id="msg"></div>
-
-        <!-- 成功覆盖层：初始隐藏，验证通过后显示 -->
-        <div id="successOverlay" style="display: none;"></div>
+    <div id="splash-screen">
+        <div class="app-logo"></div>
+        <p style="font-size: small;">初次加载需要一些时间，稍候...</p>
     </div>
 
-    <script>
-        (function() {
-            "use strict";
+    <!-- 只保留唯一 id="target-page"，删除重复ID -->
+    <iframe id="target-page" src="core.php" frameborder="0"></iframe>
 
-            // ----- 配置 -----
-            const TARGET_PAGE = 'login-service.php';   // 跳转目标
-            const REFRESH_INTERVAL = 30;               // 30秒刷新
-            const REDIRECT_DELAY = 2000;               // 2秒跳转
+    <!-- 底部导航栏：全部改为调用 switchFramePage，只切换iframe，不整页跳转 -->
+    <div class="glass-bottom-bar" id="bottomBar">
+        <div class="bar-container">
+            <div class="capsule" id="capsuleContainer">
+                <div class="slider-bg" id="sliderBg"></div>
+                <!-- 圈子 -->
+                <div class="tab-item" data-tab="circle" onclick="switchFramePage('core.php')">
+                    <div class="icon"><i class="fas fa-users"></i></div>
+                    <span>圈子</span>
+                </div>
+                <!-- 云 
+                <div class="tab-item" data-tab="music" onclick="switchFramePage('./service/ancloud/')">
+                    <div class="icon"><i class="fas fa-cloud"></i></div>
+                    <span>云存</span>
+                </div>
+                -->
+                <!-- 我的 -->
+                <div class="tab-item" data-tab="profile" onclick="switchFramePage('profile.php')">
+                    <div class="icon"><i class="fas fa-user"></i></div>
+                    <span>我的</span>
+                </div>
+            </div>
+            <div class="search-circle" id="searchCircle">
+                <i class="fas fa-plus"></i>
+            </div>
+        </div>
+    </div>
 
-            // ----- 状态变量 -----
-            let countdownTimer = null;          // 倒计时定时器
-            let redirectTimer = null;           // 跳转定时器
-            let mockMode = false;              // 是否降级为模拟模式
-            let currentCode = '';              // 当前验证码（模拟模式）
-            let isVerifiedSuccess = false;     // 防止重复验证通过
+<script>
+(function() {
+    const splash = document.getElementById('splash-screen');
+    const targetPage = document.getElementById('target-page');
+    const minDisplayTime = 800;
+    const startTime = Date.now();
+    let bottomBarInitialized = false;
 
-            // ----- DOM 元素 -----
-            const verifyCodeEl = document.getElementById('verifyCode');
-            const countdownTextEl = document.getElementById('countdownText');
-            const inputCodeEl = document.getElementById('inputCode');
-            const msgEl = document.getElementById('msg');
-            const verifyBtn = document.getElementById('verifyBtn');
-            const refreshBtn = document.getElementById('refreshBtn');
-            const verificationPanel = document.getElementById('verificationPanel');
-            const countdownBox = document.getElementById('countdownBox');
-            const codeWrapper = document.getElementById('codeWrapper');
-            const successOverlay = document.getElementById('successOverlay');
+    function initBottomBarAndScroll() {
+        if (bottomBarInitialized) return;
+        bottomBarInitialized = true;
 
-            // ----- 工具函数 -----
-            function generateMockCode() {
-                const num = Math.floor(Math.random() * 1000000);
-                return num.toString().padStart(6, '0');
+        const capsule = document.getElementById('capsuleContainer');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const sliderBg = document.getElementById('sliderBg');
+        const searchCircle = document.getElementById('searchCircle');
+        const bottomBar = document.getElementById('bottomBar');
+
+        if (!capsule || !sliderBg || tabItems.length === 0) return;
+
+        let activeIndex = 0;
+        function setActiveTab(index, fromClick = false) {
+            if (index === activeIndex && fromClick) {
+                const current = tabItems[activeIndex];
+                if (current) {
+                    current.style.transform = 'scale(0.97)';
+                    setTimeout(() => { if (current) current.style.transform = ''; }, 100);
+                }
+                return;
             }
-
-            function displayVerifyCode(code) {
-                verifyCodeEl.textContent = code;
-                currentCode = code;
+            activeIndex = index;
+            tabItems.forEach(item => item.classList.remove('active'));
+            tabItems[activeIndex].classList.add('active');
+            updateSliderPosition();
+            if (fromClick) {
+                const clicked = tabItems[activeIndex];
+                if (clicked) {
+                    clicked.style.background = 'rgba(0, 0, 0, 0.05)';
+                    setTimeout(() => { if (clicked) clicked.style.background = ''; }, 120);
+                }
             }
+        }
 
-            function resetInputAndMsg() {
-                inputCodeEl.value = '';
-                msgEl.textContent = '';
-                msgEl.className = 'msg';
-            }
+        function updateSliderPosition() {
+            if (!capsule || !sliderBg || !tabItems[activeIndex]) return;
+            const activeItem = tabItems[activeIndex];
+            const capsuleRect = capsule.getBoundingClientRect();
+            const itemRect = activeItem.getBoundingClientRect();
+            let leftOffset = itemRect.left - capsuleRect.left;
+            let itemWidth = itemRect.width;
+            const pad = 3;
+            sliderBg.style.left = (leftOffset + pad) + 'px';
+            sliderBg.style.width = (itemWidth - pad * 2) + 'px';
+        }
 
-            // ----- 获取验证码（优先后端，失败降级模拟）-----
-            function fetchVerifyCode() {
-                fetch('verify_core.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: 'action=generate'
-                })
-                .then(res => {
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    return res.json();
-                })
-                .then(data => {
-                    if (data.status && data.data && data.data.code) {
-                        mockMode = false;
-                        displayVerifyCode(data.data.code);
-                        resetInputAndMsg();
-                        resetCountdown();
-                    } else {
-                        throw new Error('后端返回状态异常');
+        tabItems.forEach((item, idx) => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                setActiveTab(idx, true);
+            });
+        });
+
+        // 加号按钮逻辑
+        if (searchCircle) {
+            searchCircle.addEventListener('click', () => {
+                const icon = searchCircle.querySelector('i');
+                if (icon) {
+                    icon.style.transform = 'scale(0.9)';
+                    setTimeout(() => { if (icon) icon.style.transform = ''; }, 120);
+                }
+                const iframe = document.getElementById('target-page');
+                if (iframe && iframe.contentWindow) {
+                    try {
+                        iframe.contentWindow.callPublishModal();
+                    } catch (e) {
+                        console.warn('调用内部发帖弹窗失败');
                     }
-                })
-                .catch(err => {
-                    console.warn('后端验证码获取失败，启用模拟模式:', err);
-                    mockMode = true;
-                    const mockCode = generateMockCode();
-                    displayVerifyCode(mockCode);
-                    resetInputAndMsg();
-                    if (!document.querySelector('.mock-badge')) {
-                        const mockBadge = document.createElement('span');
-                        mockBadge.className = 'mock-badge';
-                        mockBadge.innerHTML = '<i class="fas fa-laptop"></i> 模拟';
-                        document.querySelector('.code-wrapper')?.appendChild(mockBadge);
-                    }
-                    resetCountdown();
+                }
+            });
+        }
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            if (resizeTimer) clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateSliderPosition, 100);
+        });
+        const resizeObserver = new ResizeObserver(updateSliderPosition);
+        resizeObserver.observe(capsule);
+        setActiveTab(0);
+
+// iframe 底部栏 - 直接常驻显示（去除隐藏逻辑）
+if (targetPage && bottomBar) {
+    // 1. 强制底部栏显示（移除 hidden 类，确保它一直在那里）
+    bottomBar.classList.remove('hidden');
+
+    function attachIframeScroll() {
+        try {
+            const iframeDoc = targetPage.contentDocument || targetPage.contentWindow.document;
+            if (!iframeDoc) return false;
+            const iframeWin = targetPage.contentWindow;
+            if (!iframeWin) return false;
+
+            // 2. 依然保留 iframe 内部样式填充
+            // 作用：因为底部栏是固定显示的，必须给 iframe 的 body 留出 85pt 的底边距，防止文章最底部被底部栏遮住
+            const style = iframeDoc.createElement('style');
+            style.textContent = `body { padding-bottom: 85pt !important; margin: 0; min-height: 100%; }`;
+            iframeDoc.head.appendChild(style);
+
+            // 3. 如果你原本还有 slider（滑动条）或进度条需要跟随页面滚动更新
+            // 保留这个滚动监听，但只用来更新 UI，不再执行任何隐藏判断
+            if (typeof updateSliderPosition === 'function') {
+                iframeWin.addEventListener('scroll', () => {
+                    updateSliderPosition();
                 });
             }
 
-            function refreshVerifyCode() {
-                if (isVerifiedSuccess) return;
-                fetchVerifyCode();
+            return true;
+        } catch(e) {
+            console.warn("iframe滚动监听受限");
+            return false;
+        }
+    }
+
+    if (targetPage.contentDocument && targetPage.contentDocument.readyState === 'complete') {
+        attachIframeScroll();
+    } else {
+        targetPage.addEventListener('load', () => setTimeout(attachIframeScroll, 100));
+    }
+}
+    }
+
+    targetPage.onload = function() {
+        const elapsed = Date.now() - startTime;
+        const waitTime = Math.max(0, minDisplayTime - elapsed);
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            targetPage.style.opacity = '1';
+            setTimeout(() => {
+                splash.classList.add('splash-hidden');
+                initBottomBarAndScroll();
+            }, 500);
+        }, waitTime);
+    };
+
+    setTimeout(() => {
+        if (!splash.classList.contains('splash-hidden')) {
+            splash.style.opacity = '0';
+            targetPage.style.opacity = '1';
+            setTimeout(() => {
+                splash.classList.add('splash-hidden');
+                initBottomBarAndScroll();
+            }, 500);
+        }
+    }, 3000);
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const publishBtn = document.getElementById('publishPostBtn');
+    if (publishBtn) {
+        publishBtn.onclick = function(){
+            switchFramePage('core.php');
+            const iframe = document.getElementById('target-page');
+            if (iframe && iframe.contentWindow) {
+                setTimeout(() => {
+                    iframe.contentWindow.location.hash = 'anchina1';
+                }, 300);
             }
-
-            // ----- 倒计时逻辑 -----
-            let currentCountdown = REFRESH_INTERVAL;
-
-            function updateCountdownText() {
-                countdownTextEl.textContent = `距离下次刷新还有：${currentCountdown}秒`;
-            }
-
-            function resetCountdown() {
-                if (countdownTimer) clearInterval(countdownTimer);
-                currentCountdown = REFRESH_INTERVAL;
-                updateCountdownText();
-
-                countdownTimer = setInterval(() => {
-                    if (isVerifiedSuccess) {
-                        clearInterval(countdownTimer);
-                        countdownTimer = null;
-                        return;
-                    }
-                    currentCountdown--;
-                    updateCountdownText();
-                    if (currentCountdown <= 0) {
-                        refreshVerifyCode();
-                    }
-                }, 1000);
-            }
-
-            // ----- 验证逻辑 -----
-            function checkCode() {
-                if (isVerifiedSuccess) return;
-
-                const inputCode = inputCodeEl.value.trim();
-                if (!inputCode || inputCode.length !== 6 || !/^\d{6}$/.test(inputCode)) {
-                    showMsg('请输入6位有效数字验证码', 'error');
-                    return;
-                }
-
-                if (mockMode) {
-                    const success = (inputCode === currentCode);
-                    const mockData = {
-                        status: success,
-                        msg: success ? '验证通过 (模拟环境)' : '验证码错误，请重试'
-                    };
-                    handleVerifyResponse(mockData);
-                } else {
-                    fetch('verify_core.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: `action=check&code=${encodeURIComponent(inputCode)}`
-                    })
-                    .then(res => {
-                        if (!res.ok) throw new Error(`后端响应异常`);
-                        return res.json();
-                    })
-                    .then(data => {
-                        handleVerifyResponse(data);
-                    })
-                    .catch(err => {
-                        console.error('后端验证失败，降级模拟重试', err);
-                        mockMode = true;
-                        checkCode();
-                    });
-                }
-            }
-
-            function handleVerifyResponse(data) {
-                if (!data || typeof data.status === 'undefined') {
-                    showMsg('服务响应异常', 'error');
-                    return;
-                }
-
-                if (data.status === true) {
-                    isVerifiedSuccess = true;
-                    if (countdownTimer) {
-                        clearInterval(countdownTimer);
-                        countdownTimer = null;
-                    }
-                    if (redirectTimer) {
-                        clearTimeout(redirectTimer);
-                        redirectTimer = null;
-                    }
-                    showSuccessOverlay();
-                    redirectTimer = setTimeout(() => {
-                        window.location.href = TARGET_PAGE;
-                    }, REDIRECT_DELAY);
-                } else {
-                    const errorMsg = data.msg || '验证码错误，请重新输入';
-                    showMsg(errorMsg, 'error');
-                    inputCodeEl.value = '';
-                }
-            }
-
-            function showSuccessOverlay() {
-                codeWrapper.classList.add('hidden');
-                countdownBox.classList.add('hidden');
-                verificationPanel.classList.add('hidden');
-                msgEl.classList.add('hidden');
-                refreshBtn.disabled = true;
-
-                successOverlay.style.display = 'block';
-                successOverlay.innerHTML = `
-                    <i class="fas fa-check-circle"></i>
-                    <h3>验证通过</h3>
-                    <p><i class="fas fa-arrow-right"></i> 即将跳转 · 2秒</p>
-                `;
-                successOverlay.classList.add('success-overlay');
-            }
-
-            function showMsg(text, type) {
-                msgEl.textContent = text;
-                msgEl.className = `msg ${type || ''}`;
-            }
-
-            function bindEvents() {
-                verifyBtn.addEventListener('click', checkCode);
-                refreshBtn.addEventListener('click', function() {
-                    if (isVerifiedSuccess) return;
-                    refreshVerifyCode();
-                });
-                inputCodeEl.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        checkCode();
-                    }
-                });
-                inputCodeEl.addEventListener('input', function(e) {
-                    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
-                });
-            }
-
-            function init() {
-                bindEvents();
-                fetchVerifyCode();
-            }
-
-            init();
-        })();
-    </script>
+        };
+    }
+});
+</script>
+<!--script src="ad-popup.js"></script-->
+<script>
+// 更新网站时修改这里的版本号
+const VERSION = "2026073001";
+const localVer = localStorage.getItem("site_version");
+if(localVer !== VERSION){
+    localStorage.setItem("site_version", VERSION);
+    // true 强制绕过缓存，从服务器拉取最新index.html
+    location.reload(true);
+}
+</script>
 </body>
 </html>

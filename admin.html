@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevConsole · 终端入口</title>
+    <style>
+        /* ===== 全局重置 ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0e14;
+            color: #c5d0e0;
+            font-family: 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .terminal-box {
+            background: #0d121c;
+            border: 1px solid #2a3a4a;
+            border-radius: 10px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.8), inset 0 1px 0 #1e2a36;
+            padding: 28px 32px 32px;
+            max-width: 780px;
+            width: 100%;
+            position: relative;
+        }
+
+        .terminal-box::before {
+            content: "● ● ●";
+            position: absolute;
+            top: 12px;
+            left: 20px;
+            color: #3a4a5a;
+            font-size: 12px;
+            letter-spacing: 4px;
+        }
+
+        .terminal-box .term-header {
+            margin-top: 8px;
+            margin-bottom: 24px;
+            color: #5a7a8a;
+            font-size: 13px;
+            border-bottom: 1px solid #1a2632;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .terminal-box .term-header .path {
+            color: #4a8a6a;
+        }
+
+        .terminal-box .term-header .time {
+            color: #5a6a7a;
+        }
+
+        /* ===== 登录界面 ===== */
+        #loginPage {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0a0e14;
+            transition: opacity 0.3s ease;
+        }
+        #loginPage.hidden {
+            display: none !important;
+        }
+
+        .login-prompt {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .login-prompt .line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .login-prompt .prompt-symbol {
+            color: #6a9a7a;
+            font-weight: bold;
+        }
+
+        .login-prompt .input-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .login-prompt .input-group label {
+            color: #8a9aaa;
+        }
+
+        .login-prompt .input-group input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #2a3a4a;
+            color: #c5d0e0;
+            font-family: inherit;
+            font-size: 15px;
+            padding: 4px 0;
+            outline: none;
+            width: 180px;
+            transition: border-color 0.2s;
+        }
+
+        .login-prompt .input-group input:focus {
+            border-bottom-color: #4a8a6a;
+        }
+
+        .login-prompt .input-group input::placeholder {
+            color: #3a4a5a;
+        }
+
+        .login-prompt .error-msg {
+            color: #d05a6a;
+            font-size: 13px;
+            min-height: 20px;
+            margin-top: 4px;
+        }
+
+        .login-prompt .btn-login {
+            background: transparent;
+            border: 1px solid #4a8a6a;
+            color: #6a9a7a;
+            font-family: inherit;
+            font-size: 14px;
+            padding: 4px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .login-prompt .btn-login:hover {
+            background: #1a2a22;
+            border-color: #6aaa8a;
+            color: #8acaaa;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: #6a9a7a;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ===== 仪表板 ===== */
+        #dashboard {
+            display: none;
+            width: 100%;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        #dashboard.active {
+            display: block;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1a2632;
+            padding-bottom: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .dash-header .hostname {
+            color: #6a9a7a;
+        }
+
+        .dash-header .hostname span {
+            color: #c5d0e0;
+        }
+
+        .dash-header .user-info {
+            color: #5a7a8a;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .dash-header .user-info .logout-btn {
+            background: transparent;
+            border: 1px solid #3a4a5a;
+            color: #7a8a9a;
+            font-family: inherit;
+            font-size: 12px;
+            padding: 2px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .dash-header .user-info .logout-btn:hover {
+            border-color: #d05a6a;
+            color: #d05a6a;
+            background: #1a1820;
+        }
+
+        .dash-welcome {
+            color: #6a8a7a;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .dash-welcome strong {
+            color: #c5d0e0;
+        }
+
+        .entry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .entry-card {
+            display: block;
+            background: #0d121c;
+            border: 1px solid #1e2a36;
+            border-radius: 6px;
+            padding: 18px 16px 16px;
+            text-decoration: none;
+            color: #c5d0e0;
+            transition: all 0.2s ease;
+            position: relative;
+            font-size: 13px;
+        }
+
+        .entry-card:hover {
+            border-color: #4a7a6a;
+            background: #111a24;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .entry-card .cmd {
+            color: #6a9a7a;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .entry-card .cmd::before {
+            content: "$ ";
+            color: #3a5a4a;
+        }
+
+        .entry-card .desc {
+            color: #6a7a8a;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .entry-card .badge {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 10px;
+            background: #1a2632;
+            color: #7a9a8a;
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid #2a3a4a;
+            letter-spacing: 0.3px;
+        }
+
+        .entry-card .arrow {
+            position: absolute;
+            right: 14px;
+            bottom: 14px;
+            color: #2a3a4a;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+
+        .entry-card:hover .arrow {
+            color: #4a8a6a;
+        }
+
+        .comment-line {
+            color: #3a5a5a;
+            font-size: 12px;
+            border-top: 1px solid #141e28;
+            padding-top: 16px;
+            margin-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .comment-line code {
+            background: #0a121a;
+            padding: 0 8px;
+            border-radius: 4px;
+            color: #5a7a6a;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            .terminal-box {
+                padding: 20px 16px 24px;
+            }
+            .terminal-box::before {
+                top: 8px;
+                left: 14px;
+                font-size: 10px;
+            }
+            .login-prompt .input-group input {
+                width: 120px;
+                font-size: 14px;
+            }
+            .entry-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .dash-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .entry-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== 登录终端 ==================== -->
+    <div id="loginPage">
+        <div class="terminal-box">
+            <div class="term-header">
+                <span class="path">~/devconsole</span>
+                <span class="time" id="loginClock">--:--:--</span>
+            </div>
+
+            <div class="login-prompt">
+                <div class="line">
+                    <span class="prompt-symbol">$</span>
+                    <span style="color:#8a9aaa;">./login --secure</span>
+                </div>
+                <div class="line" style="margin-top:6px;">
+                    <span class="prompt-symbol">></span>
+                    <div class="input-group">
+                        <label for="passwordInput">password:</label>
+                        <input type="password" id="passwordInput" placeholder="••••••••" autofocus />
+                        <button class="btn-login" id="loginBtn">⏎</button>
+                    </div>
+                </div>
+                <div class="error-msg" id="loginError"></div>
+                <div style="margin-top:6px; font-size:12px; color:#3a4a5a;">
+                    <span class="cursor-blink"></span> 等待身份验证...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 仪表板 ==================== -->
+    <div id="dashboard">
+        <div class="terminal-box">
+            <div class="term-header">
+                <span class="path">~/devconsole</span>
+                <span class="time" id="dashClock">--:--:--</span>
+            </div>
+
+            <div class="dash-header">
+                <div class="hostname">
+                    <span>user@devconsole</span>:<span style="color:#5a7a8a;">~</span><span style="color:#c5d0e0;">$</span>
+                </div>
+                <div class="user-info">
+                    <span id="sessionUser">admin</span>
+                    <button class="logout-btn" id="logoutBtn">exit</button>
+                </div>
+            </div>
+
+            <div class="dash-welcome">
+                <span style="color:#3a5a4a;">//</span> 欢迎回来, <strong id="greetingUser">admin</strong> · 选择功能模块
+            </div>
+
+            <div class="entry-grid">
+                <a href="change_password_data.json" class="entry-card" target="_blank">
+                    <span class="cmd">anchina</span>
+                    <span class="desc">查看更改密码记录</span>
+                    <span class="badge">全部用户的记录</span>
+                    <span class="arrow">↗</span>
+                </a>
+
+                <a href="login-data.json" class="entry-card" target="_blank">
+                    <span class="cmd">anchina</span>
+                    <span class="desc">查看用户登录记录</span>
+                    <span class="badge">全部用户的登录记录</span>
+                    <span class="arrow">↗</span>
+                </a>
+
+                <!-- 图片审核 -->
+                <a href="audit.php" class="entry-card" target="_blank">
+                    <span class="cmd">image-audit</span>
+                    <span class="desc">管理图片</span>
+                    <span class="badge">pending 3</span>
+                    <span class="arrow">↗</span>
+                </a>
+
+                <a href="surveys.json" class="entry-card" target="_blank">
+                    <span class="cmd">anchina</span>
+                    <span class="desc">查看使用反馈</span>
+                    <span class="badge">pending 5</span>
+                    <span class="arrow">↗</span>
+                </a>
+                                
+                <a href="cancel.json" class="entry-card" target="_blank">
+                    <span class="cmd">anchina</span>
+                    <span class="desc">查看注销申请</span>
+                    <span class="badge">pending 5</span>
+                    <span class="arrow">↗</span>
+                </a>
+
+                <!-- 刷赞 -->
+                <a href="mz.php" class="entry-card" target="_blank">
+                    <span class="cmd">boost</span>
+                    <span class="desc">批量点赞工具</span>
+                    <span class="badge">ready</span>
+                    <span class="arrow">↗</span>
+                </a>
+
+                <!-- 用户查看 -->
+                <a href="root.json" class="entry-card" target="_blank">
+                    <span class="cmd">user-list</span>
+                    <span class="desc">浏览所有用户</span>
+                    <span class="badge">1,284</span>
+                    <span class="arrow">↗</span>
+                </a>
+                                
+                <a href="sign-edit.php" class="entry-card" target="_blank">
+                    <span class="cmd">anchina</span>
+                    <span class="desc">编辑首次访问欢迎语</span>
+                    <span class="badge">pending 5</span>
+                    <span class="arrow">↗</span>
+                </a>
+            </div>
+
+            <div class="comment-line">
+                <span>🔒 密码哈希存储于 <code>data/passwd.json</code> (SHA-256)</span>
+                <span>v2.0 · 内部工具</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 原生 JavaScript（含降级方案） ==================== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // =====================================================
+            //  配置 & DOM 引用
+            // =====================================================
+            const STORAGE_KEY = 'devconsole_auth';
+            const PASSWORD_HASH_KEY = 'devconsole_password_hash';
+
+            const loginPage = document.getElementById('loginPage');
+            const dashboard = document.getElementById('dashboard');
+            const passwordInput = document.getElementById('passwordInput');
+            const loginBtn = document.getElementById('loginBtn');
+            const loginError = document.getElementById('loginError');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const greetingUser = document.getElementById('greetingUser');
+            const sessionUser = document.getElementById('sessionUser');
+            const loginClock = document.getElementById('loginClock');
+            const dashClock = document.getElementById('dashClock');
+
+            // =====================================================
+            //  SHA-256 哈希函数（支持降级）
+            // =====================================================
+            let sha256Impl = null;
+
+            // 尝试使用 Web Crypto API (需要 HTTPS)
+            async function sha256WebCrypto(message) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(message);
+                const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+
+            // 降级方案：动态加载 CryptoJS
+            function loadCryptoJS() {
+                return new Promise((resolve, reject) => {
+                    if (typeof CryptoJS !== 'undefined' && CryptoJS.SHA256) {
+                        resolve();
+                        return;
+                    }
+                    const script = document.createElement('script');
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js';
+                    script.onload = () => resolve();
+                    script.onerror = () => reject(new Error('无法加载 CryptoJS 库'));
+                    document.head.appendChild(script);
+                });
+            }
+
+            async function sha256CryptoJS(message) {
+                if (typeof CryptoJS === 'undefined' || !CryptoJS.SHA256) {
+                    await loadCryptoJS();
+                }
+                return CryptoJS.SHA256(message).toString();
+            }
+
+            // 初始化哈希实现
+            async function getSha256() {
+                if (sha256Impl) return sha256Impl;
+                // 检测 Web Crypto 是否可用
+                if (window.crypto && window.crypto.subtle) {
+                    try {
+                        // 测试一下是否真的能用
+                        await sha256WebCrypto('test');
+                        sha256Impl = sha256WebCrypto;
+                        console.log('✅ 使用 Web Crypto API (SHA-256)');
+                        return sha256Impl;
+                    } catch (e) {
+                        console.warn('Web Crypto 不可用，尝试降级', e);
+                    }
+                }
+                // 降级到 CryptoJS
+                try {
+                    await loadCryptoJS();
+                    sha256Impl = sha256CryptoJS;
+                    console.log('✅ 使用 CryptoJS (SHA-256) 降级方案');
+                    return sha256Impl;
+                } catch (err) {
+                    console.error('❌ 无法加载任何 SHA-256 实现，登录将失败', err);
+                    throw new Error('加密库不可用，请使用 HTTPS 或检查网络');
+                }
+            }
+
+            // =====================================================
+            //  密码管理（模拟 JSON 存储）
+            // =====================================================
+            async function getStoredPasswordHash() {
+                let hash = localStorage.getItem(PASSWORD_HASH_KEY);
+                if (!hash) {
+                    const defaultPassword = 'admin123';
+                    const sha256 = await getSha256();
+                    hash = await sha256(defaultPassword);
+                    localStorage.setItem(PASSWORD_HASH_KEY, hash);
+                    console.warn('🔑 未找到密码哈希，已生成默认密码 "admin123" 的 SHA-256 哈希 (模拟 JSON)');
+                }
+                return hash;
+            }
+
+            // =====================================================
+            //  认证
+            // =====================================================
+            async function login(password) {
+                try {
+                    const sha256 = await getSha256();
+                    const storedHash = await getStoredPasswordHash();
+                    const inputHash = await sha256(password);
+                    return inputHash === storedHash;
+                } catch (err) {
+                    console.error('登录异常:', err);
+                    loginError.textContent = '⚠️ 加密库加载失败，请检查网络或使用 HTTPS';
+                    return false;
+                }
+            }
+
+            function setAuth() {
+                localStorage.setItem(STORAGE_KEY, 'authenticated');
+            }
+
+            function getAuth() {
+                return localStorage.getItem(STORAGE_KEY);
+            }
+
+            function clearAuth() {
+                localStorage.removeItem(STORAGE_KEY);
+            }
+
+            function isAuthenticated() {
+                return !!getAuth();
+            }
+
+            // =====================================================
+            //  UI 切换
+            // =====================================================
+            function showLoginPage() {
+                loginPage.style.display = 'flex';
+                loginPage.classList.remove('hidden');
+                dashboard.style.display = 'none';
+                dashboard.classList.remove('active');
+                passwordInput.value = '';
+                loginError.textContent = '';
+                passwordInput.focus();
+                updateClock(loginClock);
+            }
+
+            function showDashboard() {
+                loginPage.style.display = 'none';
+                loginPage.classList.add('hidden');
+                dashboard.style.display = 'block';
+                dashboard.classList.add('active');
+                const user = 'admin';
+                greetingUser.textContent = user;
+                sessionUser.textContent = user;
+                updateClock(dashClock);
+                console.log('✅ 登录成功，已切换至仪表板');
+            }
+
+            // =====================================================
+            //  时钟
+            // =====================================================
+            function updateClock(el) {
+                if (!el) return;
+                const now = new Date();
+                const h = String(now.getHours()).padStart(2, '0');
+                const m = String(now.getMinutes()).padStart(2, '0');
+                const s = String(now.getSeconds()).padStart(2, '0');
+                el.textContent = h + ':' + m + ':' + s;
+            }
+
+            setInterval(() => {
+                updateClock(loginClock);
+                updateClock(dashClock);
+            }, 1000);
+
+            // =====================================================
+            //  事件绑定
+            // =====================================================
+            async function handleLogin() {
+                const password = passwordInput.value.trim();
+                if (!password) {
+                    loginError.textContent = '请输入密码';
+                    return;
+                }
+                loginError.textContent = '';
+                try {
+                    const ok = await login(password);
+                    if (ok) {
+                        setAuth();
+                        showDashboard();
+                    } else {
+                        loginError.textContent = '❌ 密码错误，请重试';
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                } catch (err) {
+                    loginError.textContent = err.message || '登录异常';
+                }
+            }
+
+            loginBtn.addEventListener('click', handleLogin);
+            passwordInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    loginBtn.click();
+                }
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                clearAuth();
+                showLoginPage();
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+                    e.preventDefault();
+                    clearAuth();
+                    showLoginPage();
+                }
+            });
+
+            // =====================================================
+            //  初始化
+            // =====================================================
+            (async function init() {
+                try {
+                    // 预初始化哈希实现
+                    await getSha256();
+                    // 确保密码哈希存在
+                    await getStoredPasswordHash();
+
+                    if (isAuthenticated()) {
+                        showDashboard();
+                    } else {
+                        showLoginPage();
+                    }
+                    console.log('⚡ DevConsole 终端入口已加载 (兼容 HTTP/HTTPS)');
+                    console.log('📌 默认密码: admin123');
+                    console.log('🔒 密码哈希存储于 localStorage 模拟 JSON');
+                } catch (err) {
+                    // 如果加密库完全不可用，显示错误并停留在登录页
+                    loginError.textContent = '⚠️ 加密组件初始化失败，请使用 HTTPS 或检查网络';
+                    console.error('初始化失败:', err);
+                }
+            })();
+
+        })();
+    </script>
+
+</body>
+</html>
