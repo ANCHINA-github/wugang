@@ -81,6 +81,27 @@ document.addEventListener('click', function(e) {
     }
 });
 
+// 标签栏动态吸顶
+const tabBar = document.getElementById('section1_5');
+// 获取标签栏自身的offsetTop：滚动超过这个值就开启吸顶
+const tabOffsetTop = tabBar.offsetTop;
+
+window.addEventListener('scroll', function(){
+    // 如果当前是阅读模式，直接不启用吸顶
+    const detailModal = document.getElementById('postDetailModal');
+    if(detailModal.classList.contains('show')){
+        tabBar.classList.remove('is-sticky');
+        return;
+    }
+
+    if(window.scrollY >= tabOffsetTop){
+        tabBar.classList.add('is-sticky');
+    }else{
+        tabBar.classList.remove('is-sticky');
+    }
+});
+
+
 // 模态框内伪输入框 -> 打开评论发布弹窗
 const modalFakeInput = document.getElementById('modalFakeInput');
 if (modalFakeInput) {
@@ -529,9 +550,9 @@ document.addEventListener('click', function(e) {
     // 拼接分享文本
     let shareText = '';
     if(userName && content){
-        shareText = `${userName}：${content}，更多内容请访问${siteUrl}`;
+        shareText = `${userName}：${content}更多内容请访问${siteUrl}`;
     }else if(userName){
-        shareText = `${userName}，更多内容请访问${siteUrl}`;
+        shareText = `${userName}更多内容请访问${siteUrl}`;
     }else{
         shareText = `更多内容请访问${siteUrl}`;
     }
@@ -905,10 +926,6 @@ function showPostDetail(postCard) {
             <button class="action-btn post-like-btn ${likedPosts.includes(pid) ? 'liked' : ''}" data-type="post" data-id="${pid}">
                 <i class="${likedPosts.includes(pid) ? 'fas' : 'far'} fa-heart action-icon"></i>
                 <span class="like-count">${likes}</span> 
-            </button>
-            <button class="action-btn post-comment-btn" data-pid="${pid}">
-                <i class="far fa-comment action-icon"></i>
-                <span class="comment-count">${comments.length}</span>
             </button>
         </div>
     `;

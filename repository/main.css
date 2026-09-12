@@ -918,7 +918,7 @@ body>video {
     padding: 15px;
     width: 200px;
     display: none;
-    z-index: 100;
+    z-index: 10000 !important; /* ←强制最高，避开sticky堆叠上下文 */
     opacity: 0;
     transform: translateY(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -996,6 +996,16 @@ body>video {
     overflow-x: auto;
     white-space: nowrap;
 }
+
+/* ===== 只有加上这个class，才开启吸顶固定 ===== */
+#section1_5.is-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    /* 不要 left/right，避免冲破容器 */
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
 
 .tab-button {
     padding: 8px 20px;
@@ -1863,7 +1873,7 @@ body>video {
 
 .bottom-login-prompt {
     position: fixed;
-    bottom: 20px;
+    bottom: 130px;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.549);
@@ -1898,7 +1908,7 @@ body>video {
 .fixed-icons {
     position: fixed;
     right: 25px;
-    bottom: 35px;
+    bottom: 130px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -1954,6 +1964,11 @@ body>video {
     background: rgba(118, 118, 118, 0);
     transform: scale(1.1);
     box-shadow: 0 12px 40px rgba(206, 206, 206, 0.6);
+}
+
+/* 隐藏右下角发帖按钮，但保留 DOM 供 index.html 调用 callPublishModal */
+#publishPostBtn {
+    display: none !important;
 }
 
 .post-btn {
@@ -2357,7 +2372,7 @@ body>video {
     }
 
     .bottom-login-prompt {
-        bottom: 80px;
+        bottom: 125px;
         padding: 10px 20px;
         font-size: 13px;
     }
@@ -2430,7 +2445,7 @@ body>video {
 
     .fixed-icons {
         right: 15px;
-        bottom: 20px;
+        bottom: 135px;
     }
 
     .fixed-icon {
@@ -2509,7 +2524,7 @@ body>video {
     }
 
     .bottom-login-prompt {
-        bottom: 70px;
+        bottom: 115px;
         padding: 8px 16px;
         font-size: 12px;
     }
@@ -2566,7 +2581,7 @@ body>video {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 9999;
+    z-index: 9999 !important;
 
     width: calc(100% - 32px);
     max-width: 1200px;
