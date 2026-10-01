@@ -1,0 +1,1722 @@
+[
+    {
+        "word": "critical",
+        "ipa": "/ˈkrɪtɪkl/",
+        "mean": "adj. 批评的，批判性的；关键的；危急的"
+    },
+    {
+        "word": "trap",
+        "ipa": "/træp/",
+        "mean": "vt. 使落入险境；卡住，绊住 n. 陷阱，罗网；圈套；困境，牢笼"
+    },
+    {
+        "word": "release",
+        "ipa": "/rɪˈliːs/",
+        "mean": "vt. 发布；释放；松开；发泄 n. 释放；发行；排放，泄漏"
+    },
+    {
+        "word": "ambulance",
+        "ipa": "/ˈæmbjələns/",
+        "mean": "n. 救护车"
+    },
+    {
+        "word": "extend",
+        "ipa": "/ɪkˈstend/",
+        "mean": "vi. & vt. 延伸(距离)；扩大，延长；伸展"
+    },
+    {
+        "word": "construction",
+        "ipa": "/kənˈstrʌkʃn/",
+        "mean": "n. 建筑，建造；建造物"
+    },
+    {
+        "word": "dozen",
+        "ipa": "/ˈdʌzn/",
+        "mean": "n. 许多；(一)打；十来个"
+    },
+    {
+        "word": "dozens of",
+        "ipa": "",
+        "mean": "很多，许多"
+    },
+    {
+        "word": "minor",
+        "ipa": "/ˈmaɪnə(r)/",
+        "mean": "adj. 轻微的，次要的"
+    },
+    {
+        "word": "bath",
+        "ipa": "/bɑːθ/",
+        "mean": "n. 洗澡，洗浴；浴缸，浴盆"
+    },
+    {
+        "word": "scream",
+        "ipa": "/skriːm/",
+        "mean": "vi. & vt. 尖叫；高声喊；发出大而尖的声音 n. 尖叫，尖锐刺耳的声音"
+    },
+    {
+        "word": "bark",
+        "ipa": "/bɑːk/",
+        "mean": "vi. (狗)吠叫 vt. 厉声发令 n. (狗)吠声；短促响亮的人声；树皮"
+    },
+    {
+        "word": "choke",
+        "ipa": "/tʃəʊk/",
+        "mean": "vt. & vi. (使)窒息；(使)哽咽，(尤指感情激动而)说不出话来"
+    },
+    {
+        "word": "cigarette",
+        "ipa": "/ˌsɪɡəˈret/",
+        "mean": "n. 香烟"
+    },
+    {
+        "word": "carpet",
+        "ipa": "/ˈkɑːpɪt/",
+        "mean": "n. 地毯；覆盖地面的一层厚东西"
+    },
+    {
+        "word": "automatic",
+        "ipa": "/ˌɔːtəˈmætɪk/",
+        "mean": "adj. 自动的；无意识的，不假思索的"
+    },
+    {
+        "word": "investigate",
+        "ipa": "/ɪnˈvestɪɡeɪt/",
+        "mean": "vt. & vi. 侦查，调查；研究"
+    },
+    {
+        "word": "come about",
+        "ipa": "",
+        "mean": "发生"
+    },
+    {
+        "word": "journalist",
+        "ipa": "/ˈdʒɜːnəlɪst/",
+        "mean": "n. 新闻记者，新闻工作者"
+    },
+    {
+        "word": "priority",
+        "ipa": "/praɪˈɒrəti/",
+        "mean": "n. 优先事项，首要事情；优先权，重点"
+    },
+    {
+        "word": "contradict",
+        "ipa": "/ˌkɒntrəˈdɪkt/",
+        "mean": "vt. 相矛盾，相反；反驳，驳斥"
+    },
+    {
+        "word": "factual",
+        "ipa": "/ˈfæktʃuəl/",
+        "mean": "adj. 事实的，真实的"
+    },
+    {
+        "word": "instance",
+        "ipa": "/ˈɪnstəns/",
+        "mean": "n. 例子，事例"
+    },
+    {
+        "word": "for instance",
+        "ipa": "",
+        "mean": "例如，比如"
+    },
+    {
+        "word": "differ",
+        "ipa": "/ˈdɪfə(r)/",
+        "mean": "vi. 相异；意见相左"
+    },
+    {
+        "word": "conclusion",
+        "ipa": "/kənˈkluːʒn/",
+        "mean": "n. 结论，推论；结束，结果；签订，达成"
+    },
+    {
+        "word": "false",
+        "ipa": "/fɔːls/",
+        "mean": "adj. 错误的，不真实的；非天生的；假的，伪造的；不真诚的"
+    },
+    {
+        "word": "bring sth to light",
+        "ipa": "",
+        "mean": "揭露，披露"
+    },
+    {
+        "word": "minimum",
+        "ipa": "/ˈmɪnɪməm/",
+        "mean": "n. 最小值，最少量 adj. 最低的，最小的"
+    },
+    {
+        "word": "maximum",
+        "ipa": "/ˈmæksɪməm/",
+        "mean": "n. 最大量，最大限度 adj. 最高的，最多的"
+    },
+    {
+        "word": "sum up",
+        "ipa": "",
+        "mean": "总结，概括"
+    },
+    {
+        "word": "sum",
+        "ipa": "/sʌm/",
+        "mean": "n. 金额，款项；总和，总数；全部"
+    },
+    {
+        "word": "accurate",
+        "ipa": "/ˈækjərət/",
+        "mean": "adj. 正确无误的；精确的"
+    },
+    {
+        "word": "committed",
+        "ipa": "/kəˈmɪtɪd/",
+        "mean": "adj. 尽心尽力的"
+    },
+    {
+        "word": "be committed to",
+        "ipa": "",
+        "mean": "致力于"
+    },
+    {
+        "word": "discrimination",
+        "ipa": "/dɪˌskrɪmɪˈneɪʃn/",
+        "mean": "n. 辨别力，识别力；歧视，区别对待"
+    },
+    {
+        "word": "curiosity",
+        "ipa": "/ˌkjʊəriˈɒsəti/",
+        "mean": "n. 好奇心，求知欲；奇物，珍品"
+    },
+    {
+        "word": "journalism",
+        "ipa": "/ˈdʒɜːnəlɪzəm/",
+        "mean": "n. 新闻业，新闻工作"
+    },
+    {
+        "word": "commitment",
+        "ipa": "/kəˈmɪtmənt/",
+        "mean": "n. 献身，投入；承诺，许诺；花费"
+    },
+    {
+        "word": "citizen",
+        "ipa": "/ˈsɪtɪzn/",
+        "mean": "n. 公民；市民，居民"
+    },
+    {
+        "word": "found",
+        "ipa": "/faʊnd/",
+        "mean": "vt. 创建，创办；建立，兴建"
+    },
+    {
+        "word": "politics",
+        "ipa": "/ˈpɒlətɪks/",
+        "mean": "n. 政治，政治事务；(个人的)政治观点，政见"
+    },
+    {
+        "word": "accuse",
+        "ipa": "/əˈkjuːz/",
+        "mean": "vt. 谴责，控诉"
+    },
+    {
+        "word": "tax",
+        "ipa": "/tæks/",
+        "mean": "n. 税，税款 vt. 对…征税，使纳税"
+    },
+    {
+        "word": "mount",
+        "ipa": "/maʊnt/",
+        "mean": "vi. 逐步增加 n. 增长，提高；vt. 攀登，爬上 n. 山"
+    },
+    {
+        "word": "mount up",
+        "ipa": "",
+        "mean": "(尺寸和数量上) 增加，上升"
+    },
+    {
+        "word": "elevation",
+        "ipa": "/ˌelɪˈveɪʃn/",
+        "mean": "n. 提高；提升；海拔"
+    },
+    {
+        "word": "profession",
+        "ipa": "/prəˈfeʃn/",
+        "mean": "n. 职业，行业；同行；宣称，声明"
+    },
+    {
+        "word": "drama",
+        "ipa": "/ˈdrɑːmə/",
+        "mean": "n. 戏剧；戏剧性事件"
+    },
+    {
+        "word": "scholarship",
+        "ipa": "/ˈskɒləʃɪp/",
+        "mean": "n. 奖学金；学术"
+    },
+    {
+        "word": "category",
+        "ipa": "/ˈkætəɡəri/",
+        "mean": "n. 类别，种类"
+    },
+    {
+        "word": "nevertheless",
+        "ipa": "/ˌnevəðəˈles/",
+        "mean": "adv. 尽管如此"
+    },
+    {
+        "word": "witness",
+        "ipa": "/ˈwɪtnəs/",
+        "mean": "vt. & vi. 是发生…的时间(或地点)，见证；目击；作证；是…的迹象 n. 目击者，见证人；证人"
+    },
+    {
+        "word": "edition",
+        "ipa": "/ɪˈdɪʃn/",
+        "mean": "n. 版本；一份，一期；版次"
+    },
+    {
+        "word": "platform",
+        "ipa": "/ˈplætfɔːm/",
+        "mean": "n. 计算机平台；站台，月台；讲台，舞台"
+    },
+    {
+        "word": "spring up",
+        "ipa": "",
+        "mean": "迅速出现，突然兴起"
+    },
+    {
+        "word": "interaction",
+        "ipa": "/ˌɪntərˈækʃn/",
+        "mean": "n. 互动；互相作用"
+    },
+    {
+        "word": "membership",
+        "ipa": "/ˈmembəʃɪp/",
+        "mean": "n. (统称)会员，会员人数；会员资格"
+    },
+    {
+        "word": "chart",
+        "ipa": "/tʃɑːt/",
+        "mean": "n. 图表；海图；(the charts) 排行榜 vt. 记录；制订计划；绘制区域地图"
+    },
+    {
+        "word": "broadcast",
+        "ipa": "/ˈbrɔːdkɑːst/",
+        "mean": "n. 广播节目，电视节目 vi. & vt. (broadcast, broadcast) 播送，广播；散布，传播"
+    },
+    {
+        "word": "advertising",
+        "ipa": "/ˈædvətaɪzɪŋ/",
+        "mean": "n. 广告活动，广告业"
+    },
+    {
+        "word": "persuasion",
+        "ipa": "/pəˈsweɪʒn/",
+        "mean": "n. 说服，劝说；信仰"
+    },
+    {
+        "word": "persuade",
+        "ipa": "/pəˈsweɪd/",
+        "mean": "vt. 说服；使信服"
+    },
+    {
+        "word": "advertisement",
+        "ipa": "/ədˈvɜːtɪsmənt/",
+        "mean": "n. (informal ad) 广告，启事；广告活动，广告宣传"
+    },
+    {
+        "word": "channel",
+        "ipa": "/ˈtʃænl/",
+        "mean": "n. 途径，渠道；电视台；频道；方法；水渠"
+    },
+    {
+        "word": "peak",
+        "ipa": "/piːk/",
+        "mean": "adj. 高峰时期的，最高度的 n. 顶峰，高峰；山峰；尖端 vi. 达到高峰，达到最高值"
+    },
+    {
+        "word": "advertise",
+        "ipa": "/ˈædvətaɪz/",
+        "mean": "vt. & vi. 做广告，登广告；公布，征聘；展现，宣传"
+    },
+    {
+        "word": "boost",
+        "ipa": "/buːst/",
+        "mean": "vt. 使增长，使兴旺 n. 增长，提高；帮助，激励"
+    },
+    {
+        "word": "psychology",
+        "ipa": "/saɪˈkɒlədʒi/",
+        "mean": "n. 心理，心理特征；心理学"
+    },
+    {
+        "word": "purchase",
+        "ipa": "/ˈpɜːtʃəs/",
+        "mean": "vt. 买，购买 n. 购买，采购；购买的东西，购买项目"
+    },
+    {
+        "word": "memorable",
+        "ipa": "/ˈmemərəbl/",
+        "mean": "adj. 难忘的，值得纪念的"
+    },
+    {
+        "word": "slogan",
+        "ipa": "/ˈsləʊɡən/",
+        "mean": "n. 标语，口号"
+    },
+    {
+        "word": "teapot",
+        "ipa": "/ˈtiːpɒt/",
+        "mean": "n. 茶壶"
+    },
+    {
+        "word": "get across",
+        "ipa": "",
+        "mean": "被传达，被理解，把…讲清楚"
+    },
+    {
+        "word": "brand",
+        "ipa": "/brænd/",
+        "mean": "n. 品牌；类型；烙印"
+    },
+    {
+        "word": "ambassador",
+        "ipa": "/æmˈbæsədə(r)/",
+        "mean": "n. 大使，代表"
+    },
+    {
+        "word": "placement",
+        "ipa": "/ˈpleɪsmənt/",
+        "mean": "n. 放置；安置"
+    },
+    {
+        "word": "rating",
+        "ipa": "/ˈreɪtɪŋ/",
+        "mean": "n. 收视率；等级，级别"
+    },
+    {
+        "word": "sponsor",
+        "ipa": "/ˈspɒnsə(r)/",
+        "mean": "vt. 赞助；主办；为慈善活动捐款；资助 n. 赞助商；为慈善活动捐款的人"
+    },
+    {
+        "word": "absorb",
+        "ipa": "/əbˈzɔːb/",
+        "mean": "vt. 理解，掌握；吸收；吸引全部注意力"
+    },
+    {
+        "word": "discount",
+        "ipa": "/ˈdɪskaʊnt/",
+        "mean": "n. 折扣 vt. 打折出售"
+    },
+    {
+        "word": "tailor",
+        "ipa": "/ˈteɪlə(r)/",
+        "mean": "vt. 专门制作，定做 n. 裁缝"
+    },
+    {
+        "word": "brighten up",
+        "ipa": "",
+        "mean": "(使)增添乐趣；使更艳丽"
+    },
+    {
+        "word": "housing",
+        "ipa": "/ˈhaʊzɪŋ/",
+        "mean": "n. 住房，住宅"
+    },
+    {
+        "word": "estate",
+        "ipa": "/ɪˈsteɪt/",
+        "mean": "n. 住宅区；(通常指农村的)大片私有土地；个人财产，(尤指)遗产"
+    },
+    {
+        "word": "housing estate",
+        "ipa": "",
+        "mean": "住宅区，住宅群"
+    },
+    {
+        "word": "amuse",
+        "ipa": "/əˈmjuːz/",
+        "mean": "vt. (提供)消遣；逗笑"
+    },
+    {
+        "word": "solidarity",
+        "ipa": "/ˌsɒlɪˈdærəti/",
+        "mean": "n. 团结，齐心协力"
+    },
+    {
+        "word": "BCE",
+        "ipa": "/ˌbiː siː ˈiː/",
+        "mean": "abbr. 公元前"
+    },
+    {
+        "word": "participate",
+        "ipa": "/pɑːˈtɪsɪpeɪt/",
+        "mean": "vi. 参加，参与"
+    },
+    {
+        "word": "compete",
+        "ipa": "/kəmˈpiːt/",
+        "mean": "vi. 参加比赛；竞争"
+    },
+    {
+        "word": "racial",
+        "ipa": "/ˈreɪʃl/",
+        "mean": "adj. 种族的；种族间的"
+    },
+    {
+        "word": "diverse",
+        "ipa": "/daɪˈvɜːs/",
+        "mean": "adj. 多种多样的，不同的"
+    },
+    {
+        "word": "joint",
+        "ipa": "/dʒɔɪnt/",
+        "mean": "adj. 联合的，共同的 n. 关节；接合处"
+    },
+    {
+        "word": "motivate",
+        "ipa": "/ˈməʊtɪveɪt/",
+        "mean": "vt. 激励，激发；成为…的动机，是…的原因"
+    },
+    {
+        "word": "motto",
+        "ipa": "/ˈmɒtəʊ/",
+        "mean": "n. (pl. mottoes, mottos) 格言，座右铭"
+    },
+    {
+        "word": "boundary",
+        "ipa": "/ˈbaʊndri/",
+        "mean": "n. 边界，分界线"
+    },
+    {
+        "word": "demonstrate",
+        "ipa": "/ˈdemənstreɪt/",
+        "mean": "vt. 表现，表露；证实，证明；示范，演示 vi. 游行示威"
+    },
+    {
+        "word": "afterwards",
+        "ipa": "/ˈɑːftəwədz/",
+        "mean": "(also afterward) adv. 以后，后来"
+    },
+    {
+        "word": "proceed",
+        "ipa": "/prəˈsiːd/",
+        "mean": "vi. 接着做，继而做；继续从事(或进行)；行进，前往"
+    },
+    {
+        "word": "flame",
+        "ipa": "/fleɪm/",
+        "mean": "n. 火焰，火舌"
+    },
+    {
+        "word": "applaud",
+        "ipa": "/əˈplɔːd/",
+        "mean": "vt. & vi. 称赞，赞许；鼓掌"
+    },
+    {
+        "word": "track and field",
+        "ipa": "",
+        "mean": "田径运动"
+    },
+    {
+        "word": "consistent",
+        "ipa": "/kənˈsɪstənt/",
+        "mean": "adj. 一致的，始终如一的；连续的"
+    },
+    {
+        "word": "call on sb to do sth",
+        "ipa": "",
+        "mean": "正式邀请某人做某事；请求某人做某事"
+    },
+    {
+        "word": "humanity",
+        "ipa": "/hjuːˈmænəti/",
+        "mean": "n. (统称)人，人类；人性；人道，仁慈"
+    },
+    {
+        "word": "rank",
+        "ipa": "/ræŋk/",
+        "mean": "vi. & vt. 属于某等级，把…分等级；排列，使排成行 n. 地位，级别；等级；排，列；军衔"
+    },
+    {
+        "word": "trend",
+        "ipa": "/trend/",
+        "mean": "n. 趋势，趋向"
+    },
+    {
+        "word": "hurdle",
+        "ipa": "/ˈhɜːdl/",
+        "mean": "n. (hurdles) 跨栏赛；栏架；障碍"
+    },
+    {
+        "word": "election",
+        "ipa": "/ɪˈlekʃn/",
+        "mean": "n. 选举，推选；当选"
+    },
+    {
+        "word": "advent",
+        "ipa": "/ˈædvent/",
+        "mean": "n. (重要事件、人物等的)到来，出现"
+    },
+    {
+        "word": "faith",
+        "ipa": "/feɪθ/",
+        "mean": "n. 信心；宗教信仰"
+    },
+    {
+        "word": "ambition",
+        "ipa": "/æmˈbɪʃn/",
+        "mean": "n. 追求的目标，夙愿；野心，雄心，壮志"
+    },
+    {
+        "word": "ascend",
+        "ipa": "/əˈsend/",
+        "mean": "vi. & vt. 上升，升高，登高"
+    },
+    {
+        "word": "identical",
+        "ipa": "/aɪˈdentɪkl/",
+        "mean": "adj. 完全同样的"
+    },
+    {
+        "word": "fellow",
+        "ipa": "/ˈfeləʊ/",
+        "mean": "adj. 同伴的，同情况的，同类的 n. 同辈，同类；男人，家伙"
+    },
+    {
+        "word": "relay",
+        "ipa": "/ˈrɪleɪ/",
+        "mean": "n. 接力赛 /rɪˈleɪ; rɪˈleɪ/ vt. 转发(信息、消息等)；播放，转播"
+    },
+    {
+        "word": "chest",
+        "ipa": "/tʃest/",
+        "mean": "n. 胸部；大箱子"
+    },
+    {
+        "word": "cheek",
+        "ipa": "/tʃiːk/",
+        "mean": "n. 面颊，脸颊"
+    },
+    {
+        "word": "half-marathon",
+        "ipa": "/ˌhɑːf ˈmærəθən/",
+        "mean": "n. 半程马拉松赛跑"
+    },
+    {
+        "word": "amateur",
+        "ipa": "/ˈæmətə(r)/",
+        "mean": "n. 业余运动员，业余爱好者；生手，外行 adj. 业余的"
+    },
+    {
+        "word": "ankle",
+        "ipa": "/ˈæŋkl/",
+        "mean": "n. 踝，踝关节"
+    },
+    {
+        "word": "gradually",
+        "ipa": "/ˈɡrædʒuəli/",
+        "mean": "adv. 逐渐地，逐步地"
+    },
+    {
+        "word": "session",
+        "ipa": "/ˈseʃn/",
+        "mean": "n. 一段时间，一场；会议，开庭；学年"
+    },
+    {
+        "word": "limit",
+        "ipa": "/ˈlɪmɪt/",
+        "mean": "n. 限度，限制；限量，限额；界限 vt. 限制，限定；限量，减量"
+    },
+    {
+        "word": "marathon",
+        "ipa": "/ˈmærəθən/",
+        "mean": "n. 马拉松赛跑；马拉松式的活动(或工作)"
+    },
+    {
+        "word": "chairman",
+        "ipa": "/ˈtʃeəmən/",
+        "mean": "n. (委员会的)委员长，主席；(会议的)主席，主持人"
+    },
+    {
+        "word": "constitution",
+        "ipa": "/ˌkɒnstɪˈtjuːʃn/",
+        "mean": "n. 体质，身体素质；宪法，章程"
+    },
+    {
+        "word": "pour",
+        "ipa": "/pɔː(r)/",
+        "mean": "vt. & vi. 倒，斟；倾倒，倒出；涌流，倾泻；下大雨"
+    },
+    {
+        "word": "walk on air",
+        "ipa": "",
+        "mean": "欢天喜地，得意扬扬"
+    },
+    {
+        "word": "keep sth in perspective",
+        "ipa": "",
+        "mean": "正确客观地看待"
+    },
+    {
+        "word": "celebrity",
+        "ipa": "/səˈlebrəti/",
+        "mean": "n. 名人；名望"
+    },
+    {
+        "word": "opponent",
+        "ipa": "/əˈpəʊnənt/",
+        "mean": "n. 对手，竞争者；反对者"
+    },
+    {
+        "word": "humility",
+        "ipa": "/hjuːˈmɪləti/",
+        "mean": "n. 谦逊，谦虚"
+    },
+    {
+        "word": "grace",
+        "ipa": "/ɡreɪs/",
+        "mean": "n. 高雅，文雅；优美；风度，体面"
+    },
+    {
+        "word": "dignity",
+        "ipa": "/ˈdɪɡnəti/",
+        "mean": "n. 尊严；自尊；高贵"
+    },
+    {
+        "word": "bobsleigh",
+        "ipa": "/ˈbɒbsleɪ/",
+        "mean": "n. 大雪橇(供两人或两人以上比赛用)"
+    },
+    {
+        "word": "unselfish",
+        "ipa": "/ʌnˈselfɪʃ/",
+        "mean": "adj. 无私的，忘我的"
+    },
+    {
+        "word": "idiom",
+        "ipa": "/ˈɪdiəm/",
+        "mean": "n. 习语，成语"
+    },
+    {
+        "word": "find one's way into",
+        "ipa": "",
+        "mean": "偶然来到，无意中处于"
+    },
+    {
+        "word": "league",
+        "ipa": "/liːɡ/",
+        "mean": "n. 联赛；等级，级别"
+    },
+    {
+        "word": "opposing",
+        "ipa": "/əˈpəʊzɪŋ/",
+        "mean": "adj. 对抗的；相反的"
+    },
+    {
+        "word": "net",
+        "ipa": "/net/",
+        "mean": "n. (the net) 球门网；网，网状物"
+    },
+    {
+        "word": "move the goalposts",
+        "ipa": "",
+        "mean": "改变条件(或规则)"
+    },
+    {
+        "word": "insurance",
+        "ipa": "/ɪnˈʃʊərəns; ɪnˈʃɔːrəns/",
+        "mean": "n. 保险业；保险；保险费"
+    },
+    {
+        "word": "salesman",
+        "ipa": "/ˈseɪlzmən/",
+        "mean": "n. 售货员，推销员"
+    },
+    {
+        "word": "complain",
+        "ipa": "/kəmˈpleɪn/",
+        "mean": "vi. & vt. 抱怨，投诉"
+    },
+    {
+        "word": "score an own goal",
+        "ipa": "",
+        "mean": "进乌龙球；无意中做让自己吃亏的事"
+    },
+    {
+        "word": "unintentionally",
+        "ipa": "/ˌʌnɪnˈtenʃənəli/",
+        "mean": "adv. 无意地，非故意地"
+    },
+    {
+        "word": "council",
+        "ipa": "/ˈkaʊnsl/",
+        "mean": "n. 政务委员会，地方议会；市政服务机构；委员会"
+    },
+    {
+        "word": "backfire",
+        "ipa": "/ˌbækˈfaɪə(r)/",
+        "mean": "vi. 产生事与愿违的不良(或危险)后果"
+    },
+    {
+        "word": "ballpark",
+        "ipa": "/ˈbɔːlpɑːk/",
+        "mean": "n. 棒球场；变动范围"
+    },
+    {
+        "word": "in the ballpark",
+        "ipa": "",
+        "mean": "差不多"
+    },
+    {
+        "word": "a ballpark estimate",
+        "ipa": "",
+        "mean": "大致相近的估计"
+    },
+    {
+        "word": "venue",
+        "ipa": "/ˈvenjuː/",
+        "mean": "n. 活动场地"
+    },
+    {
+        "word": "curveball",
+        "ipa": "/ˈkɜːvbɔːl/",
+        "mean": "n. 曲线球"
+    },
+    {
+        "word": "throw sb a curveball",
+        "ipa": "",
+        "mean": "给某人出难题"
+    },
+    {
+        "word": "handle",
+        "ipa": "/ˈhændl/",
+        "mean": "vt. 处理，应付；控制，操纵 n. 把手，拉手；柄"
+    },
+    {
+        "word": "three strikes and you are out",
+        "ipa": "",
+        "mean": "三振出局"
+    },
+    {
+        "word": "fist",
+        "ipa": "/fɪst/",
+        "mean": "n. 拳，拳头"
+    },
+    {
+        "word": "waist",
+        "ipa": "/weɪst/",
+        "mean": "n. 腰，腰部；(衣服的)腰部"
+    },
+    {
+        "word": "below the belt",
+        "ipa": "",
+        "mean": "不公正的，伤人的，残忍的"
+    },
+    {
+        "word": "cruel",
+        "ipa": "/ˈkruːəl/",
+        "mean": "adj. 刻毒伤人的，残酷的"
+    },
+    {
+        "word": "remark",
+        "ipa": "/rɪˈmɑːk/",
+        "mean": "n. 谈论，言论 vi. & vt. 说，说起，评论"
+    },
+    {
+        "word": "towel",
+        "ipa": "/ˈtaʊəl/",
+        "mean": "n. 毛巾，抹布，纸巾"
+    },
+    {
+        "word": "throw in the towel",
+        "ipa": "",
+        "mean": "认输，承认失败"
+    },
+    {
+        "word": "literally",
+        "ipa": "/ˈlɪtərəli/",
+        "mean": "adv. 真正地，确实地；按字面，字面上"
+    },
+    {
+        "word": "iron",
+        "ipa": "/ˈaɪən/",
+        "mean": "n. 铁；熨斗 vt. & vi. (用熨斗)熨，烫平"
+    },
+    {
+        "word": "surgeon",
+        "ipa": "/ˈsɜːdʒən/",
+        "mean": "n. 外科医生"
+    },
+    {
+        "word": "physician",
+        "ipa": "/fɪˈzɪʃn/",
+        "mean": "n. 医师，内科医生"
+    },
+    {
+        "word": "chemist",
+        "ipa": "/ˈkemɪst/",
+        "mean": "n. 药剂师，药商；化学家"
+    },
+    {
+        "word": "dentist",
+        "ipa": "/ˈdentɪst/",
+        "mean": "n. 牙科医生"
+    },
+    {
+        "word": "specialize",
+        "ipa": "/ˈspeʃəlaɪz/",
+        "mean": "(also specialise) vi. 专门研究(或从事)，专攻"
+    },
+    {
+        "word": "gene",
+        "ipa": "/dʒiːn/",
+        "mean": "n. 基因"
+    },
+    {
+        "word": "game-changing",
+        "ipa": "/ˈɡeɪm tʃeɪndʒɪŋ/",
+        "mean": "adj. 改变游戏规则的(指彻底改变事态发展的)"
+    },
+    {
+        "word": "genome",
+        "ipa": "/ˈdʒiːnəʊm/",
+        "mean": "n. 基因组，染色体组"
+    },
+    {
+        "word": "cell",
+        "ipa": "/sel/",
+        "mean": "n. 细胞"
+    },
+    {
+        "word": "being",
+        "ipa": "/ˈbiːɪŋ/",
+        "mean": "n. 生物；存在；身心"
+    },
+    {
+        "word": "lifespan",
+        "ipa": "/ˈlaɪfspæn/",
+        "mean": "n. 寿命，有效期"
+    },
+    {
+        "word": "affect",
+        "ipa": "/əˈfekt/",
+        "mean": "vt. 影响；侵袭，使感染；深深打动"
+    },
+    {
+        "word": "contract",
+        "ipa": "/kənˈtrækt/",
+        "mean": "vt. 感染(疾病)；与…订立合同(或契约) /ˈkɒntrækt/ n. 合同，合约"
+    },
+    {
+        "word": "virus",
+        "ipa": "/ˈvaɪrəs/",
+        "mean": "n. 病毒；(计算机程序中的)病毒"
+    },
+    {
+        "word": "cancer",
+        "ipa": "/ˈkænsə(r)/",
+        "mean": "n. 癌症；邪恶，毒瘤"
+    },
+    {
+        "word": "identify",
+        "ipa": "/aɪˈdentɪfaɪ/",
+        "mean": "vt. 找到，发现；确认，认出；显示，说明身份"
+    },
+    {
+        "word": "relate",
+        "ipa": "/rɪˈleɪt/",
+        "mean": "vi. & vt. 联系，使有联系；叙述，讲述"
+    },
+    {
+        "word": "relate to",
+        "ipa": "",
+        "mean": "涉及，与…相关"
+    },
+    {
+        "word": "means",
+        "ipa": "/miːnz/",
+        "mean": "n. (pl. means) 方法，方式；财富，钱财"
+    },
+    {
+        "word": "delete",
+        "ipa": "/dɪˈliːt/",
+        "mean": "vt. 删去，删除"
+    },
+    {
+        "word": "restore",
+        "ipa": "/rɪˈstɔː(r)/",
+        "mean": "vt. 恢复；修复；使复原，使复位"
+    },
+    {
+        "word": "ultimately",
+        "ipa": "/ˈʌltɪmətli/",
+        "mean": "adv. 最终；根本上"
+    },
+    {
+        "word": "abnormal",
+        "ipa": "/æbˈnɔːml/",
+        "mean": "adj. 反常的，畸形的"
+    },
+    {
+        "word": "weapon",
+        "ipa": "/ˈwepən/",
+        "mean": "n. 武器，手段；兵器"
+    },
+    {
+        "word": "fundamental",
+        "ipa": "/ˌfʌndəˈmentl/",
+        "mean": "adj. 十分重大的，根本的；基础的，基本的 n. 基本规律，根本法则，基础"
+    },
+    {
+        "word": "pace",
+        "ipa": "/peɪs/",
+        "mean": "n. 发生的速度，节奏；步速；快节奏 vi. & vt. 来回踱步，走来走去；确定速度，调整节奏"
+    },
+    {
+        "word": "arise",
+        "ipa": "/əˈraɪz/",
+        "mean": "vi. (arose, arisen) 发生，出现；(由…)引起，(因…)产生"
+    },
+    {
+        "word": "restrict",
+        "ipa": "/rɪˈstrɪkt/",
+        "mean": "vt. 限制，限定；束缚，妨碍；约束，管束"
+    },
+    {
+        "word": "prohibit",
+        "ipa": "/prəˈhɪbɪt/",
+        "mean": "vt. (尤指以法令)禁止；使不可能"
+    },
+    {
+        "word": "prohibit sb from doing sth",
+        "ipa": "",
+        "mean": "禁止某人做某事"
+    },
+    {
+        "word": "resistance",
+        "ipa": "/rɪˈzɪstəns/",
+        "mean": "n. 抵抗力；抵制，反对；抵抗，反抗"
+    },
+    {
+        "word": "flu",
+        "ipa": "/fluː/",
+        "mean": "n. 流行性感冒，流感"
+    },
+    {
+        "word": "characteristic",
+        "ipa": "/ˌkærəktəˈrɪstɪk/",
+        "mean": "n. 特征，特点 adj. 典型的，独特的"
+    },
+    {
+        "word": "wrestle",
+        "ipa": "/ˈresl/",
+        "mean": "vi. & vt. 奋力对付，努力处理；摔跤"
+    },
+    {
+        "word": "wrestle with",
+        "ipa": "",
+        "mean": "努力处理，全力解决"
+    },
+    {
+        "word": "put sth in place",
+        "ipa": "",
+        "mean": "准备就绪"
+    },
+    {
+        "word": "debate",
+        "ipa": "/dɪˈbeɪt/",
+        "mean": "vt. & vi. 讨论，辩论；仔细考虑，思考 n. 讨论，争论；辩论"
+    },
+    {
+        "word": "without doubt",
+        "ipa": "",
+        "mean": "毫无疑问，的确"
+    },
+    {
+        "word": "finding",
+        "ipa": "/ˈfaɪndɪŋ/",
+        "mean": "n. 调查发现，调研结果"
+    },
+    {
+        "word": "ripe",
+        "ipa": "/raɪp/",
+        "mean": "adj. 成熟的；时机成熟的"
+    },
+    {
+        "word": "a ripe old age",
+        "ipa": "",
+        "mean": "高龄"
+    },
+    {
+        "word": "withdraw",
+        "ipa": "/wɪðˈdrɔː/",
+        "mean": "vi. & vt. (withdrew, withdrawn) 脱离(社会)，不与人交往；(使)撤回；(使)退出；停止提供"
+    },
+    {
+        "word": "equip",
+        "ipa": "/ɪˈkwɪp/",
+        "mean": "vt. 配备；使有能力"
+    },
+    {
+        "word": "artificial",
+        "ipa": "/ˌɑːtɪˈfɪʃl/",
+        "mean": "adj. 人工的，人造的；人为的；虚假的"
+    },
+    {
+        "word": "limb",
+        "ipa": "/lɪm/",
+        "mean": "n. 肢，臂，腿"
+    },
+    {
+        "word": "rubber",
+        "ipa": "/ˈrʌbə(r)/",
+        "mean": "n. 橡胶；橡皮"
+    },
+    {
+        "word": "outgoing",
+        "ipa": "/ˈaʊtɡəʊɪŋ/",
+        "mean": "adj. 外向的"
+    },
+    {
+        "word": "grateful",
+        "ipa": "/ˈɡreɪtfl/",
+        "mean": "adj. 感激的，表示感谢的"
+    },
+    {
+        "word": "disabled",
+        "ipa": "/dɪsˈeɪbld/",
+        "mean": "adj. 有残疾的，丧失能力的"
+    },
+    {
+        "word": "disability",
+        "ipa": "/ˌdɪsəˈbɪləti/",
+        "mean": "n. 缺陷，障碍"
+    },
+    {
+        "word": "conventional",
+        "ipa": "/kənˈvenʃənl/",
+        "mean": "adj. 传统的，习惯的；依照惯例的，遵循习俗的"
+    },
+    {
+        "word": "leather",
+        "ipa": "/ˈleðə(r)/",
+        "mean": "n. 皮革"
+    },
+    {
+        "word": "sensory",
+        "ipa": "/ˈsensəri/",
+        "mean": "adj. 感觉的，感官的"
+    },
+    {
+        "word": "patent",
+        "ipa": "/ˈpætnt; ˈpeɪtnt/",
+        "mean": "n. 专利，专利证书 /ˈpeɪtnt/ adj. 有专利的，受专利保护的"
+    },
+    {
+        "word": "fuel",
+        "ipa": "/ˈfjuːəl/",
+        "mean": "vt. 增加，刺激；给…提供燃料 n. 燃料"
+    },
+    {
+        "word": "disturb",
+        "ipa": "/dɪˈstɜːb/",
+        "mean": "vt. 使不安；打扰；搅乱"
+    },
+    {
+        "word": "tackle",
+        "ipa": "/ˈtækl/",
+        "mean": "vt. 应付，处理，解决"
+    },
+    {
+        "word": "head-on",
+        "ipa": "/ˌhed ˈɒn/",
+        "mean": "adv. 积极地，果断地；正面相撞地 adj. 迎头相撞的；正面反对的"
+    },
+    {
+        "word": "go to great lengths to do sth",
+        "ipa": "",
+        "mean": "竭尽全力做某事，不遗余力做某事"
+    },
+    {
+        "word": "adjust",
+        "ipa": "/əˈdʒʌst/",
+        "mean": "vt. & vi. 调整，调节；适应，习惯；整理"
+    },
+    {
+        "word": "centimetre",
+        "ipa": "/ˈsentɪmiːtə(r)/",
+        "mean": "(AmE centimeter) n. 厘米"
+    },
+    {
+        "word": "acupuncture",
+        "ipa": "/ˈækjupʌŋktʃə(r)/",
+        "mean": "n. 针刺疗法"
+    },
+    {
+        "word": "needle",
+        "ipa": "/ˈniːdl/",
+        "mean": "n. 针；注射针；指针"
+    },
+    {
+        "word": "evidence",
+        "ipa": "/ˈevɪdəns/",
+        "mean": "n. 证据，证明；物证，人证 vt. 证明，表明"
+    },
+    {
+        "word": "date back to",
+        "ipa": "",
+        "mean": "追溯到，始于，自…至今"
+    },
+    {
+        "word": "solid",
+        "ipa": "/ˈsɒlɪd/",
+        "mean": "adj. 实心的；固体的；结实的；纯色的"
+    },
+    {
+        "word": "switch",
+        "ipa": "/swɪtʃ/",
+        "mean": "vi. & vt. 转变；交换；调班 n. 开关，闸；转变，改变"
+    },
+    {
+        "word": "stainless",
+        "ipa": "/ˈsteɪnləs/",
+        "mean": "adj. 不生锈的"
+    },
+    {
+        "word": "steel",
+        "ipa": "/stiːl/",
+        "mean": "n. 钢；钢铁工业"
+    },
+    {
+        "word": "millimetre",
+        "ipa": "/ˈmɪlimiːtə(r)/",
+        "mean": "(AmE millimeter) n. 毫米"
+    },
+    {
+        "word": "clinic",
+        "ipa": "/ˈklɪnɪk/",
+        "mean": "n. 私人诊所；门诊部；门诊时间"
+    },
+    {
+        "word": "examine",
+        "ipa": "/ɪɡˈzæmɪn/",
+        "mean": "vt. 检查，检验；审查，调查；考，测试；审问"
+    },
+    {
+        "word": "tongue",
+        "ipa": "/tʌŋ/",
+        "mean": "n. 舌头；语言"
+    },
+    {
+        "word": "pulse",
+        "ipa": "/pʌls/",
+        "mean": "n. 脉搏 vi. 搏动，跳动；洋溢着"
+    },
+    {
+        "word": "wrist",
+        "ipa": "/rɪst/",
+        "mean": "n. 手腕，腕关节"
+    },
+    {
+        "word": "organ",
+        "ipa": "/ˈɔːɡən/",
+        "mean": "n. 器官；风琴；机构，机关"
+    },
+    {
+        "word": "severe",
+        "ipa": "/sɪˈvɪə(r)/",
+        "mean": "adj. 十分严重的，极为恶劣的；严厉的；艰难的"
+    },
+    {
+        "word": "anxiety",
+        "ipa": "/æŋˈzaɪəti/",
+        "mean": "n. 焦虑；担心；渴望"
+    },
+    {
+        "word": "abuse",
+        "ipa": "/əˈbjuːz/",
+        "mean": "vt. 滥用；虐待；辱骂 /əˈbjuːs/ n. 滥用；虐待；辱骂"
+    },
+    {
+        "word": "alcohol",
+        "ipa": "/ˈælkəhɒl/",
+        "mean": "n. 酒精，酒"
+    },
+    {
+        "word": "tobacco",
+        "ipa": "/təˈbækəʊ/",
+        "mean": "n. 烟草"
+    },
+    {
+        "word": "drug",
+        "ipa": "/drʌɡ/",
+        "mean": "n. 毒品；药物"
+    },
+    {
+        "word": "phenomenon",
+        "ipa": "/fəˈnɒmɪnən/",
+        "mean": "n. (pl. phenomena /fəˈnɒmɪnə/) 现象"
+    },
+    {
+        "word": "substance",
+        "ipa": "/ˈsʌbstəns/",
+        "mean": "n. 物质；要点"
+    },
+    {
+        "word": "symbol",
+        "ipa": "/ˈsɪmbl/",
+        "mean": "n. 象征；符号，代号"
+    },
+    {
+        "word": "widespread",
+        "ipa": "/ˈwaɪdspred/",
+        "mean": "adj. 分布广的，普遍的，广泛的"
+    },
+    {
+        "word": "bandage",
+        "ipa": "/ˈbændɪdʒ/",
+        "mean": "n. 绷带"
+    },
+    {
+        "word": "infection",
+        "ipa": "/ɪnˈfekʃn/",
+        "mean": "n. 传染，感染"
+    },
+    {
+        "word": "department",
+        "ipa": "/dɪˈpɑːtmənt/",
+        "mean": "n. (医院的)科，部门；局，系"
+    },
+    {
+        "word": "castle",
+        "ipa": "/ˈkɑːsl/",
+        "mean": "n. 城堡"
+    },
+    {
+        "word": "castles in the air",
+        "ipa": "",
+        "mean": "(建)空中楼阁，幻想，空想"
+    },
+    {
+        "word": "input",
+        "ipa": "/ˈɪnpʊt/",
+        "mean": "n. 输入的信息；投入 vt. (input, input) 输入(信息)"
+    },
+    {
+        "word": "capacity",
+        "ipa": "/kəˈpæsəti/",
+        "mean": "n. 领悟(或理解、办事)能力；容量，容积；职位，职责；生产量"
+    },
+    {
+        "word": "analyse",
+        "ipa": "/ˈænəlaɪz/",
+        "mean": "(AmE analyze) vt. 分析"
+    },
+    {
+        "word": "massive",
+        "ipa": "/ˈmæsɪv/",
+        "mean": "adj. 巨大的，大而重的；非常严重的"
+    },
+    {
+        "word": "network",
+        "ipa": "/ˈnetwɜːk/",
+        "mean": "n. 网络，网状系统；关系网，人际网；(互联)网络"
+    },
+    {
+        "word": "coin",
+        "ipa": "/kɔɪn/",
+        "mean": "vt. 创造(新词语)"
+    },
+    {
+        "word": "breakthrough",
+        "ipa": "/ˈbreɪkθruː/",
+        "mean": "n. 重大进展，突破 adj. 突破性的"
+    },
+    {
+        "word": "finance",
+        "ipa": "/ˈfaɪnæns; faɪˈnæns/",
+        "mean": "n. 财政，金融；资金；财力，财务管理 vt. 提供资金"
+    },
+    {
+        "word": "to name but a few",
+        "ipa": "",
+        "mean": "略举几例"
+    },
+    {
+        "word": "autonomous",
+        "ipa": "/ɔːˈtɒnəməs/",
+        "mean": "adj. 自主的，有自主权的；自治的"
+    },
+    {
+        "word": "domestic",
+        "ipa": "/dəˈmestɪk/",
+        "mean": "adj. 家庭的，家用的；本国的，国内的"
+    },
+    {
+        "word": "threaten",
+        "ipa": "/ˈθretn/",
+        "mean": "vt. 危及，对…构成威胁；威胁，恐吓"
+    },
+    {
+        "word": "commit",
+        "ipa": "/kəˈmɪt/",
+        "mean": "vt. 犯(罪)；承诺，保证；花(钱或时间) vi. 全心全意投入，忠于"
+    },
+    {
+        "word": "crime",
+        "ipa": "/kraɪm/",
+        "mean": "n. 罪，罪行；犯罪活动"
+    },
+    {
+        "word": "murder",
+        "ipa": "/ˈmɜːdə(r)/",
+        "mean": "vt. & n. 谋杀，凶杀"
+    },
+    {
+        "word": "urge",
+        "ipa": "/ɜːdʒ/",
+        "mean": "vt. 敦促，催促；大力推荐，竭力主张；驱赶，鞭策 n. 冲动，强烈的欲望"
+    },
+    {
+        "word": "pose",
+        "ipa": "/pəʊz/",
+        "mean": "vt. 造成，产生；提问，质询 vi. 摆好姿势 n. 姿势"
+    },
+    {
+        "word": "apparently",
+        "ipa": "/əˈpærəntli/",
+        "mean": "adv. 显然，可见"
+    },
+    {
+        "word": "warning",
+        "ipa": "/ˈwɔːnɪŋ/",
+        "mean": "n. 警告，先兆；警戒"
+    },
+    {
+        "word": "demand",
+        "ipa": "/dɪˈmɑːnd/",
+        "mean": "vt. 需要；强烈要求 n. 要求，所需之物；需求，需要"
+    },
+    {
+        "word": "victim",
+        "ipa": "/ˈvɪktɪm/",
+        "mean": "n. 受害者，牺牲品；受骗者；祭品"
+    },
+    {
+        "word": "fall victim to",
+        "ipa": "",
+        "mean": "受伤，受损，被害"
+    },
+    {
+        "word": "greedy",
+        "ipa": "/ˈɡriːdi/",
+        "mean": "adj. 贪心的，贪婪的"
+    },
+    {
+        "word": "recognition",
+        "ipa": "/ˌrekəɡˈnɪʃn/",
+        "mean": "n. 识别，认出；承认，认可；赞誉，赏识"
+    },
+    {
+        "word": "database",
+        "ipa": "/ˈdeɪtəbeɪs/",
+        "mean": "n. 数据库"
+    },
+    {
+        "word": "alternative",
+        "ipa": "/ɔːlˈtɜːnətɪv/",
+        "mean": "n. 可供选择的事物 adj. 可供替代的；非传统的"
+    },
+    {
+        "word": "hacker",
+        "ipa": "/ˈhækə(r)/",
+        "mean": "n. 黑客"
+    },
+    {
+        "word": "theft",
+        "ipa": "/θeft/",
+        "mean": "n. 偷窃，偷窃罪"
+    },
+    {
+        "word": "break into",
+        "ipa": "",
+        "mean": "强行闯入，撬开；突然开始(笑、唱等)；顺利打入"
+    },
+    {
+        "word": "fail-safe",
+        "ipa": "/ˈfeɪl seɪf/",
+        "mean": "adj. 有自动保险装置的，具有自动防止故障性能的"
+    },
+    {
+        "word": "drone",
+        "ipa": "/drəʊn/",
+        "mean": "n. 无人驾驶飞机"
+    },
+    {
+        "word": "distribution",
+        "ipa": "/ˌdɪstrɪˈbjuːʃn/",
+        "mean": "n. 分发，分送；分配，分布"
+    },
+    {
+        "word": "predict",
+        "ipa": "/prɪˈdɪkt/",
+        "mean": "vt. 预言，预告"
+    },
+    {
+        "word": "decrease",
+        "ipa": "/dɪˈkriːs/",
+        "mean": "vt. & vi. 减少，降低 /ˈdiːkriːs/ n. 减少，降低"
+    },
+    {
+        "word": "deny",
+        "ipa": "/dɪˈnaɪ/",
+        "mean": "vt. 否认，否定；拒绝承认，拒绝接受"
+    },
+    {
+        "word": "quantity",
+        "ipa": "/ˈkwɒntəti/",
+        "mean": "n. 数量；大量"
+    },
+    {
+        "word": "in large quantities",
+        "ipa": "",
+        "mean": "大量，大批"
+    },
+    {
+        "word": "airline",
+        "ipa": "/ˈeəlaɪn/",
+        "mean": "n. 航空公司"
+    },
+    {
+        "word": "threat",
+        "ipa": "/θret/",
+        "mean": "n. 构成威胁的人(或事物)；威胁，恐吓；凶兆"
+    },
+    {
+        "word": "spy",
+        "ipa": "/spaɪ/",
+        "mean": "vi. 从事间谍活动 vt. 突然看见 n. 间谍"
+    },
+    {
+        "word": "spy on",
+        "ipa": "",
+        "mean": "暗中监视，窥探"
+    },
+    {
+        "word": "illegal",
+        "ipa": "/ɪˈliːɡl/",
+        "mean": "adj. 不合法的，非法的"
+    },
+    {
+        "word": "monitor",
+        "ipa": "/ˈmɒnɪtə(r)/",
+        "mean": "vt. 监视，跟踪调查；监听 n. 显示屏；监测器；班长"
+    },
+    {
+        "word": "licence",
+        "ipa": "/ˈlaɪsns/",
+        "mean": "(AmE license) n. 许可证，执照"
+    },
+    {
+        "word": "stadium",
+        "ipa": "/ˈsteɪdiəm/",
+        "mean": "n. 体育场，运动场"
+    },
+    {
+        "word": "highlight",
+        "ipa": "/ˈhaɪlaɪt/",
+        "mean": "n. 最好(或最精彩)的部分 vt. 突出，强调；使醒目"
+    },
+    {
+        "word": "capsule",
+        "ipa": "/ˈkæpsjuːl/",
+        "mean": "n. 小塑料容器；(装药的)胶囊；太空舱"
+    },
+    {
+        "word": "bury",
+        "ipa": "/ˈberi/",
+        "mean": "vt. 埋藏；埋葬，安葬；覆盖；遮盖；使陷入"
+    },
+    {
+        "word": "fountain",
+        "ipa": "/ˈfaʊntən/",
+        "mean": "n. 喷射，涌流；喷水池；源泉，丰富来源"
+    },
+    {
+        "word": "fountain pen",
+        "ipa": "",
+        "mean": "自来水笔"
+    },
+    {
+        "word": "contemporary",
+        "ipa": "/kənˈtemprəri/",
+        "mean": "adj. 当代的，现代的；属同时期的，同一时代的 n. 同代人，同辈人"
+    },
+    {
+        "word": "seed",
+        "ipa": "/siːd/",
+        "mean": "n. 种子；起源，起因"
+    },
+    {
+        "word": "wheat",
+        "ipa": "/wiːt/",
+        "mean": "n. 小麦，麦粒"
+    },
+    {
+        "word": "muscular",
+        "ipa": "/ˈmʌskjələ(r)/",
+        "mean": "adj. 肌肉的；强壮的"
+    },
+    {
+        "word": "conclude",
+        "ipa": "/kənˈkluːd/",
+        "mean": "vt. & vi. 断定，推断出；达成，订立；(使)结束，终止"
+    },
+    {
+        "word": "justified",
+        "ipa": "/ˈdʒʌstɪfaɪd/",
+        "mean": "adj. 合乎情理的，事出有因的；有正当理由的"
+    },
+    {
+        "word": "superiority",
+        "ipa": "/suːˌpɪəriˈɒrəti/",
+        "mean": "n. 优越感；优越性，优势"
+    },
+    {
+        "word": "virtual",
+        "ipa": "/ˈvɜːtʃuəl/",
+        "mean": "adj. 虚拟的，模拟的；很接近的，事实上的"
+    },
+    {
+        "word": "at the forefront of",
+        "ipa": "",
+        "mean": "处于最前列，进入重要地位"
+    },
+    {
+        "word": "definition",
+        "ipa": "/ˌdefɪˈnɪʃn/",
+        "mean": "n. 定义；释义，解释"
+    },
+    {
+        "word": "headset",
+        "ipa": "/ˈhedset/",
+        "mean": "n. 耳机"
+    },
+    {
+        "word": "sensor",
+        "ipa": "/ˈsensə(r)/",
+        "mean": "n. 传感器，敏感元件"
+    },
+    {
+        "word": "practical",
+        "ipa": "/ˈpræktɪkl/",
+        "mean": "adj. 实际的，真实的；切实可行的；有用的；实事求是的"
+    },
+    {
+        "word": "a host of",
+        "ipa": "",
+        "mean": "许多，大量"
+    },
+    {
+        "word": "academic",
+        "ipa": "/ˌækəˈdemɪk/",
+        "mean": "adj. 教学的，学术的；学习良好的；纯理论的"
+    },
+    {
+        "word": "immersive",
+        "ipa": "/ɪˈmɜːsɪv/",
+        "mean": "adj. (计算机系统或图像)沉浸式虚拟现实的"
+    },
+    {
+        "word": "engage",
+        "ipa": "/ɪnˈɡeɪdʒ/",
+        "mean": "vt. & vi. 吸引住(注意力、兴趣)；雇用，聘用；与…建立密切关系"
+    },
+    {
+        "word": "twin",
+        "ipa": "/twɪn/",
+        "mean": "n. 双胞胎之一；一对相像的事物之一 adj. 双胞胎之一的；成对的，成双的"
+    },
+    {
+        "word": "clone",
+        "ipa": "/kləʊn/",
+        "mean": "n. 好像一模一样的人，复制品；克隆动物(或植物) vt. 克隆，以无性繁殖技术复制"
+    },
+    {
+        "word": "barrier",
+        "ipa": "/ˈbæriə(r)/",
+        "mean": "n. 障碍，阻力；屏障，障碍物；分界线，隔阂"
+    },
+    {
+        "word": "boil down to",
+        "ipa": "",
+        "mean": "归结为，基本问题是"
+    },
+    {
+        "word": "fine-tune",
+        "ipa": "/ˌfaɪn ˈtjuːn/",
+        "mean": "vt. 对…微调"
+    },
+    {
+        "word": "initial",
+        "ipa": "/ɪˈnɪʃl/",
+        "mean": "adj. 最初的，开始的 n. 首字母"
+    },
+    {
+        "word": "optimistic",
+        "ipa": "/ˌɒptɪˈmɪstɪk/",
+        "mean": "adj. 乐观的，抱乐观看法的"
+    },
+    {
+        "word": "annoy",
+        "ipa": "/əˈnɔɪ/",
+        "mean": "vt. 使恼怒，使生气；打扰，骚扰"
+    },
+    {
+        "word": "weed",
+        "ipa": "/wiːd/",
+        "mean": "n. 杂草，野草"
+    },
+    {
+        "word": "like weeds",
+        "ipa": "",
+        "mean": "大量"
+    },
+    {
+        "word": "state-of-the-art",
+        "ipa": "/ˌsteɪt ɒv ði ˈɑːt/",
+        "mean": "adj. 使用最先进技术(或方法)的，最先进的"
+    },
+    {
+        "word": "globe",
+        "ipa": "/ɡləʊb/",
+        "mean": "n. 球体，球状物；地球仪；地球，世界"
+    },
+    {
+        "word": "satellite",
+        "ipa": "/ˈsætəlaɪt/",
+        "mean": "n. 人造卫星；卫星"
+    },
+    {
+        "word": "expense",
+        "ipa": "/ɪkˈspens/",
+        "mean": "n. 费用；开销；开支"
+    },
+    {
+        "word": "at the expense of",
+        "ipa": "",
+        "mean": "在牺牲(或损害)…的情况下"
+    },
+    {
+        "word": "gender",
+        "ipa": "/ˈdʒendə(r)/",
+        "mean": "n. 性别"
+    },
+    {
+        "word": "envy",
+        "ipa": "/ˈenvi/",
+        "mean": "n. & vt. 羡慕，忌妒"
+    },
+    {
+        "word": "pub",
+        "ipa": "/pʌb/",
+        "mean": "n. 酒吧，酒馆"
+    }
+]

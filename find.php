@@ -291,7 +291,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" id="id" name="id" class="glass-input" placeholder="例如 0000000001" value="<?php echo isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>" required>
             </div>
             <div class="form-group">
-                <label for="pname">🧑 昵称（忘记的话去搜索账号找到自己的昵称）</label>
+                <label for="pname">🧑 昵称（忘记的话去<a href="mp.html">搜索账号</a>找到自己的昵称）</label>
                 <input type="text" id="pname" name="pname" class="glass-input" placeholder="你的昵称" value="<?php echo isset($_POST['pname']) ? htmlspecialchars($_POST['pname']) : ''; ?>" required>
             </div>
 

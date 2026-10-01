@@ -1,5 +1,16 @@
 <?php
 date_default_timezone_set('Asia/Shanghai');
+session_start();
+$error = '';
+$fromUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../../../core.php';
+$self = $_SERVER['PHP_SELF'];
+
+// 兼容低版本PHP替换str_contains
+if (strpos($fromUrl, $self) !== false) {
+    $fromUrl = isset($_SESSION['feedback_from']) ? $_SESSION['feedback_from'] : '../../../core.php';
+} else {
+    $_SESSION['feedback_from'] = $fromUrl;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? '';
@@ -33,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         array_unshift($problems, $data);
         
         if (file_put_contents('problem.json', json_encode($problems, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
-            $redirect_to = '../../../core.php';
             echo <<<HTML
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -57,11 +67,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="icon">✓</div>
         <h1>反馈成功！</h1>
         <p>感谢您的宝贵意见，我们将尽快处理。</p>
-        <div class="tip">页面将在 <span id="c">2</span> 秒后跳转...<br>未自动跳转？<a href="javascript:history.back()">返回</a></div>
+        <div class="tip">页面将在 <span id="c">2</span> 秒跳转回原页面...<br>未自动跳转？<a href="{$fromUrl}">点击返回</a></div>
     </div>
     <script>
+        const target = "{$fromUrl}";
         let n = 2, el = document.getElementById('c');
-        let t = setInterval(() => { if (--n <= 0) { clearInterval(t); location.href = '$redirect_to'; } else el.textContent = n; }, 1000);
+        let t = setInterval(() => {
+            if (--n <= 0) {
+                clearInterval(t);
+                location.href = target;
+            } else {
+                el.textContent = n;
+            }
+        }, 1000);
     </script>
 </body>
 </html>
@@ -72,7 +90,6 @@ HTML;
         }
     }
 }
-
 $problems = [];
 if (file_exists('problem.json')) {
     $json = file_get_contents('problem.json');
@@ -112,28 +129,22 @@ if (file_exists('problem.json')) {
 <body>
     <div class="container">
         <h1>问题反馈</h1>
-        <p class="lead">我们会在第一时间处理您的反馈<a href="" class="text-blue-600" onclick="event.preventDefault(); history.length &gt; 1 ? history.back() : window.location.href = '/'"> 返回</a></p>
-
+        <p class="lead">我们会在第一时间处理您的反馈<a href="<?php echo $fromUrl; ?>"> 返回</a></p>
         <div class="card">
             <?php if (isset($error)): ?>
-                <div class="alert"><?php echo $error; ?></div>
+                <div class="alert"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
-
             <form method="POST">
                 <label>用户ID *</label>
-                <input type="text" name="id" pattern="\d{1,12}" required placeholder="1-12位数字ID" value="<?php echo htmlspecialchars($_POST['id'] ?? ''); ?>">
-
+                <input type="text" name="id" pattern="\d{1,12}" required placeholder="1-12位数字ID" value="<?php echo isset($error) ? htmlspecialchars($_POST['id'] ?? '') : ''; ?>">
                 <label>邮箱 *</label>
-                <input type="email" name="email" required placeholder="your@email.com" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
-
+                <input type="email" name="email" required placeholder="your@email.com" value="<?php echo isset($error) ? htmlspecialchars($_POST['email'] ?? '') : ''; ?>">
                 <label>反馈内容 *</label>
-                <textarea name="feedback" required maxlength="300" placeholder="请描述您遇到的问题（最多300字）"><?php echo htmlspecialchars($_POST['feedback'] ?? ''); ?></textarea>
+                <textarea name="feedback" required maxlength="300" placeholder="请描述您遇到的问题（最多300字）"><?php echo isset($error) ? htmlspecialchars($_POST['feedback'] ?? '') : ''; ?></textarea>
                 <div class="char-count"><span id="cnt">0</span>/300</div>
-
                 <button type="submit">提交反馈</button>
             </form>
         </div>
-
         <div class="card">
             <h2>已提交的问题</h2>
             <?php if (empty($problems)): ?>
@@ -150,10 +161,8 @@ if (file_exists('problem.json')) {
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-
         <footer>&copy; <?php echo date('Y'); ?> 问题反馈系统</footer>
     </div>
-
     <script>
         const ta = document.querySelector('textarea'), cnt = document.getElementById('cnt');
         if (ta && cnt) {

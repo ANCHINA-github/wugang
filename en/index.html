@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>英语单词随机抽查</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ 基础 ============ */
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; overflow:hidden; }
+body{
+  font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  background-color:#ffffff;
+  color:#1a1a1a;
+  transition:background-color 1.1s ease;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+}
+body.dark{ background-color:#04060f; }
+
+/* ============ 星空画布 ============ */
+#stars{
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  opacity:0; transition:opacity 1.5s ease;
+}
+#stars.on{ opacity:1; }
+
+/* ============ 主界面 ============ */
+#home{
+  position:fixed; inset:0; z-index:3;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:5vh 5vw;
+  background:#ffffff;
+  transition:opacity .7s ease, transform .8s ease;
+  overflow-y:auto;
+}
+#home.leaving{ opacity:0; transform:scale(1.05); pointer-events:none; }
+
+.home-title{
+  font-size:clamp(24px,3.4vw,44px);
+  font-weight:700; letter-spacing:.08em; color:#111;
+  margin:0 0 10px; text-align:center;
+}
+.home-sub{
+  font-size:clamp(12px,1.1vw,15px); color:#9a9a9a;
+  letter-spacing:.28em; margin:0 0 clamp(26px,5vh,54px);
+}
+
+.cards{
+  display:flex; flex-wrap:wrap; justify-content:center;
+  gap:clamp(14px,1.6vw,26px);
+  max-width:1240px; width:100%;
+}
+.card{
+  position:relative; flex:0 0 auto;
+  width:clamp(168px,20vw,250px);
+  height:clamp(118px,15vh,168px);
+  border:none; border-radius:22px;
+  background:linear-gradient(145deg,var(--c1),var(--c2));
+  color:#fff; font-family:inherit;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  cursor:pointer; overflow:hidden;
+  box-shadow:0 10px 24px -8px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .28s cubic-bezier(.2,.9,.3,1.5), box-shadow .28s;
+}
+.card::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 80% at 20% 0%,rgba(255,255,255,.3),transparent 62%);
+}
+.card:hover{ transform:translateY(-7px) scale(1.03); box-shadow:0 20px 36px -12px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.45); }
+.card:active{ transform:translateY(-2px) scale(.985); }
+.card-title{ font-size:clamp(21px,2.1vw,33px); font-weight:700; letter-spacing:.1em; text-shadow:0 2px 8px rgba(0,0,0,.2); }
+.card-sub{ font-size:clamp(11px,.95vw,14px); letter-spacing:.18em; opacity:.92; }
+
+/* ============ 抽查界面 ============ */
+#quiz{
+  position:fixed; inset:0; z-index:2;
+  opacity:0; pointer-events:none;
+  transition:opacity .9s ease;
+}
+#quiz.show{ opacity:1; pointer-events:auto; }
+
+.quiz-top{
+  position:absolute; top:clamp(18px,3.6vh,40px); left:clamp(18px,4vw,48px);
+  z-index:6; pointer-events:none;
+}
+.unit-name{
+  font-size:clamp(24px,3.2vw,46px);
+  font-weight:700; letter-spacing:.1em; line-height:1.1;
+  color:#fff; text-shadow:0 0 34px rgba(120,170,255,.55);
+}
+.progress{
+  margin-top:9px;
+  font-size:clamp(11px,1.05vw,15px);
+  color:rgba(150,185,235,.78);
+  letter-spacing:.2em;
+  font-variant-numeric:tabular-nums;
+}
+
+/* ---- 单词显示区 ---- */
+#wordArea{
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  padding:clamp(84px,15vh,170px) clamp(20px,6vw,110px) clamp(96px,17vh,180px);
+  overflow:hidden;
+}
+#wordContent{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:calc(var(--word-size,72px) * .26);
+  max-width:100%;
+  transform-origin:center center;
+  will-change:transform;
+}
+
+/* 单词 + 喇叭 */
+#wordWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:0.12em;
+  flex-wrap:wrap;
+  max-width:100%;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+#word{
+  font-family:'Baloo 2','Varela Round','Arial Rounded MT Bold','Comic Sans MS',system-ui,sans-serif;
+  font-weight:600;
+  font-size:var(--word-size,72px);
+  line-height:1.12;
+  color:#fff;
+  text-align:center;
+  letter-spacing:.01em;
+  max-width:100%;
+  min-width:0;
+  overflow-wrap:break-word;
+  word-break:break-word;
+  text-shadow:0 0 62px rgba(110,160,255,.6), 0 2px 30px rgba(0,0,0,.65);
+  transition:text-shadow .22s;
+}
+#word.speaking{
+  text-shadow:0 0 88px rgba(170,210,255,1), 0 0 34px rgba(120,170,255,.9), 0 2px 30px rgba(0,0,0,.65);
+}
+
+#speaker{
+  flex:none;
+  width:calc(var(--word-size,72px) * .52);
+  height:calc(var(--word-size,72px) * .52);
+  display:inline-flex; align-items:center; justify-content:center;
+  color:#8fb6ff;
+  opacity:.3;
+  transition:opacity .25s, color .25s, transform .2s;
+  filter:drop-shadow(0 0 14px rgba(120,170,255,.7));
+  pointer-events:none;
+}
+#wordWrap:hover #speaker{ opacity:.85; }
+#speaker.speaking{
+  opacity:1; color:#dbe8ff;
+  animation:speakerPulse .5s ease-in-out infinite alternate;
+}
+@keyframes speakerPulse{
+  from{ transform:scale(1);    opacity:.6; }
+  to  { transform:scale(1.14); opacity:1;  }
+}
+
+#ipa{
+  font-size:var(--ipa-size,26px);
+  color:rgba(150,182,228,.88);
+  letter-spacing:.06em;
+  text-align:center; font-weight:400;
+  max-width:100%; overflow-wrap:break-word;
+}
+#mean{
+  font-size:calc(var(--word-size,72px) * .3);
+  color:rgba(255,255,255,.95);
+  text-align:center;
+  padding:.34em 1.05em;
+  border-radius:999px;
+  background:rgba(120,170,255,.1);
+  border:1px solid rgba(140,180,255,.24);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  box-shadow:0 0 44px rgba(80,140,255,.2);
+  line-height:1.45; max-width:100%;
+}
+
+@keyframes popIn{
+  from{ opacity:0; transform:translateY(16px) scale(.96); }
+  to  { opacity:1; transform:translateY(0) scale(1); }
+}
+#wordWrap.pop,#ipa.pop,#mean.pop{ animation:popIn .42s cubic-bezier(.2,.8,.3,1) both; }
+#wordWrap.pop{ animation-delay:0s; }
+#ipa.pop { animation-delay:.05s; }
+#mean.pop{ animation-delay:.1s; }
+
+/* ---- 加载/错误提示 ---- */
+.hint{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(580px,84vw); text-align:center;
+  color:#9db4db; font-size:15px; line-height:1.9; letter-spacing:.05em;
+  white-space:pre-line; pointer-events:none;
+  opacity:0; transition:opacity .35s; z-index:4;
+}
+.hint.show{ opacity:1; }
+
+/* ---- 底部上一个 / 下一个 ---- */
+.bottom-bar{
+  position:absolute; left:50%; bottom:clamp(22px,3.8vh,44px);
+  transform:translateX(-50%);
+  display:flex; gap:16px; z-index:6;
+}
+.nav-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 30px;
+  border-radius:999px;
+  border:1px solid rgba(150,190,255,.28);
+  background:rgba(255,255,255,.06);
+  color:#dfe9ff;
+  font-family:inherit;
+  font-size:clamp(13px,1.15vw,17px);
+  letter-spacing:.1em;
+  cursor:pointer;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  transition:background .22s, border-color .22s, color .22s, transform .18s, box-shadow .22s;
+  user-select:none;
+}
+.nav-btn:hover{ background:rgba(120,170,255,.2); border-color:rgba(150,190,255,.55); color:#fff; transform:translateY(-2px); }
+.nav-btn:active{ transform:translateY(0) scale(.96); }
+.nav-btn.primary{
+  background:linear-gradient(140deg,rgba(90,150,255,.9),rgba(140,100,255,.9));
+  border-color:transparent; color:#fff;
+  box-shadow:0 10px 30px -10px rgba(90,150,255,.95);
+}
+.nav-btn.primary:hover{ box-shadow:0 14px 36px -10px rgba(120,150,255,1); }
+
+/* ---- 右下角功能面板 ---- */
+.panel{
+  position:absolute; right:clamp(14px,2.4vw,32px); bottom:clamp(14px,2.4vh,32px);
+  width:min(288px,78vw);
+  z-index:8;
+  border-radius:18px;
+  background:rgba(14,20,38,.74);
+  border:1px solid rgba(130,170,255,.22);
+  -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  box-shadow:0 20px 54px -20px rgba(0,0,0,.95);
+  overflow:hidden;
+}
+.panel-head{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:13px 18px;
+  background:transparent; border:none;
+  color:#cfe0ff; font-family:inherit; font-size:14px; letter-spacing:.14em;
+  cursor:pointer;
+}
+.panel-head .chev{ display:inline-block; transition:transform .32s ease; font-size:12px; }
+.panel.collapsed .panel-head .chev{ transform:rotate(-90deg); }
+
+.panel-body{
+  padding:2px 18px 18px;
+  max-height:min(460px, 62vh);
+  overflow-y:auto;
+  opacity:1;
+  transition:max-height .35s ease, opacity .25s ease, padding .35s ease;
+  scrollbar-width:thin;
+}
+.panel-body::-webkit-scrollbar{ width:5px; }
+.panel-body::-webkit-scrollbar-thumb{ background:rgba(130,170,255,.3); border-radius:4px; }
+.panel.collapsed .panel-body{ max-height:0; opacity:0; padding-top:0; padding-bottom:0; }
+
+.row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:9px 0; }
+.row.col{ display:block; }
+.row-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.label{ font-size:13px; color:#a9bfe0; letter-spacing:.1em; }
+.val{ font-size:12px; color:#6f8ec4; font-variant-numeric:tabular-nums; }
+
+/* 滑块 */
+input[type=range]{
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:4px; border-radius:4px;
+  background:rgba(255,255,255,.15);
+  outline:none; cursor:pointer; margin:0;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:16px; height:16px; border-radius:50%;
+  background:linear-gradient(140deg,#8ab6ff,#a98cff);
+  box-shadow:0 0 14px rgba(120,160,255,.95);
+  border:none; cursor:pointer;
+}
+input[type=range]::-moz-range-track{ height:4px; border-radius:4px; background:rgba(255,255,255,.15); }
+input[type=range]::-moz-range-thumb{
+  width:16px; height:16px; border-radius:50%; border:none;
+  background:linear-gradient(140deg,#8ab6ff,#a98cff);
+  box-shadow:0 0 14px rgba(120,160,255,.95); cursor:pointer;
+}
+
+/* 开关 */
+.switch{ position:relative; display:inline-block; width:46px; height:26px; flex:none; }
+.switch input{ opacity:0; width:0; height:0; }
+.slider-sw{
+  position:absolute; inset:0; cursor:pointer; border-radius:999px;
+  background:rgba(255,255,255,.15); transition:background .25s;
+}
+.slider-sw::before{
+  content:''; position:absolute; width:20px; height:20px; border-radius:50%;
+  left:3px; top:3px; background:#c9d8f5;
+  transition:transform .25s, background .25s;
+}
+.switch input:checked + .slider-sw{ background:linear-gradient(140deg,#5a96ff,#8f6bff); }
+.switch input:checked + .slider-sw::before{ transform:translateX(20px); background:#fff; }
+
+/* 下拉框 */
+select{
+  width:100%;
+  padding:8px 32px 8px 12px;
+  border-radius:10px;
+  background-color:rgba(255,255,255,.06);
+  border:1px solid rgba(150,190,255,.25);
+  color:#cfe0ff;
+  font-family:inherit;
+  font-size:13px;
+  outline:none;
+  cursor:pointer;
+  -webkit-appearance:none; appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237f9cd0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 11px center;
+  transition:border-color .22s, background-color .22s;
+  text-overflow:ellipsis;
+}
+select:hover{ border-color:rgba(150,190,255,.5); background-color:rgba(120,170,255,.12); }
+select option{ background:#0f1730; color:#cfe0ff; }
+
+/* ---- Toast ---- */
+#toast{
+  position:fixed; left:50%; bottom:120px;
+  transform:translate(-50%,12px);
+  padding:11px 24px; border-radius:999px;
+  background:rgba(20,28,50,.92);
+  border:1px solid rgba(130,170,255,.32);
+  color:#dbe7ff; font-size:14px; letter-spacing:.07em;
+  opacity:0; pointer-events:none;
+  transition:opacity .3s, transform .3s;
+  z-index:30;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  white-space:nowrap;
+}
+#toast.show{ opacity:1; transform:translate(-50%,0); }
+
+/* 小屏适配 */
+@media (max-width:640px){
+  .bottom-bar{ bottom:16px; gap:10px; }
+  .nav-btn{ padding:11px 20px; }
+  .panel{ bottom:auto; top:clamp(84px,12vh,120px); }
+  #toast{ bottom:80px; font-size:12.5px; padding:9px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 星空 -->
+<canvas id="stars"></canvas>
+
+<!-- ========== 主界面 ========== -->
+<div id="home">
+  <h1 class="home-title">305班英语单词随机抽查</h1>
+  <p class="home-sub">SELECT A UNIT</p>
+  <div class="cards" id="cards"></div>
+</div>
+
+<!-- ========== 抽查界面 ========== -->
+<div id="quiz">
+  <div class="quiz-top">
+    <div class="unit-name" id="unitName">必修一</div>
+    <div class="progress" id="progress">0 / 0</div>
+  </div>
+
+  <div id="wordArea">
+    <div id="wordContent">
+      <div id="wordWrap" title="点击朗读">
+        <div id="word"></div>
+        <div id="speaker">
+          <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5 6 9H2v6h4l5 4V5z"/>
+            <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+            <path d="M18.5 5.5a9 9 0 0 1 0 13"/>
+          </svg>
+        </div>
+      </div>
+      <div id="ipa"></div>
+      <div id="mean"></div>
+    </div>
+    <div class="hint" id="hint"></div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="nav-btn" id="prevBtn">‹ 上一个</button>
+    <button class="nav-btn primary" id="nextBtn">下一个 ›</button>
+  </div>
+
+  <!-- 功能面板 -->
+  <div class="panel" id="panel">
+    <button class="panel-head" id="panelHead">
+      <span>⚙ 设 置</span>
+      <span class="chev">▾</span>
+    </button>
+    <div class="panel-body">
+
+      <div class="row">
+        <span class="label">显示释义</span>
+        <label class="switch">
+          <input type="checkbox" id="meanSwitch">
+          <span class="slider-sw"></span>
+        </label>
+      </div>
+
+      <div class="row" id="autoSpeakRow">
+        <span class="label">自动发音</span>
+        <label class="switch">
+          <input type="checkbox" id="autoSpeakSwitch">
+          <span class="slider-sw"></span>
+        </label>
+      </div>
+
+      <div class="row col">
+        <div class="row-head">
+          <span class="label">单词大小</span>
+          <span class="val" id="wordSizeVal">72</span>
+        </div>
+        <input type="range" id="wordSize" min="28" max="140" step="1" value="72">
+      </div>
+
+      <div class="row col">
+        <div class="row-head">
+          <span class="label">音标大小</span>
+          <span class="val" id="ipaSizeVal">26</span>
+        </div>
+        <input type="range" id="ipaSize" min="14" max="56" step="1" value="26">
+      </div>
+
+      <div class="row col" id="rateRow">
+        <div class="row-head">
+          <span class="label">朗读语速</span>
+          <span class="val" id="rateVal">0.90</span>
+        </div>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="0.9">
+      </div>
+
+      <div class="row col" id="voiceRow" style="display:none">
+        <div class="row-head">
+          <span class="label">口音 / 音色</span>
+        </div>
+        <select id="voiceSelect"></select>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* =========================================================
+   1. 单元配置
+   ========================================================= */
+const UNITS = [
+  { key:'bx1', name:'必修一', file:'bx1.json', c1:'#ff9a9e', c2:'#ef4f59' },
+  { key:'bx2', name:'必修二', file:'bx2.json', c1:'#ffc07a', c2:'#f08c1a' },
+  { key:'bx3', name:'必修三', file:'bx3.json', c1:'#ffe27a', c2:'#efc000' },
+  { key:'xx1', name:'选修一', file:'xx1.json', c1:'#8ce99a', c2:'#2f9e44' },
+  { key:'xx2', name:'选修二', file:'xx2.json', c1:'#63e6be', c2:'#0b8f6b' },
+  { key:'xx3', name:'选修三', file:'xx3.json', c1:'#8ecbff', c2:'#1c7ed6' },
+  { key:'xx4', name:'选修四', file:'xxs.json', c1:'#c0b0ff', c2:'#6741d9' }
+];
+
+/* =========================================================
+   2. DOM
+   ========================================================= */
+const homeEl      = document.getElementById('home');
+const cardsEl     = document.getElementById('cards');
+const quizEl      = document.getElementById('quiz');
+const canvasEl    = document.getElementById('stars');
+const unitNameEl  = document.getElementById('unitName');
+const progressEl  = document.getElementById('progress');
+const wordAreaEl  = document.getElementById('wordArea');
+const contentEl   = document.getElementById('wordContent');
+const wordWrapEl  = document.getElementById('wordWrap');
+const wordEl      = document.getElementById('word');
+const speakerEl   = document.getElementById('speaker');
+const ipaEl       = document.getElementById('ipa');
+const meanEl      = document.getElementById('mean');
+const hintEl      = document.getElementById('hint');
+const panelEl     = document.getElementById('panel');
+const panelHead   = document.getElementById('panelHead');
+const meanSwitch  = document.getElementById('meanSwitch');
+const autoSpeakSwitch = document.getElementById('autoSpeakSwitch');
+const autoSpeakRow    = document.getElementById('autoSpeakRow');
+const wordSizeEl  = document.getElementById('wordSize');
+const ipaSizeEl   = document.getElementById('ipaSize');
+const rateEl      = document.getElementById('rate');
+const rateRow     = document.getElementById('rateRow');
+const voiceRow    = document.getElementById('voiceRow');
+const voiceSelect = document.getElementById('voiceSelect');
+const wordSizeVal = document.getElementById('wordSizeVal');
+const ipaSizeVal  = document.getElementById('ipaSizeVal');
+const rateVal     = document.getElementById('rateVal');
+const prevBtn     = document.getElementById('prevBtn');
+const nextBtn     = document.getElementById('nextBtn');
+const toastEl     = document.getElementById('toast');
+
+/* =========================================================
+   3. 状态
+   ========================================================= */
+let NAMES       = {};
+let queue       = [];
+let index       = 0;
+let showMean    = false;
+let transitioning = false;
+
+/* =========================================================
+   4. 语音合成（Web Speech API）
+   ========================================================= */
+const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+
+let voices        = [];      // 可用英文语音列表
+let currentVoice  = null;    // 当前选中的语音
+let autoSpeak     = false;   // 是否自动朗读
+let speechRate    = 0.9;     // 语速
+
+function refreshVoices(){
+  if (!speechSupported) return;
+  const all = speechSynthesis.getVoices() || [];
+  // 优先过滤出英文语音
+  let en = all.filter(v => /^en([-_]|$)/i.test(v.lang) || /english/i.test(v.name));
+  if (!en.length) en = all.slice();
+
+  voices = en;
+  voiceSelect.innerHTML = '';
+
+  if (!voices.length){
+    voiceRow.style.display = 'none';
+    return;
+  }
+
+  voices.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = v.name + ' · ' + v.lang;
+    voiceSelect.appendChild(opt);
+  });
+  voiceRow.style.display = '';
+
+  // 选一个最合适的作为默认
+  let idx = voices.findIndex(v =>
+    /en[-_]US/i.test(v.lang) && /google|natural|samantha|aria|jenny|zira/i.test(v.name)
+  );
+  if (idx < 0) idx = voices.findIndex(v => /en[-_]US/i.test(v.lang));
+  if (idx < 0) idx = 0;
+
+  voiceSelect.value = idx;
+  currentVoice = voices[idx];
+}
+
+function setSpeaking(on){
+  wordEl.classList.toggle('speaking', on);
+  speakerEl.classList.toggle('speaking', on);
+}
+
+function speak(text){
+  if (!speechSupported || !text) return;
+  try {
+    speechSynthesis.cancel();  // 打断上一句
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang  = currentVoice ? currentVoice.lang : 'en-US';
+    if (currentVoice) u.voice = currentVoice;
+    u.rate  = speechRate;
+    u.pitch = 1;
+    u.onstart = () => setSpeaking(true);
+    u.onend   = () => setSpeaking(false);
+    u.onerror = () => setSpeaking(false);
+    speechSynthesis.speak(u);
+  } catch (e){ /* 静默失败 */ }
+}
+
+if (speechSupported){
+  refreshVoices();
+  if (typeof speechSynthesis.onvoiceschanged !== 'undefined'){
+    speechSynthesis.onvoiceschanged = refreshVoices;
+  }
+  // 有些浏览器语音列表是异步加载的，多试几次
+  setTimeout(refreshVoices, 300);
+  setTimeout(refreshVoices, 1200);
+} else {
+  // 不支持就隐藏发音相关的行
+  autoSpeakRow.style.display = 'none';
+  rateRow.style.display = 'none';
+  voiceRow.style.display = 'none';
+}
+
+/* =========================================================
+   5. 星空背景
+   ========================================================= */
+const ctx = canvasEl.getContext('2d');
+let stars = [], meteors = [], rafId = null, starsRunning = false;
+
+function resizeCanvas(){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvasEl.width  = Math.floor(innerWidth  * dpr);
+  canvasEl.height = Math.floor(innerHeight * dpr);
+  canvasEl.style.width  = innerWidth  + 'px';
+  canvasEl.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  buildStars();
+}
+
+function buildStars(){
+  const w = innerWidth, h = innerHeight;
+  const count = Math.max(60, Math.min(320, Math.round(w * h / 7000)));
+  stars = [];
+  for (let i = 0; i < count; i++){
+    stars.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.3 + 0.25,
+      a: Math.random() * 0.8 + 0.2,
+      da: (Math.random() * 0.011 + 0.003) * (Math.random() < 0.5 ? -1 : 1),
+      blue: Math.random() < 0.18
+    });
+  }
+}
+
+function drawStars(){
+  const w = innerWidth, h = innerHeight;
+  ctx.clearRect(0, 0, w, h);
+
+  for (const s of stars){
+    s.a += s.da;
+    if (s.a > 1)   { s.a = 1;   s.da *= -1; }
+    if (s.a < 0.12){ s.a = 0.12; s.da *= -1; }
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = s.blue
+      ? `rgba(150,200,255,${s.a})`
+      : `rgba(255,255,255,${s.a})`;
+    ctx.fill();
+  }
+
+  if (Math.random() < 0.0035 && meteors.length < 2){
+    meteors.push({
+      x: Math.random() * w * 0.8,
+      y: Math.random() * h * 0.4,
+      len: 120 + Math.random() * 110,
+      speed: 7 + Math.random() * 6,
+      life: 1
+    });
+  }
+  for (let i = meteors.length - 1; i >= 0; i--){
+    const m = meteors[i];
+    m.x += m.speed;
+    m.y += m.speed * 0.52;
+    m.life -= 0.011;
+    if (m.life <= 0 || m.x > w + 200 || m.y > h + 200){ meteors.splice(i, 1); continue; }
+    const grad = ctx.createLinearGradient(m.x, m.y, m.x - m.len, m.y - m.len * 0.52);
+    grad.addColorStop(0, `rgba(190,220,255,${m.life * 0.9})`);
+    grad.addColorStop(1, 'rgba(190,220,255,0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(m.x, m.y);
+    ctx.lineTo(m.x - m.len, m.y - m.len * 0.52);
+    ctx.stroke();
+  }
+
+  rafId = requestAnimationFrame(drawStars);
+}
+
+function startStars(){
+  if (starsRunning) return;
+  starsRunning = true;
+  resizeCanvas();
+  drawStars();
+}
+
+window.addEventListener('resize', () => {
+  if (starsRunning) resizeCanvas();
+  fitContent();
+});
+
+/* =========================================================
+   6. 操作音效（Web Audio）
+   ========================================================= */
+let audioCtx = null;
+function getAudio(){
+  if (!audioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    audioCtx = new AC();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function playTone(f1, f2, dur, vol, type){
+  const ac = getAudio(); if (!ac) return;
+  const t = ac.currentTime;
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.setValueAtTime(f1, t);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(f2, 1), t + dur);
+  gain.gain.setValueAtTime(0.0001, t);
+  gain.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  osc.connect(gain); gain.connect(ac.destination);
+  osc.start(t); osc.stop(t + dur + 0.03);
+}
+
+function playSound(kind){
+  if (kind === 'next'){
+    playTone(620, 1080, 0.15, 0.17, 'sine');
+    setTimeout(() => playTone(1000, 1360, 0.09, 0.09, 'triangle'), 55);
+  } else if (kind === 'prev'){
+    playTone(760, 400, 0.17, 0.17, 'sine');
+    setTimeout(() => playTone(500, 320, 0.09, 0.09, 'triangle'), 50);
+  } else if (kind === 'toggle'){
+    playTone(880, 880, 0.07, 0.09, 'sine');
+  }
+}
+
+function playSwoosh(){
+  const ac = getAudio(); if (!ac) return;
+  const t = ac.currentTime;
+  const len = Math.floor(ac.sampleRate * 0.55);
+  const buffer = ac.createBuffer(1, len, ac.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < len; i++){
+    data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2.2);
+  }
+  const src = ac.createBufferSource();
+  src.buffer = buffer;
+  const filter = ac.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(260, t);
+  filter.frequency.exponentialRampToValueAtTime(2400, t + 0.5);
+  filter.Q.value = 1.1;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.1, t + 0.09);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+  src.connect(filter); filter.connect(g); g.connect(ac.destination);
+  src.start(t); src.stop(t + 0.55);
+}
+
+/* =========================================================
+   7. 主界面卡片
+   ========================================================= */
+UNITS.forEach(u => {
+  const btn = document.createElement('button');
+  btn.className = 'card';
+  btn.style.setProperty('--c1', u.c1);
+  btn.style.setProperty('--c2', u.c2);
+  btn.innerHTML =
+    `<span class="card-title">${u.name}</span>` +
+    `<span class="card-sub">点击开始抽查</span>`;
+  btn.addEventListener('click', () => enterQuiz(u));
+  cardsEl.appendChild(btn);
+});
+
+/* =========================================================
+   8. 进入抽查界面
+   ========================================================= */
+function enterQuiz(unit){
+  if (transitioning) return;
+  transitioning = true;
+
+  playSwoosh();
+
+  homeEl.classList.add('leaving');
+  document.body.classList.add('dark');
+  startStars();
+  canvasEl.classList.add('on');
+
+  setTimeout(() => quizEl.classList.add('show'), 380);
+  setTimeout(() => { homeEl.style.display = 'none'; }, 900);
+
+  unitNameEl.textContent = NAMES[unit.key] || unit.name;
+  loadUnit(unit);
+}
+
+/* =========================================================
+   9. name.json（可选）
+   ========================================================= */
+async function loadNames(){
+  try {
+    const res = await fetch('name.json', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (Array.isArray(data)){
+      data.forEach(item => {
+        if (item && typeof item === 'object' && item.key) NAMES[item.key] = item.name;
+      });
+    } else if (data && typeof data === 'object'){
+      NAMES = data;
+    }
+  } catch (e){ /* 没有 name.json 就用内置名字 */ }
+}
+
+/* =========================================================
+   10. 读取词库
+   ========================================================= */
+function normalizeWords(raw){
+  const arr = Array.isArray(raw)
+    ? raw
+    : (raw && (raw.words || raw.data || raw.list)) || [];
+  return arr
+    .map(o => ({
+      word: (o.word  != null ? o.word  : (o.w  != null ? o.w  : '')).toString().trim(),
+      ipa : (o.ipa   != null ? o.ipa   : (o.phonetic != null ? o.phonetic : '')).toString().trim(),
+      mean: (o.mean  != null ? o.mean  : (o.meaning != null ? o.meaning : (o.cn != null ? o.cn : ''))).toString().trim()
+    }))
+    .filter(o => o.word);
+}
+
+async function loadUnit(unit){
+  setHint('加载中…');
+  wordEl.textContent = '';
+  ipaEl.textContent  = '';
+  meanEl.textContent = '';
+  progressEl.textContent = '0 / 0';
+
+  try {
+    const res = await fetch(unit.file, { cache: 'no-store' });
+    if (!res.ok) throw new Error('无法读取 ' + unit.file + '（HTTP ' + res.status + '）');
+    const raw = await res.json();
+    const list = normalizeWords(raw);
+    if (!list.length) throw new Error(unit.file + ' 中没有有效的单词数据');
+
+    queue = shuffle(list);
+    index = 0;
+    setHint('');
+    render();
+  } catch (err){
+    setHint('加载失败：' + err.message +
+      '\n\n请确认：\n1) 词库文件与该页面在同一目录\n2) 使用本地服务器打开（例如：php -S localhost:8000）\n3) 直接双击 file:// 打开时浏览器会拦截 JSON 读取');
+  }
+}
+
+/* =========================================================
+   11. 洗牌 & 渲染
+   ========================================================= */
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function reshuffleKeepingLastOut(){
+  const last = queue.length ? queue[queue.length - 1] : null;
+  const a = shuffle(queue);
+  if (last && a.length > 1 && a[0].word === last.word){
+    [a[0], a[1]] = [a[1], a[0]];
+  }
+  return a;
+}
+
+function render(){
+  const item = queue[index];
+  if (!item) return;
+
+  wordEl.textContent = item.word || '';
+  ipaEl.textContent  = item.ipa  || '';
+  meanEl.textContent = item.mean || '';
+  meanEl.style.display = showMean ? '' : 'none';
+
+  progressEl.textContent = (index + 1) + ' / ' + queue.length;
+
+  // 重播入场动画
+  [wordWrapEl, ipaEl, meanEl].forEach(el => el.classList.remove('pop'));
+  void wordEl.offsetWidth;
+  [wordWrapEl, ipaEl, meanEl].forEach(el => el.classList.add('pop'));
+
+  requestAnimationFrame(fitContent);
+
+  // 自动发音（延迟一点点，避免与翻页音效打架）
+  if (autoSpeak && speechSupported && item.word){
+    setTimeout(() => {
+      if (queue[index] && queue[index].word === item.word) speak(item.word);
+    }, 90);
+  }
+}
+
+/* =========================================================
+   12. 自适应缩放
+   ========================================================= */
+function fitContent(){
+  const cs = getComputedStyle(wordAreaEl);
+  const rect = wordAreaEl.getBoundingClientRect();
+  const padL = parseFloat(cs.paddingLeft)  || 0;
+  const padR = parseFloat(cs.paddingRight) || 0;
+  const padT = parseFloat(cs.paddingTop)   || 0;
+  const padB = parseFloat(cs.paddingBottom)|| 0;
+
+  const availW = rect.width  - padL - padR;
+  const availH = rect.height - padT - padB;
+  if (availW <= 0 || availH <= 0) return;
+
+  const w = contentEl.offsetWidth;
+  const h = contentEl.offsetHeight;
+  if (!w || !h) return;
+
+  let s = Math.min(availW / w, availH / h, 1);
+  if (!isFinite(s) || s <= 0) s = 1;
+  contentEl.style.transform = 'scale(' + s.toFixed(4) + ')';
+}
+
+if (window.ResizeObserver){
+  new ResizeObserver(() => fitContent()).observe(wordAreaEl);
+}
+window.addEventListener('orientationchange', () => setTimeout(fitContent, 260));
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(() => fitContent());
+}
+
+/* =========================================================
+   13. 上一个 / 下一个
+   ========================================================= */
+function nextWord(){
+  if (!queue.length) return;
+  playSound('next');
+
+  if (index >= queue.length - 1){
+    queue = reshuffleKeepingLastOut();
+    index = 0;
+    toast('本轮已抽查完毕，已重新洗牌开始新一轮');
+  } else {
+    index++;
+  }
+  render();
+}
+
+function prevWord(){
+  if (!queue.length) return;
+  playSound('prev');
+
+  if (index <= 0){
+    toast('已经是第一个单词了');
+    return;
+  }
+  index--;
+  render();
+}
+
+nextBtn.addEventListener('click', nextWord);
+prevBtn.addEventListener('click', prevWord);
+
+window.addEventListener('keydown', e => {
+  if (!quizEl.classList.contains('show')) return;
+  if (e.key === 'ArrowRight'){ e.preventDefault(); nextWord(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevWord(); }
+  if (e.key === 'h' || e.key === 'H'){ toggleMean(); }
+  if (e.key === ' '){ e.preventDefault(); if (queue[index]) speak(queue[index].word); }
+});
+
+/* =========================================================
+   14. 点击单词发音
+   ========================================================= */
+wordWrapEl.addEventListener('click', () => {
+  // 如果用户正在选中文本，就不触发发音
+  const sel = window.getSelection();
+  if (sel && sel.toString().trim()) return;
+  if (queue[index]) speak(queue[index].word);
+});
+
+/* =========================================================
+   15. 功能面板
+   ========================================================= */
+panelHead.addEventListener('click', () => {
+  panelEl.classList.toggle('collapsed');
+  playSound('toggle');
+});
+
+// 显示 / 隐藏释义
+function toggleMean(){
+  showMean = !showMean;
+  meanSwitch.checked = showMean;
+  meanEl.style.display = showMean ? '' : 'none';
+  playSound('toggle');
+  requestAnimationFrame(fitContent);
+}
+meanSwitch.addEventListener('change', () => {
+  showMean = meanSwitch.checked;
+  meanEl.style.display = showMean ? '' : 'none';
+  playSound('toggle');
+  requestAnimationFrame(fitContent);
+});
+
+// 自动发音
+autoSpeakSwitch.addEventListener('change', () => {
+  autoSpeak = autoSpeakSwitch.checked;
+  playSound('toggle');
+  if (autoSpeak && queue[index]) speak(queue[index].word);
+});
+
+// 单词大小
+wordSizeEl.addEventListener('input', e => {
+  const v = +e.target.value;
+  wordSizeVal.textContent = v;
+  contentEl.style.setProperty('--word-size', v + 'px');
+  requestAnimationFrame(fitContent);
+});
+
+// 音标大小
+ipaSizeEl.addEventListener('input', e => {
+  const v = +e.target.value;
+  ipaSizeVal.textContent = v;
+  contentEl.style.setProperty('--ipa-size', v + 'px');
+  requestAnimationFrame(fitContent);
+});
+
+// 朗读语速
+rateEl.addEventListener('input', e => {
+  speechRate = +e.target.value;
+  rateVal.textContent = speechRate.toFixed(2);
+});
+
+// 口音 / 音色选择（切换后试听）
+voiceSelect.addEventListener('change', e => {
+  const v = voices[+e.target.value];
+  if (v) currentVoice = v;
+  speak('Hello');
+});
+
+/* =========================================================
+   16. 提示工具
+   ========================================================= */
+let toastTimer = null;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1900);
+}
+
+function setHint(text){
+  if (!text){
+    hintEl.classList.remove('show');
+    hintEl.textContent = '';
+    return;
+  }
+  hintEl.textContent = text;
+  hintEl.classList.add('show');
+}
+
+/* =========================================================
+   17. 初始化
+   ========================================================= */
+(function init(){
+  contentEl.style.setProperty('--word-size', wordSizeEl.value + 'px');
+  contentEl.style.setProperty('--ipa-size',  ipaSizeEl.value  + 'px');
+  meanEl.style.display = 'none';
+  meanSwitch.checked = false;
+
+  resizeCanvas();
+  loadNames();
+})();
+</script>
+</body>
+</html>

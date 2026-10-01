@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initKeywordEvents();
     // 初始化推荐标签区域
     initRecommendTags();
+    // 初始化字数计数器
+    initCharCounters();
     
     // 查看评论按钮（委托）
 document.addEventListener('click', function(e) {
@@ -102,7 +104,6 @@ window.addEventListener('scroll', function(){
 });
 
 
-// 模态框内伪输入框 -> 打开评论发布弹窗
 const modalFakeInput = document.getElementById('modalFakeInput');
 if (modalFakeInput) {
     modalFakeInput.addEventListener('click', function() {
@@ -118,8 +119,14 @@ if (modalFakeInput) {
         document.getElementById('commentPid').value = pid;
         document.getElementById('commentPname').value = userInfo.pname;
         document.getElementById('commentPortrait').value = userInfo.portrait || '';
+
+        // ✅ 关键修复：清空输入框 + 重置被回复对象，避免残留上一次的 @
+        const commentContent = document.getElementById('commentContent');
+        if (commentContent) commentContent.value = '';
+        replyUserName = '';
+
         showModal('commentModal');
-        hideModal('commentshowModal');   // 关闭评论查看框，避免重叠
+        hideModal('commentshowModal');
     });
 }
 
@@ -1998,7 +2005,18 @@ function initModalEvents() {
     // 点击遮罩层关闭模态框（通用）
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal-mask')) {
-        hideModal(e.target.id);
+        const modalId = e.target.id;
+        hideModal(modalId);
+
+        //点击遮罩关闭评论弹窗时，同步清空输入框和 @ 对象
+        if (modalId === 'commentModal') {
+            const commentContent = document.getElementById('commentContent');
+            if (commentContent) {
+             commentContent.value = '';
+            commentContent.dispatchEvent(new Event('input')); 
+            }
+            replyUserName = '';
+        }
     }
 });
     // 登录模态框关闭
@@ -2055,7 +2073,10 @@ document.addEventListener('click', function(e) {
             const postDeviceHeader = document.getElementById('postDeviceHeader');
             
             if (postTip) postTip.textContent = '';
-            if (postContent) postContent.value = '';
+            if (postContent) {
+            postContent.value = '';
+            postContent.dispatchEvent(new Event('input'));
+            }
             if (postSubmitBtn) {
                 postSubmitBtn.disabled = false;
                 postSubmitBtn.textContent = '发布';
@@ -2092,7 +2113,10 @@ document.addEventListener('click', function(e) {
             const commentDeviceHeader = document.getElementById('commentDeviceHeader');
             
             if (commentTip) commentTip.textContent = '';
-            if (commentContent) commentContent.value = '';
+            if (commentContent) {
+            commentContent.value = '';
+            commentContent.dispatchEvent(new Event('input'));
+            }
             if (commentSubmitBtn) {
                 commentSubmitBtn.disabled = false;
                 commentSubmitBtn.textContent = '发布评论';
@@ -3177,5 +3201,36 @@ function renderModalComments(comments, pid) {
             input.focus();
             hideModal('commentshowModal');
         });
+    });
+}
+// ==================== 文本框字数统计 ====================
+function initCharCounters() {
+    const configs = [
+        { inputId: 'postContent',    counterId: 'postContentCounter',    max: 2000 },
+        { inputId: 'commentContent', counterId: 'commentContentCounter', max: 500  }
+    ];
+
+    configs.forEach(({ inputId, counterId, max }) => {
+        const input = document.getElementById(inputId);
+        const counter = document.getElementById(counterId);
+        if (!input || !counter) return;
+
+        // 用码点计数，emoji 只算 1 个字符
+        const getLength = (str) => Array.from(str).length;
+
+        function updateCounter() {
+            const len = getLength(input.value);
+            counter.textContent = `${len} / ${max}`;
+
+            counter.classList.remove('warning', 'danger');
+            if (len >= max) {
+                counter.classList.add('danger');
+            } else if (len >= max * 0.9) {
+                counter.classList.add('warning');
+            }
+        }
+
+        input.addEventListener('input', updateCounter);
+        updateCounter();  // 初始化
     });
 }

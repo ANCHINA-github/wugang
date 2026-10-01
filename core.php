@@ -1227,7 +1227,8 @@ if (!isset($staticVer)) {
                 <form id="postForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="postContent">武冈</label>
-                        <textarea id="postContent" name="content" required placeholder="请输入你想分享的内容..."></textarea>
+                        <textarea id="postContent" name="content" required placeholder="请输入你想分享的内容..." maxlength="2000"></textarea>
+                        <div class="char-counter" id="postContentCounter">0 / 2000</div>
                     </div>
 
                     <!-- 发帖建议区域 -->
@@ -1302,7 +1303,8 @@ if (!isset($staticVer)) {
                 <form id="commentForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="commentContent">武冈</label>
-                        <textarea id="commentContent" name="com_content" required placeholder="请输入你的评论..."></textarea>
+                        <textarea id="commentContent" name="com_content" required placeholder="请输入你的评论..." maxlength="500"></textarea>
+                         <div class="char-counter" id="commentContentCounter">0 / 500</div>
                     </div>
                     
                     <!-- 评论图片上传区域 -->
@@ -1627,7 +1629,7 @@ if (!isset($staticVer)) {
     <div id="postTipOverlay" class="post-tip-overlay">
     <div class="liquid-glass-tip">
     <div class="tip-arrow"></div>
-    <p>🎉 点击这里发布你的动态吧（轻触关闭）</p>
+    <p>在这里开始思想漫步（轻触关闭）</p>
     </div>
     </div>
 

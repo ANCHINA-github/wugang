@@ -405,10 +405,16 @@
                     <div class="icon"><i class="fas fa-users"></i></div>
                     <span>圈子</span>
                 </div>
-                <!-- 聊天 -->
+                <!--
                 <div class="tab-item" data-tab="music" onclick="switchFramePage('./service/ancloud/')">
-                    <div class="icon"><i class="fas fa-comments"></i></div>
-                    <span>聊天</span>
+                    <div class="icon"><i class="fa-solid fa-mountain"></i></div>
+                    <span>武冈</span>
+                </div>
+                -->
+
+                <div class="tab-item" data-tab="music" onclick="switchFramePage('./mp.html')">
+                    <div class="icon"><i class="fa-solid fa-people-group"></i></div>
+                    <span>好友</span>
                 </div>
 
                 <!-- 我的 -->
@@ -643,7 +649,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--script src="ad-popup.js"></script-->
 <script>
 // 更新网站时修改这里的版本号
-const VERSION = "2026073001";
+const VERSION = "2026091301";
 const localVer = localStorage.getItem("site_version");
 if(localVer !== VERSION){
     localStorage.setItem("site_version", VERSION);

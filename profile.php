@@ -266,6 +266,14 @@ $currentPage = basename(__FILE__, '.php');
 
         <!-- 服务列表 -->
         <div class="service-list">
+            <a href="wugang.apk" class="service-item">
+                <div class="service-icon"><i class="fa-solid fa-download"></i></div>
+                <div class="service-content">
+                    <div class="service-title">下载武冈APP(仅安卓)</div>
+                    <div class="service-desc">更加快捷的访问</div>
+                </div>
+            </a>
+
             <a href="login-data.php" class="service-item">
                 <div class="service-icon"><i class="fa fa-calendar"></i></div>
                 <div class="service-content">
@@ -278,7 +286,7 @@ $currentPage = basename(__FILE__, '.php');
                 <div class="service-icon"><i class="fa fa-history"></i></div>
                 <div class="service-content">
                     <div class="service-title">历史动态</div>
-                    <div class="service-desc">查看你的历史动态</div>
+                    <div class="service-desc">查看和删除你的历史动态</div>
                 </div>
             </a>
 

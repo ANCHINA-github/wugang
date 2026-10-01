@@ -1,5 +1,107 @@
 <?php
-// ========== 处理删除请求（自包含，不依赖 core.php） ==========
+// ========== 处理删除评论请求（仅限帖子作者本人操作） ==========
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_comment') {
+    header('Content-Type: application/json');
+    $pid   = trim($_POST['pid'] ?? '');
+    $pname = trim($_POST['pname'] ?? '');
+    $cid   = trim($_POST['cid'] ?? '');
+
+    if ($pid === '' || $pname === '' || $cid === '') {
+        echo json_encode(['status' => 'error', 'msg' => '参数错误']);
+        exit;
+    }
+
+    $postsFile = 'posts.json';
+    if (!file_exists($postsFile)) {
+        echo json_encode(['status' => 'error', 'msg' => '数据文件不存在']);
+        exit;
+    }
+
+    $postsData = json_decode(file_get_contents($postsFile), true);
+    if (!is_array($postsData)) {
+        echo json_encode(['status' => 'error', 'msg' => '数据读取失败']);
+        exit;
+    }
+
+    // 1. 定位帖子
+    $postIndex = -1;
+    foreach ($postsData as $index => $post) {
+        if (isset($post['pid']) && $post['pid'] === $pid) {
+            $postIndex = $index;
+            break;
+        }
+    }
+    if ($postIndex === -1) {
+        echo json_encode(['status' => 'error', 'msg' => '未找到该帖子']);
+        exit;
+    }
+
+    // 2. 权限校验：必须是该帖子的作者
+    if (!isset($postsData[$postIndex]['pname']) || $postsData[$postIndex]['pname'] !== $pname) {
+        echo json_encode(['status' => 'error', 'msg' => '您没有权限删除此帖的评论']);
+        exit;
+    }
+
+    // 3. 定位评论
+    $comments = $postsData[$postIndex]['comments'] ?? [];
+    if (!is_array($comments)) {
+        $comments = [];
+    }
+    $comIndex = -1;
+    foreach ($comments as $index => $comment) {
+        if (isset($comment['com_cid']) && $comment['com_cid'] === $cid) {
+            $comIndex = $index;
+            break;
+        }
+    }
+    if ($comIndex === -1) {
+        echo json_encode(['status' => 'error', 'msg' => '未找到该评论']);
+        exit;
+    }
+
+    // 4. 收集该评论的图片（稍后物理删除）
+    $imagesToDelete = $comments[$comIndex]['com_images'] ?? [];
+    if (!is_array($imagesToDelete)) {
+        $imagesToDelete = [];
+    }
+
+    // 5. 移除评论
+    array_splice($comments, $comIndex, 1);
+    $postsData[$postIndex]['comments'] = array_values($comments);
+
+    // 6. 保存数据
+    $result = file_put_contents(
+        $postsFile,
+        json_encode($postsData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+        LOCK_EX
+    );
+    if ($result === false) {
+        echo json_encode(['status' => 'error', 'msg' => '删除失败，请重试']);
+        exit;
+    }
+
+    // 7. 删除评论图片文件
+    foreach ($imagesToDelete as $imagePath) {
+        if (!empty($imagePath) && file_exists($imagePath)) {
+            @unlink($imagePath);
+        }
+    }
+
+    // 8. 清除缓存
+    $postsCachePath = 'cache/posts_cache.json';
+    if (file_exists($postsCachePath)) {
+        @unlink($postsCachePath);
+    }
+
+    echo json_encode([
+        'status'      => 'success',
+        'msg'         => '评论已删除',
+        'comments_num' => count($postsData[$postIndex]['comments'])
+    ]);
+    exit;
+}
+
+// ========== 处理删除帖子请求（自包含，不依赖 core.php） ==========
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete_post') {
     header('Content-Type: application/json');
     $pid = trim($_POST['pid'] ?? '');
@@ -277,6 +379,7 @@ $staticVer = time();
             margin-bottom: 10px;
             padding: 6px 0;
             border-bottom: 1px solid var(--glass-border);
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
         .comment-item:last-child {
             border-bottom: none;
@@ -292,12 +395,20 @@ $staticVer = time();
         }
         .comment-content-wrap {
             flex: 1;
+            min-width: 0;
         }
         .comment-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 6px;
             margin-bottom: 2px;
+        }
+        .comment-header-right {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
         }
         .comment-username {
             font-size: 13px;
@@ -306,6 +417,9 @@ $staticVer = time();
         .comment-date {
             font-size: 11px;
             color: var(--text-tertiary);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .comment-body {
             font-size: 14px;
@@ -340,20 +454,43 @@ $staticVer = time();
             border-radius: 8px;
             border: 1px solid var(--glass-border);
         }
-        /* 删除按钮样式（右上角） */
-        .post-delete-btn {
+        /* 评论删除按钮（红色文字） */
+        .comment-delete-btn {
             background: none;
             border: none;
             color: var(--accent-red);
-            font-size: 16px;
+            font-size: 12px;
+            line-height: 1;
             cursor: pointer;
-            padding: 6px 8px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: background 0.2s, color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            opacity: 0.85;
+        }
+        .comment-delete-btn:hover {
+            background: rgba(255, 68, 68, 0.15);
+            opacity: 1;
+        }
+        .comment-delete-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        /* 帖子删除按钮（红色文字） */
+        .post-delete-btn {
+            background: none;
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 12px;
             border-radius: var(--border-radius-sm);
-            transition: background 0.2s;
+            transition: background 0.2s, color 0.2s;
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            opacity: 0.7;
+            opacity: 0.9;
         }
         .post-delete-btn:hover {
             background: rgba(255, 68, 68, 0.15);
@@ -406,8 +543,12 @@ $staticVer = time();
                 padding: 6px 10px;
             }
             .post-delete-btn {
-                font-size: 14px;
-                padding: 4px 6px;
+                font-size: 12px;
+                padding: 5px 8px;
+            }
+            .comment-delete-btn {
+                font-size: 11px;
+                padding: 2px 3px;
             }
         }
     </style>
@@ -465,6 +606,11 @@ $staticVer = time();
             });
         });
 
+        // 只保留安全字符，防止注入到 onclick 属性中
+        function safeId(v) {
+            return String(v == null ? '' : v).replace(/[^0-9A-Za-z_\-]/g, '');
+        }
+
         function renderPostCard(post) {
             const pname = escapeHtml(post.pname || '未知');
             const portrait = post.portrait || 'default-avatar.png';
@@ -472,7 +618,7 @@ $staticVer = time();
             const device = post.device ? escapeHtml(post.device) : '';
             const content = escapeHtml(post.content || '').replace(/\n/g, '<br>');
             const likes = post.plikes || 0;
-            const pid = post.pid || '';
+            const pid = safeId(post.pid || '');
             const images = post.images || [];
             const comments = post.comments || [];
 
@@ -492,7 +638,7 @@ $staticVer = time();
 
             let commentsHtml = '';
             if (comments.length > 0) {
-                commentsHtml = `<div class="comments-container"><div class="comments-title">📝 评论 (${comments.length})</div>`;
+                commentsHtml = `<div class="comments-container"><div class="comments-title">评论 (<span class="js-comment-count">${comments.length}</span>)</div>`;
                 comments.forEach(comment => {
                     const comPname = escapeHtml(comment.com_pname || '未知');
                     const comPortrait = comment.com_portrait || 'default-avatar.png';
@@ -500,6 +646,7 @@ $staticVer = time();
                     const comContent = escapeHtml(comment.com_content || '').replace(/\n/g, '<br>');
                     const comDevice = comment.com_device ? escapeHtml(comment.com_device) : '';
                     const comImages = comment.com_images || [];
+                    const comCid = safeId(comment.com_cid || '');
 
                     let comImagesHtml = '';
                     if (comImages.length > 0) {
@@ -514,13 +661,24 @@ $staticVer = time();
                         comImagesHtml += '</div>';
                     }
 
+                    // 只有存在评论ID时才显示删除按钮（本页所有帖子均为本人所发）
+                    const delBtnHtml = comCid
+                        ? `<button class="comment-delete-btn" onclick="deleteComment('${pid}','${comCid}')" title="删除此评论">删除此评论</button>`
+                        : '';
+
                     commentsHtml += `
-                        <div class="comment-item">
+                        <div class="comment-item" data-cid="${comCid}">
                             <img src="${comPortrait}" alt="头像" class="comment-avatar" onerror="this.src='default-avatar.jpg'">
                             <div class="comment-content-wrap">
                                 <div class="comment-header">
                                     <span class="comment-username">${comPname}</span>
-                                    <span class="comment-date">${comDate} ${comDevice ? `<span class="comment-device">${comDevice}</span>` : ''}</span>
+                                    <span class="comment-header-right">
+                                        <span class="comment-date">
+                                            ${comDate}
+                                            ${comDevice ? `<span class="comment-device">${comDevice}</span>` : ''}
+                                        </span>
+                                        ${delBtnHtml}
+                                    </span>
                                 </div>
                                 <div class="comment-body">${comContent}</div>
                                 ${comImagesHtml}
@@ -546,23 +704,107 @@ $staticVer = time();
                             </div>
                         </div>
                         <div class="post-header-right">
-                            <button class="post-delete-btn" onclick="deletePost('${pid}')" title="永久删除此帖">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <button class="post-delete-btn" onclick="deletePost('${pid}')" title="永久删除此帖">删除此帖子</button>
                         </div>
                     </div>
                     <div class="post-content">${content}</div>
                     ${imagesHtml}
                     <div class="post-stats">
                         <span><i class="fas fa-heart" style="color: var(--accent-red);"></i> ${likes}</span>
-                        <span><i class="fas fa-comment"></i> ${comments.length}</span>
+                        <span><i class="fas fa-comment"></i> <span class="js-comment-count">${comments.length}</span></span>
                     </div>
                     ${commentsHtml}
                 </div>
             `;
         }
 
-        // ---------- 删除函数 ----------
+        // ---------- 删除评论 ----------
+        function deleteComment(pid, cid) {
+            if (!pid || !cid) {
+                showMessage('评论ID无效', 'error');
+                return;
+            }
+
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            if (!userInfo || !userInfo.pname) {
+                showMessage('请先登录', 'error');
+                return;
+            }
+
+            if (!confirm('确定要删除这条评论吗？\n删除后不可恢复，评论图片也会一并删除！')) {
+                return;
+            }
+
+            const item = document.querySelector(`.comment-item[data-cid="${cid}"]`);
+            const btn = item ? item.querySelector('.comment-delete-btn') : null;
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            }
+
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `action=delete_comment&pid=${encodeURIComponent(pid)}&pname=${encodeURIComponent(userInfo.pname)}&cid=${encodeURIComponent(cid)}`
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    showMessage('评论已删除', 'success');
+
+                    const card = document.querySelector(`.post-card[data-pid="${pid}"]`);
+
+                    if (item) {
+                        item.style.opacity = '0';
+                        item.style.transform = 'translateX(-12px)';
+                        setTimeout(() => {
+                            item.remove();
+                            updateCommentCount(card, -1);
+                        }, 250);
+                    } else {
+                        updateCommentCount(card, -1);
+                    }
+                } else {
+                    showMessage(result.msg, 'error');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '删除此评论';
+                    }
+                }
+            })
+            .catch(() => {
+                showMessage('网络错误，请重试', 'error');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '删除此评论';
+                }
+            });
+        }
+
+        // 同步更新评论计数；当评论数为 0 时移除评论区
+        function updateCommentCount(card, delta) {
+            if (!card) return;
+            const countEls = card.querySelectorAll('.js-comment-count');
+            if (countEls.length === 0) return;
+
+            let newCount = 0;
+            countEls.forEach(el => {
+                const cur = parseInt(el.textContent, 10) || 0;
+                newCount = Math.max(0, cur + delta);
+                el.textContent = newCount;
+            });
+
+            if (newCount === 0) {
+                const container = card.querySelector('.comments-container');
+                if (container) {
+                    container.style.transition = 'opacity 0.2s ease';
+                    container.style.opacity = '0';
+                    setTimeout(() => container.remove(), 200);
+                }
+            }
+        }
+
+        // ---------- 删除帖子 ----------
         function deletePost(pid) {
             if (!pid) {
                 showMessage('帖子ID无效', 'error');
@@ -575,7 +817,7 @@ $staticVer = time();
                 return;
             }
 
-            if (!confirm('⚠️ 确定要永久删除此帖吗？\n删除后不可恢复，包括所有评论和图片！')) {
+            if (!confirm('确定要永久删除此帖吗？\n删除后不可恢复，包括所有评论和图片！')) {
                 return;
             }
 
@@ -593,7 +835,7 @@ $staticVer = time();
             .then(response => response.json())
             .then(result => {
                 if (result.status === 'success') {
-                    showMessage('✅ 帖子已永久删除', 'success');
+                    showMessage('帖子已永久删除', 'success');
                     const card = document.querySelector(`.post-card[data-pid="${pid}"]`);
                     if (card) {
                         card.style.opacity = '0';
@@ -607,10 +849,10 @@ $staticVer = time();
                         }, 300);
                     }
                 } else {
-                    showMessage('❌ ' + result.msg, 'error');
+                    showMessage(result.msg, 'error');
                     if (btn) {
                         btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                        btn.innerHTML = '删除此帖子';
                     }
                 }
             })
@@ -618,7 +860,7 @@ $staticVer = time();
                 showMessage('网络错误，请重试', 'error');
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                    btn.innerHTML = '删除此帖子';
                 }
             });
         }

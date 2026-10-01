@@ -1,0 +1,1607 @@
+[
+    {
+        "word": "mood",
+        "ipa": "/muːd/",
+        "mean": "n. 情绪，心情；气氛，氛围"
+    },
+    {
+        "word": "combination",
+        "ipa": "/ˌkɒmbɪˈneɪʃn/",
+        "mean": "n. 结合体，联合体；联合，混合"
+    },
+    {
+        "word": "do the trick",
+        "ipa": "",
+        "mean": "奏效，起作用，达到目的"
+    },
+    {
+        "word": "creamy",
+        "ipa": "/ˈkriːmi/",
+        "mean": "adj. 含奶油的；像奶油的，光滑细腻的；淡黄色的"
+    },
+    {
+        "word": "flavour",
+        "ipa": "/ˈfleɪvə(r)/",
+        "mean": "n. 味，味道；特点，特色 vt. 给…调味，加味于 (AmE flavor)"
+    },
+    {
+        "word": "greedily",
+        "ipa": "/ˈɡriːdɪli/",
+        "mean": "adv. 贪婪地，贪心地"
+    },
+    {
+        "word": "gently",
+        "ipa": "/ˈdʒentli/",
+        "mean": "adv. 轻柔地，温和地"
+    },
+    {
+        "word": "dessert",
+        "ipa": "/dɪˈzɜːt/",
+        "mean": "n. (饭后)甜点，甜食"
+    },
+    {
+        "word": "association",
+        "ipa": "/əˌsəʊsiˈeɪʃn; əˌsəʊʃiˈeɪʃn/",
+        "mean": "n. 联想，联系；协会，社团；联合，交往"
+    },
+    {
+        "word": "vary",
+        "ipa": "/ˈveəri/",
+        "mean": "vi. (根据情况)变化，变更；相异，不同 vt. 变更，改变"
+    },
+    {
+        "word": "link",
+        "ipa": "/lɪŋk/",
+        "mean": "vt. 联系，相关联；把…连接起来 n. 联系，连接；关系，纽带；链接"
+    },
+    {
+        "word": "emotion",
+        "ipa": "/ɪˈməʊʃn/",
+        "mean": "n. 情感，强烈的感情，激情，情绪"
+    },
+    {
+        "word": "saucer",
+        "ipa": "/ˈsɔːsə(r)/",
+        "mean": "n. 碟状物，茶碟，茶托"
+    },
+    {
+        "word": "vinegar",
+        "ipa": "/ˈvɪnɪɡə(r)/",
+        "mean": "n. 醋"
+    },
+    {
+        "word": "native",
+        "ipa": "/ˈneɪtɪv/",
+        "mean": "n. 出生于某国(或某地)的人；本地人 adj. 出生地的；本地的；土著的；土产的"
+    },
+    {
+        "word": "salty",
+        "ipa": "/ˈsɔːlti/",
+        "mean": "adj. 咸的，含盐的"
+    },
+    {
+        "word": "sour",
+        "ipa": "/ˈsaʊə(r)/",
+        "mean": "adj. 酸的，有酸味的；馊的 vi. & vt. (使)变坏，变味，酸腐"
+    },
+    {
+        "word": "cry out for",
+        "ipa": "",
+        "mean": "迫切需要"
+    },
+    {
+        "word": "relieve",
+        "ipa": "/rɪˈliːv/",
+        "mean": "vt. 解除，减轻；缓和，缓解"
+    },
+    {
+        "word": "bond",
+        "ipa": "/bɒnd/",
+        "mean": "n. 纽带，联系；连接，结合"
+    },
+    {
+        "word": "security",
+        "ipa": "/sɪˈkjʊərəti/",
+        "mean": "n. 安全；保护措施；保安部门；担保，保证"
+    },
+    {
+        "word": "generate",
+        "ipa": "/ˈdʒenəreɪt/",
+        "mean": "vt. 产生，引起"
+    },
+    {
+        "word": "calorie",
+        "ipa": "/ˈkæləri/",
+        "mean": "n. 卡，卡路里；千卡"
+    },
+    {
+        "word": "digest",
+        "ipa": "/daɪˈdʒest; dɪˈdʒest/",
+        "mean": "vt. & vi. 消化；领会，理解 /ˈdaɪdʒest/ n. 摘要，文摘"
+    },
+    {
+        "word": "lower",
+        "ipa": "/ˈləʊə(r)/",
+        "mean": "vt. 降低，减少；把…放低，使…降下 adj. 下面的；在底部的；低洼的"
+    },
+    {
+        "word": "cycle",
+        "ipa": "/ˈsaɪkl/",
+        "mean": "n. 循环；自行车，摩托车 vi. 骑自行车"
+    },
+    {
+        "word": "enhance",
+        "ipa": "/ɪnˈhɑːns/",
+        "mean": "vt. 提高，增强"
+    },
+    {
+        "word": "throw oneself into",
+        "ipa": "",
+        "mean": "投身于，热衷于"
+    },
+    {
+        "word": "boil",
+        "ipa": "/bɔɪl/",
+        "mean": "vt. & vi. 用沸水煮；(使)沸腾"
+    },
+    {
+        "word": "fry",
+        "ipa": "/fraɪ/",
+        "mean": "vt. & vi. 油炸，油煎"
+    },
+    {
+        "word": "steak",
+        "ipa": "/steɪk/",
+        "mean": "n. 牛排；肉排，肉块"
+    },
+    {
+        "word": "pan",
+        "ipa": "/pæn/",
+        "mean": "n. 平锅，平底锅"
+    },
+    {
+        "word": "impress",
+        "ipa": "/ɪmˈpres/",
+        "mean": "vt. & vi. 使钦佩，给…留下深刻印象；使意识到"
+    },
+    {
+        "word": "buffet",
+        "ipa": "/ˈbʊfeɪ; ˈbʌfeɪ/",
+        "mean": "n. 自助餐"
+    },
+    {
+        "word": "bay",
+        "ipa": "/beɪ/",
+        "mean": "n. (海或湖的)湾"
+    },
+    {
+        "word": "scenery",
+        "ipa": "/ˈsiːnəri/",
+        "mean": "n. 风景，景色；舞台布景"
+    },
+    {
+        "word": "bet",
+        "ipa": "/bet/",
+        "mean": "n. 打赌，赌注；预计，估计 vi. & vt. (bet, bet) 下赌注，打赌；敢说"
+    },
+    {
+        "word": "atmosphere",
+        "ipa": "/ˈætməsfɪə(r)/",
+        "mean": "n. 气氛，氛围；大气；气体；空气"
+    },
+    {
+        "word": "out of this world",
+        "ipa": "",
+        "mean": "好(或美等)得不得了，非凡，呱呱叫"
+    },
+    {
+        "word": "version",
+        "ipa": "/ˈvɜːʃn/",
+        "mean": "n. 变体，变种；说法；版本"
+    },
+    {
+        "word": "filling",
+        "ipa": "/ˈfɪlɪŋ/",
+        "mean": "n. (糕点等的)馅"
+    },
+    {
+        "word": "elderly",
+        "ipa": "/ˈeldəli/",
+        "mean": "adj. 年纪较大的，上了年纪的"
+    },
+    {
+        "word": "bake",
+        "ipa": "/beɪk/",
+        "mean": "vt. & vi. 烘烤；烤硬"
+    },
+    {
+        "word": "flour",
+        "ipa": "/ˈflaʊə(r)/",
+        "mean": "n. 面粉"
+    },
+    {
+        "word": "adorable",
+        "ipa": "/əˈdɔːrəbl/",
+        "mean": "adj. 可爱的，讨人喜爱的"
+    },
+    {
+        "word": "mild",
+        "ipa": "/maɪld/",
+        "mean": "adj. 不浓的，淡味的；暖和的；温和的；不严重的"
+    },
+    {
+        "word": "tiramisu",
+        "ipa": "/ˌtɪrəmiˈsuː/",
+        "mean": "n. 提拉米苏"
+    },
+    {
+        "word": "bakery",
+        "ipa": "/ˈbeɪkəri/",
+        "mean": "n. 面包(糕饼)店"
+    },
+    {
+        "word": "layer",
+        "ipa": "/ˈleɪə(r); ˈleɪə(r)/",
+        "mean": "n. 层，表层；层次"
+    },
+    {
+        "word": "cheese",
+        "ipa": "/tʃiːz/",
+        "mean": "n. 干酪，奶酪"
+    },
+    {
+        "word": "bitter",
+        "ipa": "/ˈbɪtə(r)/",
+        "mean": "adj. 味苦的；激烈的；令人难过的；严寒的"
+    },
+    {
+        "word": "cream",
+        "ipa": "/kriːm/",
+        "mean": "n. 奶油，乳脂；护肤霜"
+    },
+    {
+        "word": "ingredient",
+        "ipa": "/ɪnˈɡriːdiənt/",
+        "mean": "n. 材料，成分；因素，要素"
+    },
+    {
+        "word": "loose",
+        "ipa": "/luːs/",
+        "mean": "adj. 不受约束的；未固定牢的；零散的；宽松的；疏松的"
+    },
+    {
+        "word": "let sth loose",
+        "ipa": "",
+        "mean": "释放；放任"
+    },
+    {
+        "word": "chilli",
+        "ipa": "/ˈtʃɪli/",
+        "mean": "n. 辣椒 (AmE chili)"
+    },
+    {
+        "word": "pepper",
+        "ipa": "/ˈpepə(r)/",
+        "mean": "n. 甜椒；胡椒粉"
+    },
+    {
+        "word": "Sichuan pepper",
+        "ipa": "",
+        "mean": "花椒"
+    },
+    {
+        "word": "onion",
+        "ipa": "/ˈʌnjən/",
+        "mean": "n. 洋葱，葱头"
+    },
+    {
+        "word": "spring onion",
+        "ipa": "",
+        "mean": "小葱，香葱"
+    },
+    {
+        "word": "damp",
+        "ipa": "/dæmp/",
+        "mean": "adj. 潮湿的，湿气重的"
+    },
+    {
+        "word": "foggy",
+        "ipa": "/ˈfɒɡi/",
+        "mean": "adj. 有雾的，雾茫茫的"
+    },
+    {
+        "word": "dynasty",
+        "ipa": "/ˈdɪnəsti/",
+        "mean": "n. 朝，代；王朝"
+    },
+    {
+        "word": "expand",
+        "ipa": "/ɪkˈspænd/",
+        "mean": "vt. & vi. 增加，扩大；扩展，发展；详述"
+    },
+    {
+        "word": "multiple",
+        "ipa": "/ˈmʌltɪpl/",
+        "mean": "adj. 数量多的，多样的"
+    },
+    {
+        "word": "sauce",
+        "ipa": "/sɔːs/",
+        "mean": "n. 调味汁，酱"
+    },
+    {
+        "word": "plain",
+        "ipa": "/pleɪn/",
+        "mean": "adj. 朴素的，简单的；清楚的 n. 平原"
+    },
+    {
+        "word": "slice",
+        "ipa": "/slaɪs/",
+        "mean": "n. 薄片，片；部分，份额 vt. 把…切成片；切开，割破"
+    },
+    {
+        "word": "chef",
+        "ipa": "/ʃef/",
+        "mean": "n. 主厨，厨师"
+    },
+    {
+        "word": "property",
+        "ipa": "/ˈprɒpəti/",
+        "mean": "n. 性质，特性；所有物，财产；不动产"
+    },
+    {
+        "word": "appropriate",
+        "ipa": "/əˈprəʊpriət/",
+        "mean": "adj. 合适的"
+    },
+    {
+        "word": "estimate",
+        "ipa": "/ˈestɪmeɪt/",
+        "mean": "vt. 估计，估价 /ˈestɪmət/ n. 估计；估计的成本"
+    },
+    {
+        "word": "consume",
+        "ipa": "/kənˈsjuːm/",
+        "mean": "vt. 吃，喝，饮；消耗，耗费(尤指燃料、能量或时间)"
+    },
+    {
+        "word": "hit the spot",
+        "ipa": "",
+        "mean": "使人满意，正合需要"
+    },
+    {
+        "word": "Cantonese",
+        "ipa": "/ˌkæntəˈniːz/",
+        "mean": "adj. 广东人(或文化)的，粤语的 n. (pl. Cantonese) 广东人；粤语"
+    },
+    {
+        "word": "dim sum",
+        "ipa": "/ˌdɪm ˈsʌm/",
+        "mean": "n. 点心"
+    },
+    {
+        "word": "essential",
+        "ipa": "/ɪˈsenʃl/",
+        "mean": "adj. 必不可少的；本质的，基本的"
+    },
+    {
+        "word": "innovation",
+        "ipa": "/ˌɪnəˈveɪʃn/",
+        "mean": "n. 创造，创新；新思想，新方法"
+    },
+    {
+        "word": "concept",
+        "ipa": "/ˈkɒnsept/",
+        "mean": "n. 概念，观念"
+    },
+    {
+        "word": "stimulate",
+        "ipa": "/ˈstɪmjuleɪt/",
+        "mean": "vt. 促进，激发；刺激，使兴奋"
+    },
+    {
+        "word": "appetite",
+        "ipa": "/ˈæpɪtaɪt/",
+        "mean": "n. 食欲，胃口；强烈欲望"
+    },
+    {
+        "word": "delicate",
+        "ipa": "/ˈdelɪkət/",
+        "mean": "adj. 精致的，精细的，精密的；易损的，易碎的，脆弱的"
+    },
+    {
+        "word": "emphasis",
+        "ipa": "/ˈemfəsɪs/",
+        "mean": "n. (pl. emphases /ˈemfəsiːz/) 强调，重视；重读"
+    },
+    {
+        "word": "steam",
+        "ipa": "/stiːm/",
+        "mean": "vt. & vi. 蒸；散发蒸汽 n. 水蒸气；蒸汽动力；水汽"
+    },
+    {
+        "word": "gram",
+        "ipa": "/ɡræm/",
+        "mean": "n. 克"
+    },
+    {
+        "word": "cabbage",
+        "ipa": "/ˈkæbɪdʒ/",
+        "mean": "n. 甘蓝，卷心菜"
+    },
+    {
+        "word": "wrapper",
+        "ipa": "/ˈræpə(r)/",
+        "mean": "n. (食品等的)包装材料，包装纸"
+    },
+    {
+        "word": "mixture",
+        "ipa": "/ˈmɪkstʃə(r)/",
+        "mean": "n. 混合物；混合，结合"
+    },
+    {
+        "word": "edge",
+        "ipa": "/edʒ/",
+        "mean": "n. 边，边缘；刀口"
+    },
+    {
+        "word": "apart",
+        "ipa": "/əˈpɑːt/",
+        "mean": "adv. 成碎片；分开；相隔"
+    },
+    {
+        "word": "fall apart",
+        "ipa": "",
+        "mean": "破碎，破裂；崩溃"
+    },
+    {
+        "word": "Austrian",
+        "ipa": "/ˈɒstriən/",
+        "mean": "adj. 奥地利的，奥地利人的"
+    },
+    {
+        "word": "composer",
+        "ipa": "/kəmˈpəʊzə(r)/",
+        "mean": "n. 作曲家，作曲者"
+    },
+    {
+        "word": "symphony",
+        "ipa": "/ˈsɪmfəni/",
+        "mean": "n. 交响乐，交响曲"
+    },
+    {
+        "word": "concerto",
+        "ipa": "/kənˈtʃɜːtəʊ/",
+        "mean": "n. 协奏曲"
+    },
+    {
+        "word": "Polish",
+        "ipa": "/ˈpəʊlɪʃ/",
+        "mean": "adj. 波兰的，波兰人的，波兰语的"
+    },
+    {
+        "word": "compose",
+        "ipa": "/kəmˈpəʊz/",
+        "mean": "vt. & vi. 作曲；组成；撰写；使镇静"
+    },
+    {
+        "word": "deserve",
+        "ipa": "/dɪˈzɜːv/",
+        "mean": "vt. 值得，应得"
+    },
+    {
+        "word": "tear apart",
+        "ipa": "",
+        "mean": "使(关系密切的人)分离，分开"
+    },
+    {
+        "word": "pleasant",
+        "ipa": "/ˈpleznt/",
+        "mean": "adj. 令人愉快的，可喜的；友好的，和善的"
+    },
+    {
+        "word": "whisper",
+        "ipa": "/ˈwɪspə(r)/",
+        "mean": "vi. & vt. 耳语，低语；私下说；沙沙作响 n. 低语；轻柔的声音；传言"
+    },
+    {
+        "word": "dramatic",
+        "ipa": "/drəˈmætɪk/",
+        "mean": "adj. 激动人心的，引人注目的；突然的；戏剧的；夸张的"
+    },
+    {
+        "word": "weep",
+        "ipa": "/wiːp/",
+        "mean": "vi. & vt. (wept, wept) 哭泣，流泪"
+    },
+    {
+        "word": "overcome",
+        "ipa": "/ˌəʊvəˈkʌm/",
+        "mean": "vt. (overcame, overcome) 受到…的极大影响；克服，解决；战胜"
+    },
+    {
+        "word": "sorrow",
+        "ipa": "/ˈsɒrəʊ/",
+        "mean": "n. 悲伤，悲痛；伤心事"
+    },
+    {
+        "word": "grave",
+        "ipa": "/ɡreɪv/",
+        "mean": "n. 坟墓；死亡，去世 adj. 严重的；严肃的"
+    },
+    {
+        "word": "transform",
+        "ipa": "/trænsˈfɔːm/",
+        "mean": "vi. & vt. (使)变形，(使)改观，(使)转化"
+    },
+    {
+        "word": "forever",
+        "ipa": "/fərˈevə(r)/",
+        "mean": "adv. 永远；长久地，老是"
+    },
+    {
+        "word": "combine",
+        "ipa": "/kəmˈbaɪn/",
+        "mean": "vt. & vi. (使)融合；(使)结合，(使)混合；兼做；合并"
+    },
+    {
+        "word": "rely on",
+        "ipa": "",
+        "mean": "依赖，依靠；信任"
+    },
+    {
+        "word": "blues",
+        "ipa": "/bluːz/",
+        "mean": "n. (the blues) 布鲁斯音乐，蓝调；忧郁，悲伤"
+    },
+    {
+        "word": "folk",
+        "ipa": "/fəʊk/",
+        "mean": "adj. 民间的，民俗的 n. 民间音乐；人们；各位；家人"
+    },
+    {
+        "word": "tune",
+        "ipa": "/tjuːn/",
+        "mean": "n. 曲调，曲子 vt. 调音；调频道；调整"
+    },
+    {
+        "word": "lyric",
+        "ipa": "/ˈlɪrɪk/",
+        "mean": "n. 歌词；抒情诗 adj. 抒情的；吟唱的"
+    },
+    {
+        "word": "throw in",
+        "ipa": "",
+        "mean": "奉送，额外赠送"
+    },
+    {
+        "word": "for good measure",
+        "ipa": "",
+        "mean": "作为额外增添"
+    },
+    {
+        "word": "rural",
+        "ipa": "/ˈrʊərəl/",
+        "mean": "adj. 乡村的，农村的"
+    },
+    {
+        "word": "surroundings",
+        "ipa": "/səˈraʊndɪŋz/",
+        "mean": "n. 周围，环境"
+    },
+    {
+        "word": "heaven",
+        "ipa": "/ˈhevn/",
+        "mean": "n. 极乐之地"
+    },
+    {
+        "word": "breeze",
+        "ipa": "/briːz/",
+        "mean": "n. 微风，和风"
+    },
+    {
+        "word": "guarantee",
+        "ipa": "/ˌɡærənˈtiː/",
+        "mean": "vt. 保证，担保；确保；为(产品)提供保修 n. 保证，担保；保修单"
+    },
+    {
+        "word": "jazz",
+        "ipa": "/dʒæz/",
+        "mean": "n. 爵士乐"
+    },
+    {
+        "word": "arch",
+        "ipa": "/ɑːtʃ/",
+        "mean": "n. 拱门；拱"
+    },
+    {
+        "word": "adaptation",
+        "ipa": "/ˌædæpˈteɪʃn/",
+        "mean": "n. 改编本，改写本；适应"
+    },
+    {
+        "word": "communist",
+        "ipa": "/ˈkɒmjənɪst/",
+        "mean": "adj. 共产主义的 n. 共产主义者"
+    },
+    {
+        "word": "invader",
+        "ipa": "/ɪnˈveɪdə(r)/",
+        "mean": "n. 武装入侵的军队(或国家)，侵略者"
+    },
+    {
+        "word": "consist of",
+        "ipa": "",
+        "mean": "由…组成(或构成)"
+    },
+    {
+        "word": "defend",
+        "ipa": "/dɪˈfend/",
+        "mean": "vt. & vi. 保护，防御；辩白，辩解"
+    },
+    {
+        "word": "solo",
+        "ipa": "/ˈsəʊləʊ/",
+        "mean": "n. 独奏，独唱 adj. 独自的；独唱的，独奏的"
+    },
+    {
+        "word": "flow",
+        "ipa": "/fləʊ/",
+        "mean": "vi. 流，流动；充满；涨起 n. 流，流动；连贯；涨潮"
+    },
+    {
+        "word": "spacecraft",
+        "ipa": "/ˈspeɪskrɑːft/",
+        "mean": "n. (pl. spacecraft) 航天(飞行)器，宇宙飞船"
+    },
+    {
+        "word": "solar",
+        "ipa": "/ˈsəʊlə(r)/",
+        "mean": "adj. 太阳的；太阳能的"
+    },
+    {
+        "word": "greet",
+        "ipa": "/ɡriːt/",
+        "mean": "vt. 问候，欢迎，招呼"
+    },
+    {
+        "word": "get down to (doing) sth",
+        "ipa": "",
+        "mean": "开始做某事，开始认真注意(或对待)某事"
+    },
+    {
+        "word": "suitable",
+        "ipa": "/ˈsuːtəbl; ˈsjuːtəbl/",
+        "mean": "adj. 合适的，适宜的，适当的，适用的"
+    },
+    {
+        "word": "recording",
+        "ipa": "/rɪˈkɔːdɪŋ/",
+        "mean": "n. 录音，视频；录制；记录，记载"
+    },
+    {
+        "word": "distant",
+        "ipa": "/ˈdɪstənt/",
+        "mean": "adj. 遥远的，远处的，久远的；冷淡的；远亲的"
+    },
+    {
+        "word": "volume",
+        "ipa": "/ˈvɒljuːm/",
+        "mean": "n. 音量，响度；体积，容积，容量；量，额"
+    },
+    {
+        "word": "stare",
+        "ipa": "/steə(r)/",
+        "mean": "vi. 盯着看，凝视，注视 n. 盯，凝视，注视"
+    },
+    {
+        "word": "breath",
+        "ipa": "/breθ/",
+        "mean": "n. 呼吸的空气；一次吸入的空气；微量，迹象"
+    },
+    {
+        "word": "unusual",
+        "ipa": "/ʌnˈjuːʒuəl/",
+        "mean": "adj. 特别的，不寻常的；独特的，与众不同的"
+    },
+    {
+        "word": "grab",
+        "ipa": "/ɡræb/",
+        "mean": "vt. & vi. 吸引；抓住；赶紧，抓紧"
+    },
+    {
+        "word": "sweep",
+        "ipa": "/swiːp/",
+        "mean": "vt. & vi. (swept, swept) 席卷，横扫；打扫；吹走；清除 n. 打扫，清扫"
+    },
+    {
+        "word": "disc",
+        "ipa": "/dɪsk/",
+        "mean": "n. 唱片；光碟，光盘；圆盘，圆片 (AmE disk)"
+    },
+    {
+        "word": "complicated",
+        "ipa": "/ˈkɒmplɪkeɪtɪd/",
+        "mean": "adj. 复杂的，难懂的"
+    },
+    {
+        "word": "lane",
+        "ipa": "/leɪn/",
+        "mean": "n. (乡间)小路；小巷；车道；跑道；航线"
+    },
+    {
+        "word": "accompany",
+        "ipa": "/əˈkʌmpəni/",
+        "mean": "vt. 陪同，陪伴；伴随，与…同时发生；为…伴奏"
+    },
+    {
+        "word": "expectation",
+        "ipa": "/ˌekspekˈteɪʃn/",
+        "mean": "n. 希望，盼望；预料，预期；期望，指望"
+    },
+    {
+        "word": "remarkable",
+        "ipa": "/rɪˈmɑːkəbl/",
+        "mean": "adj. 非凡的，奇异的，显著的，引人注目的"
+    },
+    {
+        "word": "stream",
+        "ipa": "/striːm/",
+        "mean": "vi. & vt. 鱼贯而行，涌动；流，流动 n. 小溪；(人)流，(车)流"
+    },
+    {
+        "word": "enthusiastic",
+        "ipa": "/ɪnˌθjuːziˈæstɪk/",
+        "mean": "adj. 热情的，热心的"
+    },
+    {
+        "word": "handkerchief",
+        "ipa": "/ˈhæŋkətʃiːf; ˈhæŋkətʃiːv/",
+        "mean": "n. (pl. handkerchiefs or handkerchieves) 手帕，纸巾"
+    },
+    {
+        "word": "vast",
+        "ipa": "/vɑːst/",
+        "mean": "adj. 大量的，辽阔的，巨大的"
+    },
+    {
+        "word": "gifted",
+        "ipa": "/ˈɡɪftɪd/",
+        "mean": "adj. 有才华的，有天赋的"
+    },
+    {
+        "word": "reputation",
+        "ipa": "/ˌrepjuˈteɪʃn/",
+        "mean": "n. 名誉，名声"
+    },
+    {
+        "word": "brilliant",
+        "ipa": "/ˈbrɪliənt/",
+        "mean": "adj. 聪颖的，技艺高的；巧妙的；很成功的；明亮的"
+    },
+    {
+        "word": "prediction",
+        "ipa": "/prɪˈdɪkʃn/",
+        "mean": "n. 预言，预测"
+    },
+    {
+        "word": "extraordinary",
+        "ipa": "/ɪkˈstrɔːdnri/",
+        "mean": "adj. 不寻常的，非凡的；意想不到的，令人惊奇的"
+    },
+    {
+        "word": "depress",
+        "ipa": "/dɪˈpres/",
+        "mean": "vt. 使抑郁，使沮丧；使萧条，使不景气"
+    },
+    {
+        "word": "upset",
+        "ipa": "/ˌʌpˈset/",
+        "mean": "adj. 难过的，失望的 /ʌpˈset/ vt. (upset, upset) 使烦恼；搅乱；打翻"
+    },
+    {
+        "word": "possess",
+        "ipa": "/pəˈzes/",
+        "mean": "vt. 具有(特质)；拥有；支配，控制"
+    },
+    {
+        "word": "abandon",
+        "ipa": "/əˈbændən/",
+        "mean": "vt. 中止，放弃，不再有；抛弃；舍弃"
+    },
+    {
+        "word": "all of a sudden",
+        "ipa": "",
+        "mean": "突然，猛地"
+    },
+    {
+        "word": "orchestra",
+        "ipa": "/ˈɔːkɪstrə/",
+        "mean": "n. 管弦乐队"
+    },
+    {
+        "word": "desperate",
+        "ipa": "/ˈdespərət/",
+        "mean": "adj. 绝望的；不惜冒险的；极其需要的；极严重的"
+    },
+    {
+        "word": "uplifting",
+        "ipa": "/ˌʌpˈlɪftɪŋ/",
+        "mean": "adj. 令人振奋的，鼓舞人心的"
+    },
+    {
+        "word": "ease",
+        "ipa": "/iːz/",
+        "mean": "n. 容易，轻易；舒适，安逸 vi. & vt. (使)宽慰，减轻"
+    },
+    {
+        "word": "genius",
+        "ipa": "/ˈdʒiːniəs/",
+        "mean": "n. 天赋，天资；天才"
+    },
+    {
+        "word": "variation",
+        "ipa": "/ˌveəriˈeɪʃn/",
+        "mean": "n. 变奏，变奏曲；变化，变更；变体，变种"
+    },
+    {
+        "word": "chorus",
+        "ipa": "/ˈkɔːrəs/",
+        "mean": "n. 合唱曲；副歌；合唱团"
+    },
+    {
+        "word": "grand",
+        "ipa": "/ɡrænd/",
+        "mean": "adj. 宏大的，宏伟的；壮丽的，堂皇的"
+    },
+    {
+        "word": "finale",
+        "ipa": "/fɪˈnɑːli/",
+        "mean": "n. 末乐章，终场，结局；结尾"
+    },
+    {
+        "word": "rhythm",
+        "ipa": "/ˈrɪðəm/",
+        "mean": "n. 节奏，韵律，律动；规律"
+    },
+    {
+        "word": "portrait",
+        "ipa": "/ˈpɔːtreɪt/",
+        "mean": "n. 肖像，半身画像；详细的描述，描绘"
+    },
+    {
+        "word": "landscape",
+        "ipa": "/ˈlændskeɪp/",
+        "mean": "n. 乡村风景画；风景，景色"
+    },
+    {
+        "word": "wander",
+        "ipa": "/ˈwɒndə(r)/",
+        "mean": "vi. & vt. 闲逛，漫步；走失；走神；蜿蜒曲折"
+    },
+    {
+        "word": "gallery",
+        "ipa": "/ˈɡæləri/",
+        "mean": "n. 展览馆，画廊；长廊，走廊；楼上旁听席"
+    },
+    {
+        "word": "decade",
+        "ipa": "/ˈdekeɪd; dɪˈkeɪd/",
+        "mean": "n. 十年，十年期"
+    },
+    {
+        "word": "mostly",
+        "ipa": "/ˈməʊstli/",
+        "mean": "adv. 主要地，一般地"
+    },
+    {
+        "word": "pond",
+        "ipa": "/pɒnd/",
+        "mean": "n. 池塘，水池"
+    },
+    {
+        "word": "canvas",
+        "ipa": "/ˈkænvəs/",
+        "mean": "n. 画布，油画；帆布"
+    },
+    {
+        "word": "neighbourhood",
+        "ipa": "/ˈneɪbəhʊd/",
+        "mean": "n. 街区，城区；邻近的地方 (AmE neighborhood)"
+    },
+    {
+        "word": "strike",
+        "ipa": "/straɪk/",
+        "mean": "vt. & vi. (struck, struck) 突然想到；撞，碰，打；突击；罢工；划(火柴) n. 罢工；袭击；击，打"
+    },
+    {
+        "word": "setting",
+        "ipa": "/ˈsetɪŋ/",
+        "mean": "n. 环境，背景；情节背景"
+    },
+    {
+        "word": "like-minded",
+        "ipa": "/ˌlaɪk ˈmaɪndɪd/",
+        "mean": "adj. 想法相同的，志趣相投的"
+    },
+    {
+        "word": "liberation",
+        "ipa": "/ˌlɪbəˈreɪʃn/",
+        "mean": "n. 解放，摆脱"
+    },
+    {
+        "word": "opposed",
+        "ipa": "/əˈpəʊzd/",
+        "mean": "adj. 截然不同的；强烈反对的"
+    },
+    {
+        "word": "as opposed to",
+        "ipa": "",
+        "mean": "(表示对比) 而，相对于"
+    },
+    {
+        "word": "dominate",
+        "ipa": "/ˈdɒmɪneɪt/",
+        "mean": "vt. & vi. 在…中具有最重要(或明显)的特色；支配，控制；占有优势；俯视"
+    },
+    {
+        "word": "employ",
+        "ipa": "/ɪmˈplɔɪ/",
+        "mean": "vt. 运用，使用；雇用"
+    },
+    {
+        "word": "brushwork",
+        "ipa": "/ˈbrʌʃwɜːk/",
+        "mean": "n. (画家的)笔触，画法"
+    },
+    {
+        "word": "realistic",
+        "ipa": "/ˌriːəˈlɪstɪk; ˌrɪəˈlɪstɪk/",
+        "mean": "adj. 逼真的，栩栩如生的；现实的，实际的；明智的"
+    },
+    {
+        "word": "essence",
+        "ipa": "/ˈesns/",
+        "mean": "n. 本质，精髓；香精，精油"
+    },
+    {
+        "word": "vivid",
+        "ipa": "/ˈvɪvɪd/",
+        "mean": "adj. 鲜明的，耀眼的；生动的"
+    },
+    {
+        "word": "vision",
+        "ipa": "/ˈvɪʒn/",
+        "mean": "n. 远见卓识；视力，视野；想象"
+    },
+    {
+        "word": "display",
+        "ipa": "/dɪˈspleɪ/",
+        "mean": "vt. 陈列，展出；显示，表现 n. 陈列，展览；表现，展示"
+    },
+    {
+        "word": "worthy",
+        "ipa": "/ˈwɜːði/",
+        "mean": "adj. 值得(或应得)…的；值得尊敬的，值得注意的"
+    },
+    {
+        "word": "calling",
+        "ipa": "/ˈkɔːlɪŋ/",
+        "mean": "n. 职业，事业；使命感"
+    },
+    {
+        "word": "shade",
+        "ipa": "/ʃeɪd/",
+        "mean": "n. 阴影部分；色度；阴凉处"
+    },
+    {
+        "word": "bathe",
+        "ipa": "/beɪð/",
+        "mean": "vt. 以(光线)洒满，覆盖，使沐浴(在光线里)；用水清洗"
+    },
+    {
+        "word": "pixel",
+        "ipa": "/ˈpɪksl/",
+        "mean": "n. 像素"
+    },
+    {
+        "word": "wage",
+        "ipa": "/weɪdʒ/",
+        "mean": "vt. 开始，发动 n. (通常指按周领的)工资，工钱"
+    },
+    {
+        "word": "campaign",
+        "ipa": "/kæmˈpeɪn/",
+        "mean": "n. (宣传)活动，运动；战役 vt. & vi. 发起运动，参加活动"
+    },
+    {
+        "word": "architecture",
+        "ipa": "/ˈɑːkɪtektʃə(r)/",
+        "mean": "n. 建筑设计，建筑风格；建筑学"
+    },
+    {
+        "word": "toast",
+        "ipa": "/təʊst/",
+        "mean": "n. 吐司，烤面包片；干杯，祝酒 vt. 为…干杯；烤；取暖"
+    },
+    {
+        "word": "garlic",
+        "ipa": "/ˈɡɑːlɪk/",
+        "mean": "n. 蒜，大蒜"
+    },
+    {
+        "word": "mushroom",
+        "ipa": "/ˈmʌʃrʊm/",
+        "mean": "n. 蘑菇"
+    },
+    {
+        "word": "arrange",
+        "ipa": "/əˈreɪndʒ/",
+        "mean": "vt. & vi. 整理，布置；安排，筹备"
+    },
+    {
+        "word": "raw",
+        "ipa": "/rɔː/",
+        "mean": "adj. 未经加工的，自然状态的；生的，未烹制的"
+    },
+    {
+        "word": "scroll",
+        "ipa": "/skrəʊl/",
+        "mean": "n. 长卷纸，卷轴"
+    },
+    {
+        "word": "insight",
+        "ipa": "/ˈɪnsaɪt/",
+        "mean": "n. 洞悉，了解；洞察力，领悟"
+    },
+    {
+        "word": "crop",
+        "ipa": "/krɒp/",
+        "mean": "n. 庄稼，作物；收成，产量"
+    },
+    {
+        "word": "wind",
+        "ipa": "/waɪnd/",
+        "mean": "vi. & vt. (wound, wound) 蜿蜒，迂回；上发条；缠绕"
+    },
+    {
+        "word": "sail",
+        "ipa": "/seɪl/",
+        "mean": "vi. & vt. (乘船)航行；起航；驾驶(船只)；飘，掠 n. 帆；乘船航行"
+    },
+    {
+        "word": "civilian",
+        "ipa": "/səˈvɪliən/",
+        "mean": "n. 平民，老百姓，庶民"
+    },
+    {
+        "word": "all walks of life",
+        "ipa": "",
+        "mean": "各行各业，社会各界"
+    },
+    {
+        "word": "butcher",
+        "ipa": "/ˈbʊtʃə(r)/",
+        "mean": "n. 肉贩，屠夫"
+    },
+    {
+        "word": "go about sth",
+        "ipa": "",
+        "mean": "忙于做某事，继续做某事"
+    },
+    {
+        "word": "apparent",
+        "ipa": "/əˈpærənt/",
+        "mean": "adj. 显而易见，明白易懂，显然"
+    },
+    {
+        "word": "ink",
+        "ipa": "/ɪŋk/",
+        "mean": "n. 墨水，墨汁"
+    },
+    {
+        "word": "perspective",
+        "ipa": "/pəˈspektɪv/",
+        "mean": "n. 透视法；态度，观点；客观判断力；景观，远景"
+    },
+    {
+        "word": "precise",
+        "ipa": "/prɪˈsaɪs/",
+        "mean": "adj. 细致的，精细的；准确的，精确的；恰好的"
+    },
+    {
+        "word": "ambitious",
+        "ipa": "/æmˈbɪʃəs/",
+        "mean": "adj. 宏大的，艰巨的；有野心的，有雄心的"
+    },
+    {
+        "word": "enormous",
+        "ipa": "/ɪˈnɔːməs/",
+        "mean": "adj. 巨大的，庞大的"
+    },
+    {
+        "word": "comprehensive",
+        "ipa": "/ˌkɒmprɪˈhensɪv/",
+        "mean": "adj. 全面的，详尽的；综合性的"
+    },
+    {
+        "word": "clothing",
+        "ipa": "/ˈkləʊðɪŋ/",
+        "mean": "n. 衣服，服装"
+    },
+    {
+        "word": "temple",
+        "ipa": "/ˈtempl/",
+        "mean": "n. 庙宇，寺院"
+    },
+    {
+        "word": "structure",
+        "ipa": "/ˈstrʌktʃə(r)/",
+        "mean": "n. 建筑物；结构，构造；精心组织"
+    },
+    {
+        "word": "overall",
+        "ipa": "/ˌəʊvərˈɔːl/",
+        "mean": "adj. 全面的，综合的 adv. 全部，总计；一般来说，大体上"
+    },
+    {
+        "word": "critic",
+        "ipa": "/ˈkrɪtɪk/",
+        "mean": "n. 批评家，评论家；批评者，挑剔的人"
+    },
+    {
+        "word": "inspection",
+        "ipa": "/ɪnˈspekʃn/",
+        "mean": "n. 检查，查看；审视；视察"
+    },
+    {
+        "word": "expose",
+        "ipa": "/ɪkˈspəʊz/",
+        "mean": "vt. 揭露，揭穿；暴露，显露；使遭受；使接触"
+    },
+    {
+        "word": "political",
+        "ipa": "/pəˈlɪtɪkl/",
+        "mean": "adj. 政治的，政府的，政权的；政党的，党派的"
+    },
+    {
+        "word": "soldier",
+        "ipa": "/ˈsəʊldʒə(r)/",
+        "mean": "n. 军人，士兵"
+    },
+    {
+        "word": "crisis",
+        "ipa": "/ˈkraɪsɪs/",
+        "mean": "n. (pl. crises /ˈkraɪsiːz/) 危机，危急关头；危难时刻，病危期"
+    },
+    {
+        "word": "decline",
+        "ipa": "/dɪˈklaɪn/",
+        "mean": "n. 衰退，衰落，减少，下降 vi. & vt. 减少，下降，衰退，衰落；谢绝"
+    },
+    {
+        "word": "overthrow",
+        "ipa": "/ˌəʊvəˈθrəʊ/",
+        "mean": "vt. (overthrew, overthrown) 推翻，打倒 /ˈəʊvəθrəʊ/ n. 推翻，打倒"
+    },
+    {
+        "word": "be down to",
+        "ipa": "",
+        "mean": "由…引起(或造成)"
+    },
+    {
+        "word": "scale",
+        "ipa": "/skeɪl/",
+        "mean": "n. 规模，范围；等级，级别；标度；比例"
+    },
+    {
+        "word": "emperor",
+        "ipa": "/ˈempərə(r)/",
+        "mean": "n. 皇帝"
+    },
+    {
+        "word": "in one's own right",
+        "ipa": "",
+        "mean": "凭自身的资格(或努力)"
+    },
+    {
+        "word": "outstanding",
+        "ipa": "/aʊtˈstændɪŋ/",
+        "mean": "adj. 优秀的，杰出的；突出的，明显的"
+    },
+    {
+        "word": "exhibition",
+        "ipa": "/ˌeksɪˈbɪʃn/",
+        "mean": "n. 展览，展出"
+    },
+    {
+        "word": "rare",
+        "ipa": "/reə(r)/",
+        "mean": "adj. 稀少的，罕见的；稀罕的，珍贵的"
+    },
+    {
+        "word": "speak volumes about",
+        "ipa": "",
+        "mean": "充分说明，清楚表明"
+    },
+    {
+        "word": "historic",
+        "ipa": "/hɪˈstɒrɪk/",
+        "mean": "adj. 历史上著名的；有史时期的"
+    },
+    {
+        "word": "career",
+        "ipa": "/kəˈrɪə(r)/",
+        "mean": "n. 经历，事业；生涯，职业"
+    },
+    {
+        "word": "barren",
+        "ipa": "/ˈbærən/",
+        "mean": "adj. 贫瘠的，不毛的；不结果实的"
+    },
+    {
+        "word": "frozen",
+        "ipa": "/ˈfrəʊzn/",
+        "mean": "adj. 结冰的，冰封的；冷冻的；冻僵的"
+    },
+    {
+        "word": "imply",
+        "ipa": "/ɪmˈplaɪ/",
+        "mean": "vt. 含有…的意思，暗示，暗指"
+    },
+    {
+        "word": "dimension",
+        "ipa": "/daɪˈmenʃn/",
+        "mean": "n. 方面，侧面；规模，程度；维"
+    },
+    {
+        "word": "grasp",
+        "ipa": "/ɡrɑːsp/",
+        "mean": "n. 理解，领会；抓紧，握紧，控制；能力所及 vt. 抓紧；领会，理解"
+    },
+    {
+        "word": "detect",
+        "ipa": "/dɪˈtekt/",
+        "mean": "vt. 发现，查明，侦察出"
+    },
+    {
+        "word": "rhyme",
+        "ipa": "/raɪm/",
+        "mean": "n. 押韵词；押韵 vt. 使押韵 vi. 和…同韵"
+    },
+    {
+        "word": "complex",
+        "ipa": "/ˈkɒmpleks/",
+        "mean": "adj. 复杂的，难懂的 n. 建筑群；复合体；情结"
+    },
+    {
+        "word": "contradictory",
+        "ipa": "/ˌkɒntrəˈdɪktəri/",
+        "mean": "adj. 相互矛盾的，对立的"
+    },
+    {
+        "word": "dig up",
+        "ipa": "",
+        "mean": "发现，搜集，查明"
+    },
+    {
+        "word": "clue",
+        "ipa": "/kluː/",
+        "mean": "n. 线索，提示；迹象"
+    },
+    {
+        "word": "cage",
+        "ipa": "/keɪdʒ/",
+        "mean": "vt. 把(动物)关在笼中 n. 笼子"
+    },
+    {
+        "word": "trill",
+        "ipa": "/trɪl/",
+        "mean": "n. (鸟的)啼啭；颤音 vt. 欢快地高声说 vi. 发颤音"
+    },
+    {
+        "word": "interpret",
+        "ipa": "/ɪnˈtɜːprət/",
+        "mean": "vt. 解释，阐释；把…理解为，领会；演绎 vi. 口译"
+    },
+    {
+        "word": "patience",
+        "ipa": "/ˈpeɪʃns/",
+        "mean": "n. 耐心，忍耐力"
+    },
+    {
+        "word": "aside",
+        "ipa": "/əˈsaɪd/",
+        "mean": "adv. 到旁边，在旁边；留，存；除…以外"
+    },
+    {
+        "word": "set sth aside",
+        "ipa": "",
+        "mean": "把…放一边；留出"
+    },
+    {
+        "word": "remote",
+        "ipa": "/rɪˈməʊt/",
+        "mean": "adj. 偏远的，偏僻的；遥远的，久远的；远亲的"
+    },
+    {
+        "word": "reward",
+        "ipa": "/rɪˈwɔːd/",
+        "mean": "vt. 奖励，奖赏 n. 奖励，回报；悬赏金"
+    },
+    {
+        "word": "constantly",
+        "ipa": "/ˈkɒnstəntli/",
+        "mean": "adv. 始终，一直"
+    },
+    {
+        "word": "logical",
+        "ipa": "/ˈlɒdʒɪkl/",
+        "mean": "adj. 符合逻辑的；必然的，合乎情理的"
+    },
+    {
+        "word": "inner",
+        "ipa": "/ˈɪnə(r)/",
+        "mean": "adj. 内心的，隐藏的；里面的，内部的"
+    },
+    {
+        "word": "perceive",
+        "ipa": "/pəˈsiːv/",
+        "mean": "vt. 注意到，意识到；将…理解为，将…视为"
+    },
+    {
+        "word": "reality",
+        "ipa": "/riˈæləti/",
+        "mean": "n. 现实，实际情况；事实，实际经历"
+    },
+    {
+        "word": "mist",
+        "ipa": "/mɪst/",
+        "mean": "n. 薄雾，水汽"
+    },
+    {
+        "word": "novelist",
+        "ipa": "/ˈnɒvəlɪst/",
+        "mean": "n. 小说家"
+    },
+    {
+        "word": "break with sth",
+        "ipa": "",
+        "mean": "与某事终止关联，破除"
+    },
+    {
+        "word": "ideal",
+        "ipa": "/aɪˈdiːəl/",
+        "mean": "n. 理想；典范 adj. 完美的，理想的"
+    },
+    {
+        "word": "rigid",
+        "ipa": "/ˈrɪdʒɪd/",
+        "mean": "adj. 死板的，僵硬的；固执的，僵化的"
+    },
+    {
+        "word": "undergo",
+        "ipa": "/ˌʌndəˈɡəʊ/",
+        "mean": "vt. (underwent, undergone) 经历，经受"
+    },
+    {
+        "word": "industrialization",
+        "ipa": "/ɪnˌdʌstriəlaɪˈzeɪʃn/",
+        "mean": "n. 工业化"
+    },
+    {
+        "word": "advocate",
+        "ipa": "/ˈædvəkeɪt/",
+        "mean": "vt. 拥护，支持，提倡 /ˈædvəkət/ n. 拥护者，支持者；辩护律师"
+    },
+    {
+        "word": "belief",
+        "ipa": "/bɪˈliːf/",
+        "mean": "n. 看法，信念；信仰，相信，信心"
+    },
+    {
+        "word": "era",
+        "ipa": "/ˈɪərə/",
+        "mean": "n. 时代，年代"
+    },
+    {
+        "word": "district",
+        "ipa": "/ˈdɪstrɪkt/",
+        "mean": "n. 区，行政区；地区，区域"
+    },
+    {
+        "word": "diverge",
+        "ipa": "/daɪˈvɜːdʒ/",
+        "mean": "vi. 分叉，岔开；分歧，相异；偏离"
+    },
+    {
+        "word": "bend",
+        "ipa": "/bend/",
+        "mean": "vi. & vt. (bent, bent) (使)拐弯，弯曲 n. 拐弯，弯道"
+    },
+    {
+        "word": "claim",
+        "ipa": "/kleɪm/",
+        "mean": "n. 声明，宣称；所有权；索赔 vt. 宣称，声称；要求；索取；获得"
+    },
+    {
+        "word": "tread",
+        "ipa": "/tred/",
+        "mean": "vi. & vt. (trod, trodden) 踩，踏；踩碎，践踏；行走，步行"
+    },
+    {
+        "word": "sigh",
+        "ipa": "/saɪ/",
+        "mean": "n. & vi. 叹气，叹息"
+    },
+    {
+        "word": "hence",
+        "ipa": "/hens/",
+        "mean": "adv. 因此，由此"
+    },
+    {
+        "word": "dare",
+        "ipa": "/deə(r)/",
+        "mean": "vi. & vt. 敢于，胆敢；激(某人做某事)"
+    },
+    {
+        "word": "dweller",
+        "ipa": "/ˈdwelə(r)/",
+        "mean": "n. 居民，居住者"
+    },
+    {
+        "word": "striking",
+        "ipa": "/ˈstraɪkɪŋ/",
+        "mean": "adj. 引人注目的，显著的；妩媚动人的，标致的"
+    },
+    {
+        "word": "characterize",
+        "ipa": "/ˈkærəktəraɪz/",
+        "mean": "vt. 是…的特征，以…为典型；使…具有特点；描述，刻画 (also characterise)"
+    },
+    {
+        "word": "Confucianism",
+        "ipa": "/kənˈfjuːʃənɪzəm/",
+        "mean": "n. 儒家，儒学，孔子学说"
+    },
+    {
+        "word": "Taoism",
+        "ipa": "/ˈtaʊɪzəm; ˈdaʊɪzəm/",
+        "mean": "n. 道教，道家"
+    },
+    {
+        "word": "legend",
+        "ipa": "/ˈledʒənd/",
+        "mean": "n. 传说，传奇故事；传奇人物"
+    },
+    {
+        "word": "encounter",
+        "ipa": "/ɪnˈkaʊntə(r)/",
+        "mean": "vt. 偶然碰到，意外地遇见；遭遇，碰到 n. 相遇，遭遇，冲突"
+    },
+    {
+        "word": "nourish",
+        "ipa": "/ˈnʌrɪʃ/",
+        "mean": "vt. 培养，助长；抚养，滋养"
+    },
+    {
+        "word": "numerous",
+        "ipa": "/ˈnjuːmərəs/",
+        "mean": "adj. 众多的，许多的"
+    },
+    {
+        "word": "glorious",
+        "ipa": "/ˈɡlɔːriəs/",
+        "mean": "adj. 荣耀的，光荣的；壮丽的，辉煌的"
+    },
+    {
+        "word": "boom",
+        "ipa": "/buːm/",
+        "mean": "n. (贸易和经济活动的)激增，繁荣 vi. 迅速发展，激增，繁荣昌盛"
+    },
+    {
+        "word": "stability",
+        "ipa": "/stəˈbɪləti/",
+        "mean": "n. 稳定(性)，稳固(性)"
+    },
+    {
+        "word": "tolerant",
+        "ipa": "/ˈtɒlərənt/",
+        "mean": "adj. 宽容的，容忍的；能耐…的"
+    },
+    {
+        "word": "liberty",
+        "ipa": "/ˈlɪbəti/",
+        "mean": "n. 自由"
+    },
+    {
+        "word": "unconstrained",
+        "ipa": "/ˌʌnkənˈstreɪnd/",
+        "mean": "adj. 不受约束的，自由的"
+    },
+    {
+        "word": "vitality",
+        "ipa": "/vaɪˈtæləti/",
+        "mean": "n. 生命力，活力，热情"
+    },
+    {
+        "word": "distinguish",
+        "ipa": "/dɪˈstɪŋɡwɪʃ/",
+        "mean": "vt. & vi. 成为…的特征，使有别于；区分，辨别；认出；使出众"
+    },
+    {
+        "word": "exaggeration",
+        "ipa": "/ɪɡˌzædʒəˈreɪʃn/",
+        "mean": "n. 夸张，夸大"
+    },
+    {
+        "word": "metaphor",
+        "ipa": "/ˈmetəfə(r)/",
+        "mean": "n. 暗喻，隐喻"
+    },
+    {
+        "word": "representative",
+        "ipa": "/ˌreprɪˈzentətɪv/",
+        "mean": "adj. 典型的，有代表性的 n. 典型人物，代表性人物；代表；责任，责备，指责"
+    },
+    {
+        "word": "frost",
+        "ipa": "/frɒst/",
+        "mean": "n. 霜；霜冻，严寒天气"
+    },
+    {
+        "word": "cast",
+        "ipa": "/kɑːst/",
+        "mean": "vt. (cast, cast) 投射；向…投以(视线、笑容等)；投，抛；选派角色 n. 全体演员；投，抛"
+    },
+    {
+        "word": "owe",
+        "ipa": "/əʊ/",
+        "mean": "vt. 欠(情)；欠(债)"
+    },
+    {
+        "word": "debt",
+        "ipa": "/det/",
+        "mean": "n. 人情债，情义，恩情；借款，欠款，债务"
+    },
+    {
+        "word": "fascinate",
+        "ipa": "/ˈfæsɪneɪt/",
+        "mean": "vt. & vi. 深深吸引，迷住"
+    },
+    {
+        "word": "entitle",
+        "ipa": "/ɪnˈtaɪtl/",
+        "mean": "vt. (usually passive) 给…命名；使享有权利，使符合资格"
+    },
+    {
+        "word": "blame",
+        "ipa": "/bleɪm/",
+        "mean": "vt. 把…归咎于，责怪，指责 n. 责任，责备，指责"
+    },
+    {
+        "word": "allowance",
+        "ipa": "/əˈlaʊəns/",
+        "mean": "n. 津贴，补助；限额；零花钱"
+    },
+    {
+        "word": "make allowance for",
+        "ipa": "",
+        "mean": "体谅；考虑到，估计到"
+    },
+    {
+        "word": "triumph",
+        "ipa": "/ˈtraɪʌmf/",
+        "mean": "n. 巨大成功，重大成就，伟大胜利 vi. 打败，战胜，成功"
+    },
+    {
+        "word": "impostor",
+        "ipa": "/ɪmˈpɒstə(r)/",
+        "mean": "n. 冒名顶替者，冒名行骗者"
+    },
+    {
+        "word": "unforgiving",
+        "ipa": "/ˌʌnfəˈɡɪvɪŋ/",
+        "mean": "adj. 棘手的；不饶人的，不宽容的"
+    }
+]
