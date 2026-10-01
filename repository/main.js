@@ -70,6 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initRecommendTags();
     // 初始化字数计数器
     initCharCounters();
+    // 初始化表情选择
+    initEmojiPickers();
     
     // 查看评论按钮（委托）
 document.addEventListener('click', function(e) {
@@ -3233,4 +3235,79 @@ function initCharCounters() {
         input.addEventListener('input', updateCounter);
         updateCounter();  // 初始化
     });
+}
+// ==================== 表情选择器 ====================
+function initEmojiPickers() {
+    document.querySelectorAll('.emoji-list').forEach(container => {
+        // 点标题折叠/展开
+const title = container.previousElementSibling; // .emoji-title
+if (title && title.classList.contains('emoji-title')) {
+    title.style.cursor = 'pointer';
+    title.addEventListener('click', () => {
+        container.classList.toggle('collapsed');
+        // 同步给父级 .emoji-area，用于箭头旋转
+        const area = container.closest('.emoji-area');
+        if (area) area.classList.toggle('collapsed', container.classList.contains('collapsed'));
+    });
+}
+        const inputId = container.getAttribute('data-target');
+        const input = document.getElementById(inputId);
+        if (!input) return;
+
+        // 初始化时强制折叠，不依赖 HTML 的初始类
+        container.classList.add('collapsed');
+
+        // 用事件委托，避免逐个绑定
+        container.addEventListener('click', function(e) {
+            const item = e.target.closest('.emoji-item');
+            if (!item) return;
+
+            e.stopPropagation(); // 防止冒泡触发其它逻辑
+
+            const emoji = item.textContent; // 直接读 span 里的 emoji
+
+            // 插入到光标处
+            insertAtCursor(input, emoji);
+
+            // 同步刷新字数计数器
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+
+            // 给点击的 emoji 加一个短暂的按压反馈
+            item.classList.add('pressed');
+            setTimeout(() => item.classList.remove('pressed'), 120);
+        });
+    });
+}
+
+function insertAtCursor(input, text) {
+    // ✅ 若设置过 maxlength，则按它做上限保护
+    const max = parseInt(input.getAttribute('maxlength') || '0', 10);
+
+    const start = (typeof input.selectionStart === 'number')
+        ? input.selectionStart
+        : input.value.length;
+    const end = (typeof input.selectionEnd === 'number')
+        ? input.selectionEnd
+        : input.value.length;
+
+    const before = input.value.substring(0, start);
+    const after = input.value.substring(end);
+    const nextValue = before + text + after;
+
+    if (max > 0 && Array.from(nextValue).length > max) {
+        // 已经满了，给个提示
+        if (typeof showGlobalTip === 'function') {
+            showGlobalTip(`最多只能输入 ${max} 字`, 'warning');
+        }
+        return;
+    }
+
+    input.value = nextValue;
+
+    const newPos = start + text.length;
+    try {
+        input.selectionStart = input.selectionEnd = newPos;
+    } catch (err) {}
+
+    input.focus();
 }

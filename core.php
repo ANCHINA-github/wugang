@@ -1231,6 +1231,40 @@ if (!isset($staticVer)) {
                         <div class="char-counter" id="postContentCounter">0 / 2000</div>
                     </div>
 
+                    <!-- 发帖表情选择区域 -->
+<div class="emoji-area">
+    <div class="emoji-title">
+       <i class="far fa-smile"></i> 表情(点击展开)
+    <i class="fas fa-chevron-down emoji-arrow"></i>
+    </div>
+    <div class="emoji-list" data-target="postContent" class="emoji-list collapsed">
+        <span class="emoji-item">😀</span>
+        <span class="emoji-item">😂</span>
+        <span class="emoji-item">🤣</span>
+        <span class="emoji-item">😊</span>
+        <span class="emoji-item">😍</span>
+        <span class="emoji-item">🥰</span>
+        <span class="emoji-item">😎</span>
+        <span class="emoji-item">🤔</span>
+        <span class="emoji-item">😭</span>
+        <span class="emoji-item">😅</span>
+        <span class="emoji-item">😡</span>
+        <span class="emoji-item">🥳</span>
+        <span class="emoji-item">👍</span>
+        <span class="emoji-item">👎</span>
+        <span class="emoji-item">👏</span>
+        <span class="emoji-item">🙏</span>
+        <span class="emoji-item">🤝</span>
+        <span class="emoji-item">💪</span>
+        <span class="emoji-item">❤️</span>
+        <span class="emoji-item">💔</span>
+        <span class="emoji-item">🎉</span>
+        <span class="emoji-item">🔥</span>
+        <span class="emoji-item">⭐</span>
+        <span class="emoji-item">🌈</span>
+    </div>
+</div>
+
                     <!-- 发帖建议区域 -->
                     <div class="suggestions-area">
                         <div class="suggestions-title">tips:可自己添加标签，再次轻触已选标签可撤回相应已输入标签</div>
@@ -1243,6 +1277,8 @@ if (!isset($staticVer)) {
                             <div class="suggestion-tag" data-tag="#分享#">#分享#</div>
                         </div>
                     </div>
+
+                    
                     
                     <!-- 帖子图片上传区域 -->
                     <div class="form-group image-upload-area">
@@ -1306,7 +1342,39 @@ if (!isset($staticVer)) {
                         <textarea id="commentContent" name="com_content" required placeholder="请输入你的评论..." maxlength="500"></textarea>
                          <div class="char-counter" id="commentContentCounter">0 / 500</div>
                     </div>
-                    
+                    <!-- 评论表情选择区域 -->
+<div class="emoji-area">
+    <div class="emoji-title">
+       <i class="far fa-smile"></i> 表情(点击展开)
+    <i class="fas fa-chevron-down emoji-arrow"></i>
+    </div>
+    <div class="emoji-list" data-target="commentContent" class="emoji-list collapsed">
+        <span class="emoji-item">😀</span>
+        <span class="emoji-item">😂</span>
+        <span class="emoji-item">🤣</span>
+        <span class="emoji-item">😊</span>
+        <span class="emoji-item">😍</span>
+        <span class="emoji-item">🥰</span>
+        <span class="emoji-item">😎</span>
+        <span class="emoji-item">🤔</span>
+        <span class="emoji-item">😭</span>
+        <span class="emoji-item">😅</span>
+        <span class="emoji-item">😡</span>
+        <span class="emoji-item">🥳</span>
+        <span class="emoji-item">👍</span>
+        <span class="emoji-item">👎</span>
+        <span class="emoji-item">👏</span>
+        <span class="emoji-item">🙏</span>
+        <span class="emoji-item">🤝</span>
+        <span class="emoji-item">💪</span>
+        <span class="emoji-item">❤️</span>
+        <span class="emoji-item">💔</span>
+        <span class="emoji-item">🎉</span>
+        <span class="emoji-item">🔥</span>
+        <span class="emoji-item">⭐</span>
+        <span class="emoji-item">🌈</span>
+    </div>
+</div>
                     <!-- 评论图片上传区域 -->
                     <div class="form-group image-upload-area">
                         <label class="image-upload-label">上传图片</label>
