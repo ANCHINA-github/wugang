@@ -30,7 +30,7 @@
     --border-radius-sm: 6px;
     --border-radius-lg: 16px;
     --transition: all 0.3s ease;
-    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0);/*阴影设置为透明，减少渲染2026100923.27*/
     --whitesmoke:whitesmoke;
     --modal-title-color: #000000ff;
 }
@@ -63,7 +63,7 @@
         --button-bg: rgba(0, 0, 0, 0.8);
         --button-hover: rgba(40, 40, 40, 0.8);
         --button-disabled: #555555;
-        --glass-shadow: 0 4px 30px rgba(255, 255, 255, 0.11);
+        --glass-shadow: 0 4px 30px rgba(255, 255, 255, 0);/*阴影设置为透明，减少渲染2026100923.27*/
         --whitesmoke: rgba(30, 30, 40, 0.893);;
         --modal-title-color: whitesmoke;
     }

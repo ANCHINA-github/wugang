@@ -1,22 +1,236 @@
 [
     {
+        "pname": "课代表",
+        "portrait": "portrait-img\/c92.jpg",
+        "content": "打印店即将失业#分享#",
+        "pdate": "2026-10-08 19:10:27",
+        "pid": "000160",
+        "plikes": 46,
+        "images": [
+            "img\/post_000160_1791457827_6ac77a2347662.webp"
+        ],
+        "comments": [
+            {
+                "com_pname": "我的轻舟是我自己",
+                "com_portrait": "portrait-img\/c24.jpg",
+                "com_content": "😂",
+                "com_date": "2026-10-08 22:06:50",
+                "com_cid": "0000632",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            }
+        ],
+        "device": "Windows PC"
+    },
+    {
+        "pname": "描绘她的轮廓",
+        "portrait": "portrait-img\/c27.jpg",
+        "content": "“我不认为一辈子只爱一个人很难” #故事集# #分享#",
+        "pdate": "2026-10-03 12:07:54",
+        "pid": "000159",
+        "plikes": 55,
+        "images": [
+            "img\/post_000159_1791000474_6ac07f9a8ba65.webp"
+        ],
+        "comments": [
+            {
+                "com_pname": "我的轻舟是我自己",
+                "com_portrait": "portrait-img\/c24.jpg",
+                "com_content": "吃碗混沌加油😎",
+                "com_date": "2026-10-06 18:26:30",
+                "com_cid": "0000630",
+                "clikes": 2,
+                "com_images": [
+                    "img\/comment_000159_0000630_1791282390_6ac4ccd650c10.webp"
+                ],
+                "com_device": "Android"
+            },
+            {
+                "com_pname": "描绘她的轮廓",
+                "com_portrait": "portrait-img\/c27.jpg",
+                "com_content": "@全都怪我不好 😭😭😭😭",
+                "com_date": "2026-10-03 19:07:21",
+                "com_cid": "0000629",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "Android"
+            },
+            {
+                "com_pname": "开心吖",
+                "com_portrait": "portrait-img\/c47.jpg",
+                "com_content": "🙏🙏🙏",
+                "com_date": "2026-10-03 13:56:07",
+                "com_cid": "0000625",
+                "clikes": 4,
+                "com_images": [],
+                "com_device": ""
+            },
+            {
+                "com_pname": "信号弱",
+                "com_portrait": "portrait-img\/custom_1780932952_cab342bac2fced36.png",
+                "com_content": "@太犹豫被人打 找到这句话了😭😭😭",
+                "com_date": "2026-10-03 13:53:47",
+                "com_cid": "0000621",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "iPhone"
+            },
+            {
+                "com_pname": "信号弱",
+                "com_portrait": "portrait-img\/custom_1780932952_cab342bac2fced36.png",
+                "com_content": "享受了对方的温柔，就要为对方拒绝所有的暧昧。我不会因为别人对他的评价就去否定对他的喜欢。爱不是控制和索取。而是尊重和接纳，不要因为别人都交卷了就急于乱填答案。浪漫不一定非得要一束花，也可以是有人愿意。听你讲一堆废话，任何关系中懂得相互服软，轮流低头，才不会走散。🌈🌈🌈",
+                "com_date": "2026-10-03 13:53:10",
+                "com_cid": "0000620",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "iPhone"
+            },
+            {
+                "com_pname": "太犹豫被人打",
+                "com_portrait": "portrait-img\/c21.jpg",
+                "com_content": "愿得一人心 白首不相离",
+                "com_date": "2026-10-03 13:47:27",
+                "com_cid": "0000619",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "Windows PC"
+            },
+            {
+                "com_pname": "全都怪我不好",
+                "com_portrait": "portrait-img\/c64.jpg",
+                "com_content": "愿得一人心 白首不相离",
+                "com_date": "2026-10-03 13:45:33",
+                "com_cid": "0000618",
+                "clikes": 5,
+                "com_images": [],
+                "com_device": ""
+            },
+            {
+                "com_pname": "何夕永远",
+                "com_portrait": "portrait-img\/c12.jpg",
+                "com_content": "时代之流，裹挟不愿，恐不能退，与君共勉之,愿我们找到属于自己的那个她 嘻嘻我找到了， TO. 徐同学 我不爱说喜欢你，是因为理性告诉我，喜欢不能用言语 ，但那颗炙热的心告诉我，我很喜欢你！但愿可以多陪你一会在多一会-------永远会记住你的那个身边人😊",
+                "com_date": "2026-10-03 13:44:16",
+                "com_cid": "0000617",
+                "clikes": 4,
+                "com_images": [],
+                "com_device": ""
+            }
+        ],
+        "device": "Android"
+    },
+    {
+        "pname": "泪水总留眼角",
+        "portrait": "portrait-img\/c74.jpg",
+        "content": "“没有你的宇宙，叫太空”🤔🤔😭 #emo#",
+        "pdate": "2026-10-03 02:42:20",
+        "pid": "000158",
+        "plikes": 32,
+        "images": [
+            "img\/post_000158_1790966540_6abffb0c7492d.webp"
+        ],
+        "comments": [
+            {
+                "com_pname": "我的轻舟是我自己",
+                "com_portrait": "portrait-img\/c24.jpg",
+                "com_content": "🤔🤔🤔🤔",
+                "com_date": "2026-10-06 18:33:11",
+                "com_cid": "0000631",
+                "clikes": 2,
+                "com_images": [],
+                "com_device": "Android"
+            },
+            {
+                "com_pname": "数学退退",
+                "com_portrait": "portrait-img\/c94.jpg",
+                "com_content": "我们都低估了时间的重量 待人如初是件很难的事情 人在承诺的时候觉得不会违背承诺 可人是会变😭😭😭😭😭💔💔💔💔",
+                "com_date": "2026-10-03 13:58:17",
+                "com_cid": "0000627",
+                "clikes": 4,
+                "com_images": [],
+                "com_device": "Android"
+            },
+            {
+                "com_pname": "数学退退",
+                "com_portrait": "portrait-img\/c94.jpg",
+                "com_content": "@开心吖 心脏有点空落落的感觉反正吧挺难受的",
+                "com_date": "2026-10-03 13:57:14",
+                "com_cid": "0000626",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": ""
+            },
+            {
+                "com_pname": "开心吖",
+                "com_portrait": "portrait-img\/c47.jpg",
+                "com_content": "放弃一个很喜欢的人是什么感觉",
+                "com_date": "2026-10-03 13:55:24",
+                "com_cid": "0000624",
+                "clikes": 4,
+                "com_images": [],
+                "com_device": ""
+            },
+            {
+                "com_pname": "信号弱",
+                "com_portrait": "portrait-img\/custom_1780932952_cab342bac2fced36.png",
+                "com_content": "你闻到了青桔的酸涩 却要去赌橘瓣的香甜",
+                "com_date": "2026-10-03 13:54:23",
+                "com_cid": "0000622",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "iPhone"
+            },
+            {
+                "com_pname": "段游",
+                "com_portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
+                "com_content": "😭😭😭",
+                "com_date": "2026-10-03 02:43:25",
+                "com_cid": "0000616",
+                "clikes": 4,
+                "com_images": [],
+                "com_device": "Android"
+            }
+        ],
+        "device": "Android"
+    },
+    {
         "pname": "段游",
         "portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
         "content": "国庆快乐🎉🎉🎉 #交友#",
         "pdate": "2026-10-01 15:57:08",
         "pid": "000157",
-        "plikes": 51,
+        "plikes": 55,
         "images": [
             "img\/post_000157_1790841428_6abe1254a4e97.webp"
         ],
         "comments": [
+            {
+                "com_pname": "段游",
+                "com_portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
+                "com_content": "@五号线 哈喽哈喽",
+                "com_date": "2026-10-02 02:07:17",
+                "com_cid": "0000609",
+                "clikes": 3,
+                "com_images": [],
+                "com_device": "Android"
+            },
+            {
+                "com_pname": "五号线",
+                "com_portrait": "portrait-img\/custom_1781180984_3617f1e59a352d99.jpg",
+                "com_content": "国庆快乐",
+                "com_date": "2026-10-01 22:03:56",
+                "com_cid": "0000608",
+                "clikes": 2,
+                "com_images": [],
+                "com_device": "iPhone"
+            },
             {
                 "com_pname": "武冈个人博客",
                 "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
                 "com_content": "国庆快乐！🥳",
                 "com_date": "2026-10-01 18:24:55",
                 "com_cid": "0000606",
-                "clikes": 1,
+                "clikes": 4,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -26,7 +240,7 @@
                 "com_content": "国庆快乐",
                 "com_date": "2026-10-01 18:00:15",
                 "com_cid": "0000605",
-                "clikes": 2,
+                "clikes": 5,
                 "com_images": [],
                 "com_device": "Windows PC"
             },
@@ -36,7 +250,7 @@
                 "com_content": "国庆快乐",
                 "com_date": "2026-10-01 16:35:27",
                 "com_cid": "0000604",
-                "clikes": 3,
+                "clikes": 5,
                 "com_images": [],
                 "com_device": ""
             },
@@ -46,7 +260,7 @@
                 "com_content": "国庆快乐呀！😀😀😀",
                 "com_date": "2026-10-01 16:15:05",
                 "com_cid": "0000602",
-                "clikes": 3,
+                "clikes": 6,
                 "com_images": [],
                 "com_device": ""
             },
@@ -56,7 +270,7 @@
                 "com_content": "国庆快乐！🌈🌈🌈",
                 "com_date": "2026-10-01 16:11:57",
                 "com_cid": "0000601",
-                "clikes": 5,
+                "clikes": 7,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -66,7 +280,7 @@
                 "com_content": "国庆快乐！🥰",
                 "com_date": "2026-10-01 16:00:21",
                 "com_cid": "0000600",
-                "clikes": 5,
+                "clikes": 7,
                 "com_images": [],
                 "com_device": "Android"
             }
@@ -79,18 +293,38 @@
         "content": "#分享#",
         "pdate": "2026-09-29 22:01:38",
         "pid": "000156",
-        "plikes": 39,
+        "plikes": 42,
         "images": [
-            "img\/post_000156_1790690498_6abbc4c200fd9.webp"
+            "banned_image.webp"
         ],
         "comments": [
+            {
+                "com_pname": "信号弱",
+                "com_portrait": "portrait-img\/custom_1780932952_cab342bac2fced36.png",
+                "com_content": "？",
+                "com_date": "2026-10-03 13:54:33",
+                "com_cid": "0000623",
+                "clikes": 2,
+                "com_images": [],
+                "com_device": "iPhone"
+            },
+            {
+                "com_pname": "武冈个人博客",
+                "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
+                "com_content": "🌈🌈🌈",
+                "com_date": "2026-10-02 13:42:47",
+                "com_cid": "0000610",
+                "clikes": 1,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "段游",
                 "com_portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
                 "com_content": "🌈🌈🌈🌈",
                 "com_date": "2026-10-01 15:33:09",
                 "com_cid": "0000598",
-                "clikes": 2,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -100,7 +334,7 @@
                 "com_content": "🤣🤣🤣🤣🤣🤣",
                 "com_date": "2026-10-01 15:32:51",
                 "com_cid": "0000597",
-                "clikes": 1,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "Windows PC"
             },
@@ -110,7 +344,7 @@
                 "com_content": "💪💪💪",
                 "com_date": "2026-10-01 15:31:25",
                 "com_cid": "0000596",
-                "clikes": 2,
+                "clikes": 4,
                 "com_images": [],
                 "com_device": "Android"
             }
@@ -123,7 +357,7 @@
         "content": "以主动之择，破算法之藩\n \n信息匮乏的年代，求知是一场主动奔赴的旅程，人们翻检书卷、四处寻访，在费力探寻中收获真知；算法盛行的当下，个性化推送将信息送到手边，答案现成，内容适配，连前行的路径都已经规划完毕。很多人乐享这份轻松，可鲜少深思：当寻找、抉择、探索被算法代劳，我们失去的不只是搜寻信息的动作，更是自主选择的判断力。身处算法时代，我们要做信息的主人，而非算法的接收者，学会主动抉择，守住自主判断的力量。\n \n算法的底层逻辑，是迎合偏好，而非拓宽眼界。平台依靠大数据捕捉我们的喜好，不断推送我们乐于看见、愿意认同的内容。它省去筛选的辛苦，却悄悄替我们做好选择。你偏爱轻松的短视频，严肃深刻的文章便隐入信息流深处；你认同某一种观点，与之相悖的见解就很难推送到你的眼前。长此以往，我们的视野被框定在算法搭建的围墙之内。我们不再练习权衡利弊、甄别真伪，判断的能力长期搁置，便会慢慢生锈。我们以为看见了全世界，实则只是算法精心挑选后的一方小天地。\n \n有人会说，算法极大便利了生活，何必苛责？不可否认，算法是时代馈赠的利器。繁杂如海的网络信息，如果全部依靠人工筛选，会耗费巨大的时间精力。算法推荐可以快速定位我们需要的资料，为学习、生活提供高效助力。算法本身没有错，把全部选择权拱手交给算法，才是风险所在。工具应当听从人的指挥，而不是人顺着工具铺好的道路被动前行。真正的自主，不是拒绝便捷，而是拥有“我可以不选算法推荐内容”的底气。\n \n锤炼自主判断力，关键在于主动跳出预设的信息流，主动给自己制造“选择的机会”。不要只停留平台首页的推送，主动检索陌生领域的知识，主动阅读不同立场的文章，主动接触和自己原有认知不一样的观点。遇到网络上扑面而来的观点，不急着认同转发，多一分追问：这条信息来源可靠吗？有没有另一面的事实？就像读书求学，不能坐等别人把整理好的结论送到手上，要主动翻查资料，多方比对，形成属于自己的看法。自主选择的能力，和肌肉一样，需要反复练习，才不会退化。\n \n自主抉择的品质，从来都是青年人不可或缺的素养。百年前的青年，在闭塞的环境中主动寻找救国救民的道路，多方比较，自主抉择，才寻到适合中国的方向。今日的我们不必再艰难寻访典籍，但自主选择的精神一脉相承。小到浏览什么信息，大到规划自己的学业与人生，没有人可以用一套固定路径替我们走完。算法能推荐资讯，却不能定义我们的理想；能推送内容，却不能决定我们看待世界的眼光。\n \n技术浪潮奔涌向前，算法推送不会停下脚步。与其被动顺着算法铺好的道路往前走，不如握紧选择的主动权。善用算法的便利，保有独立的判断，主动挑选我们想要看见的世界，走出一条属于自己的路。唯有如此，我们才不会沦为信息的被动接收者，方能在万千信息流中，活出清醒、丰盈的人生。",
         "pdate": "2026-09-27 10:25:13",
         "pid": "000155",
-        "plikes": 31,
+        "plikes": 36,
         "images": [],
         "comments": [
             {
@@ -132,7 +366,7 @@
                 "com_content": "🔥",
                 "com_date": "2026-10-01 18:31:47",
                 "com_cid": "0000607",
-                "clikes": 0,
+                "clikes": 1,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -142,7 +376,7 @@
                 "com_content": "666",
                 "com_date": "2026-09-28 21:45:44",
                 "com_cid": "0000592",
-                "clikes": 2,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "Android"
             }
@@ -155,7 +389,7 @@
         "content": "武冈市第一🎉🎉🎉 #分享#",
         "pdate": "2026-09-16 21:59:08",
         "pid": "000154",
-        "plikes": 36,
+        "plikes": 38,
         "images": [
             "img\/post_000154_1789567148_6aaaa0ac0094c.webp",
             "img\/post_000154_1789567148_6aaaa0ac0129a.webp"
@@ -167,7 +401,7 @@
                 "com_content": "牛逼",
                 "com_date": "2026-10-01 16:22:54",
                 "com_cid": "0000603",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -177,7 +411,7 @@
                 "com_content": "可",
                 "com_date": "2026-09-28 21:45:55",
                 "com_cid": "0000593",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -187,7 +421,7 @@
                 "com_content": "@信号弱 😘😘😘",
                 "com_date": "2026-09-24 22:00:02",
                 "com_cid": "0000591",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -197,7 +431,7 @@
                 "com_content": "可以可以",
                 "com_date": "2026-09-17 23:41:59",
                 "com_cid": "0000590",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Windows PC"
             }
@@ -210,7 +444,7 @@
         "content": "防晒组合 #分享#",
         "pdate": "2026-09-13 17:45:17",
         "pid": "000153",
-        "plikes": 33,
+        "plikes": 35,
         "images": [
             "img\/post_000153_1789292717_6aa670adf1dfa.webp",
             "img\/post_000153_1789292717_6aa670adf281f.webp"
@@ -222,7 +456,7 @@
                 "com_content": "@我的轻舟是我自己 先用后面那个",
                 "com_date": "2026-09-16 21:58:09",
                 "com_cid": "0000589",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -232,7 +466,7 @@
                 "com_content": "可以啊 学防晒了",
                 "com_date": "2026-09-16 21:56:26",
                 "com_cid": "0000588",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -265,18 +499,28 @@
         "content": "#游戏#",
         "pdate": "2026-09-12 13:22:32",
         "pid": "000152",
-        "plikes": 59,
+        "plikes": 60,
         "images": [
             "img\/post_000152_1789190552_6aa4e1980d0c0.webp"
         ],
         "comments": [
+            {
+                "com_pname": "武冈个人博客",
+                "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
+                "com_content": "👍👍👍",
+                "com_date": "2026-10-02 13:49:10",
+                "com_cid": "0000612",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "我的轻舟是我自己",
                 "com_portrait": "portrait-img\/c24.jpg",
                 "com_content": "乐",
                 "com_date": "2026-09-13 21:31:06",
                 "com_cid": "0000586",
-                "clikes": 0,
+                "clikes": 1,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -309,11 +553,21 @@
         "content": "#游戏#",
         "pdate": "2026-09-12 13:21:38",
         "pid": "000151",
-        "plikes": 42,
+        "plikes": 43,
         "images": [
             "img\/post_000151_1789190498_6aa4e162b4faa.webp"
         ],
         "comments": [
+            {
+                "com_pname": "武冈个人博客",
+                "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
+                "com_content": "🔥🔥🔥🔥🔥",
+                "com_date": "2026-10-02 13:50:40",
+                "com_cid": "0000613",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "段游",
                 "com_portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
@@ -333,7 +587,7 @@
         "content": "萌！",
         "pdate": "2026-09-12 13:16:53",
         "pid": "000150",
-        "plikes": 44,
+        "plikes": 45,
         "images": [
             "img\/post_000150_1789190213_6aa4e04555f14.webp"
         ],
@@ -344,7 +598,7 @@
                 "com_content": "cute girl",
                 "com_date": "2026-09-12 15:43:41",
                 "com_cid": "0000582",
-                "clikes": 4,
+                "clikes": 5,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -387,7 +641,7 @@
         "content": "#游戏# #分享#严肃补胎中",
         "pdate": "2026-09-11 23:13:51",
         "pid": "000149",
-        "plikes": 48,
+        "plikes": 49,
         "images": [
             "img\/post_000149_1789139631_6aa41aaf341bb.webp"
         ],
@@ -428,7 +682,7 @@
                 "com_content": "咋了",
                 "com_date": "2026-09-11 23:42:43",
                 "com_cid": "0000276",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             }
@@ -441,16 +695,26 @@
         "content": "哈喽哈喽",
         "pdate": "2026-09-11 23:13:04",
         "pid": "000148",
-        "plikes": 62,
+        "plikes": 64,
         "images": [],
         "comments": [
+            {
+                "com_pname": "段游",
+                "com_portrait": "portrait-img\/custom_1781182642_1efd2602093058b6.jpg",
+                "com_content": "哈喽哈喽😀😀😀",
+                "com_date": "2026-10-03 01:21:14",
+                "com_cid": "0000615",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "五号线",
                 "com_portrait": "portrait-img\/custom_1781180984_3617f1e59a352d99.jpg",
                 "com_content": "@数学退退 包的",
                 "com_date": "2026-09-12 13:17:30",
                 "com_cid": "0000573",
-                "clikes": 0,
+                "clikes": 1,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -460,7 +724,7 @@
                 "com_content": "哈喽，眼熟一下",
                 "com_date": "2026-09-11 23:53:00",
                 "com_cid": "0000281",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -470,7 +734,7 @@
                 "com_content": "上线就看见你",
                 "com_date": "2026-09-11 23:52:00",
                 "com_cid": "0000280",
-                "clikes": 0,
+                "clikes": 1,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -480,7 +744,7 @@
                 "com_content": "🤓🤓🤓",
                 "com_date": "2026-09-11 23:43:17",
                 "com_cid": "0000277",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -513,7 +777,7 @@
         "content": "辜负真心的人在山河四省上一辈子高三。",
         "pdate": "2026-09-11 07:24:57",
         "pid": "000147",
-        "plikes": 39,
+        "plikes": 41,
         "images": [],
         "comments": [
             {
@@ -595,7 +859,7 @@
         "content": "今天是教师节，别忘了祝老师#教师节快乐#！",
         "pdate": "2026-09-10 21:52:20",
         "pid": "000146",
-        "plikes": 66,
+        "plikes": 67,
         "images": [],
         "comments": [
             {
@@ -687,7 +951,7 @@
         "content": "栽了，被剥削了#英伟达#",
         "pdate": "2026-09-10 21:41:19",
         "pid": "000145",
-        "plikes": 69,
+        "plikes": 70,
         "images": [
             "img\/post_000145_1789047679_6aa2b37f99833.webp"
         ],
@@ -721,7 +985,7 @@
         "content": "公开摆擂台，有勇士上吗广州街头偶遇硬核告示💈\r\n公开摆擂台，就等勇士来开第三家理发店，全员解锁5元剪发。\r\n为了实现5元理发自由，有没有勇士敢来开第三家店🤣\r\n#托尼老师#美容美发#快剪#价格战#反内卷#威慑# #分享#",
         "pdate": "2026-09-10 21:33:08",
         "pid": "000144",
-        "plikes": 45,
+        "plikes": 46,
         "images": [
             "img\/post_000144_1789047188_6aa2b194a4b85.webp"
         ],
@@ -775,7 +1039,7 @@
         "content": "#分享#",
         "pdate": "2026-09-09 21:29:43",
         "pid": "000143",
-        "plikes": 69,
+        "plikes": 70,
         "images": [
             "banned_image.webp"
         ],
@@ -786,7 +1050,7 @@
                 "com_content": "@段游 2",
                 "com_date": "2026-10-01 13:08:14",
                 "com_cid": "0000595",
-                "clikes": 0,
+                "clikes": 1,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -796,7 +1060,7 @@
                 "com_content": "1",
                 "com_date": "2026-10-01 13:06:45",
                 "com_cid": "0000594",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -806,7 +1070,7 @@
                 "com_content": "图呢，被吞了？",
                 "com_date": "2026-09-12 00:03:00",
                 "com_cid": "0000291",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -816,7 +1080,7 @@
                 "com_content": "加载失败？",
                 "com_date": "2026-09-12 00:02:00",
                 "com_cid": "0000290",
-                "clikes": 2,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -826,19 +1090,9 @@
                 "com_content": "？",
                 "com_date": "2026-09-11 21:05:48",
                 "com_cid": "0000267",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
-            },
-            {
-                "com_pname": "信号弱",
-                "com_portrait": "portrait-img\/custom_1780932952_cab342bac2fced36.png",
-                "com_content": "# 邵阳2027届高三第一次联考数学·考前速记抱佛脚（选择填空+大题高频得分点(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)直接背）\r\n\r\n## 一、集合与常用逻辑（选择第1题必拿5分）\r\n\r\n1. 交集$(A∩B)$取公共部分(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)并集$(A∪B)$全部合起来(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)补集$\\complement_U A$全集中去掉A\r\n2. 充分必要：$(p⇒q)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)p是q充分条件；$(q⇒p)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)p是q必要条件\r\n3. 全称命题否定：$\\forall→\\exists$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)结论变相反；特称反之\r\n4. 空集是任何集合子集(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)子集个数：n个元素集合有$2^n$个子集(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$2^n-1$真子集\r\n\r\n## 二、复数（必考选择(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)5分）\r\n\r\n1. $i^2=-1(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)i^4=1$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)周期4\r\n2. 共轭复数$\\overline{a+bi}=a-bi$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)模$|a+bi|=\\sqrt{a^2+b^2}$\r\n3. 除法分母实数化：分子分母同乘分母共轭复数\r\n4. 复数不能比较大小(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)只有实数可以\r\n\r\n## 三、平面向量（选择\/填空）\r\n\r\n1. 数量积：$\\boldsymbol{a}·\\boldsymbol{b}=|\\boldsymbol{a}||\\boldsymbol{b}|\\cos\\theta=x_1x_2+y_1y_2$\r\n2. 垂直：$\\boldsymbol{a}⊥\\boldsymbol{b}⇔\\boldsymbol{a}·\\boldsymbol{b}=0$；平行：$x_1y_2-x_2y_1=0$\r\n3. 模长$|\\boldsymbol{a}|=\\sqrt{x^2+y^2}$；$|\\boldsymbol{a}±\\boldsymbol{b}|^2=|\\boldsymbol{a}|^2±2\\boldsymbol{a}·\\boldsymbol{b}+|\\boldsymbol{b}|^2$\r\n4. 中点向量、重心：$\\overrightarrow{OG}=\\frac13(\\overrightarrow{OA}+\\overrightarrow{OB}+\\overrightarrow{OC})$\r\n\r\n## 四、函数导数（选择填空+大题第一问）\r\n\r\n### 1. 基础函数求导（必背）\r\n\r\n$(x^n)'=nx^{n-1}$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$(\\sin x)'=\\cos x$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$(\\cos x)'=-\\sin x$\r\n$(e^x)'=e^x$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$(\\ln x)'=\\dfrac1x$\r\n$(\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)(uv)'=u'v+uv'$\r\n\r\n### 2. 单调性极值\r\n\r\n$f'(x)>0$单调递增；$f'(x)<0$单调递减\r\n导数由正变负→极大值；由负变正→极小值\r\n\r\n### 3. 奇偶、周期\r\n\r\n奇函数$f(-x)=-f(x)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)图像关于原点；偶函数$f(-x)=f(x)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)y轴对称\r\n奇函数在x=0有定义则$(f(0)=0)$\r\n\r\n### 4. 指数对数运算\r\n\r\n$a^m·a^n=a^{m+n}$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$\\log_a M+\\log_a N=\\log_a(MN)$\r\n$\\log_a b=\\dfrac{\\ln b}{\\ln a}$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$\\log_a a=1(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)\\log_a 1=0$\r\n\r\n## 五、三角函数&解三角形（大题必考(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)12分）\r\n\r\n### 1. 恒等变换\r\n\r\n$\\sin^2x+\\cos^2x=1(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)\\tan x=\\dfrac{\\sin x}{\\cos x}$\r\n$\\sin2x=2\\sin x\\cos x$\r\n$\\cos2x=\\cos^2x-\\sin^2x=2\\cos^2x-1=1-2\\sin^2x$\r\n辅助角：$a\\sin x+b\\cos x=\\sqrt{a^2+b^2}\\sin(x+\\varphi)$\r\n\r\n### 2. 正余弦定理\r\n\r\n正弦：$\\dfrac{a}{\\sin A}=\\dfrac{b}{\\sin B}=\\dfrac{c}{\\sin C}=2R$\r\n余弦：$a^2=b^2+c^2-2bc\\cos A$\r\n面积：$S=\\dfrac12ab\\sin C$\r\n\r\n### 3. 图像性质\r\n\r\n$y=A\\sin(\\omega x+\\varphi)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)周期$T=\\dfrac{2\\pi}{|\\omega|}$；\r\n单调区间整体代换(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)对称轴取最值(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)对称中心函数值为0\r\n\r\n## 六、数列（大题(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)10\/12分）\r\n\r\n### 等差数列\r\n\r\n$a_n=a_1+(n-1)d$；$S_n=\\dfrac{n(a_1+a_n)}{2}=na_1+\\dfrac{n(n-1)}{2}d$\r\n若$(m+n=p+q)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)则$a_m+a_n=a_p+a_q$\r\n\r\n### 等比数列\r\n\r\n$a_n=a_1q^{n-1}$；$S_n=\\begin{cases}na_1,q=1\\\\dfrac{a_1(1-q^n)}{1-q},q≠1\\end{cases}$\r\n$(m+n=p+q)⇒a_m·a_n=a_p·a_q$\r\n\r\n### 求和方法（大题万能）\r\n\r\n1. 等差等比直接套公式\r\n2. 裂项相消：$\\dfrac1{n(n+1)}=\\dfrac1n-\\dfrac1{n+1}$\r\n3. 错位相减：等差×等比型\r\n\r\n## 七、立体几何（选择+大题）\r\n\r\n1. 表面积体积\r\n球：$V=\\dfrac43\\pi R^3(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)S=4\\pi R^2$\r\n锥体$V=\\dfrac13Sh$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)柱体$(V=Sh)$\r\n2. 线面平行判定：平面外直线平行平面内一条直线\r\n3. 线面垂直：直线垂直平面内两条相交直线\r\n4. 空间向量求角\r\n线线角：取夹角余弦绝对值；\r\n线面角：直线与法向量夹角余角；\r\n二面角：两法向量夹角或其补角(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)看图判断锐钝\r\n\r\n## 八、解析几何（选择填空+压轴大题）\r\n\r\n### 1. 圆\r\n\r\n标准$(x-a)^2+(y-b)^2=r^2$；点到直线距离$d=\\dfrac{|Ax_0+By_0+C|}{\\sqrt{A^2+B^2}}$\r\n$(d>r)$相离(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$(d=r)$相切(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$(d<r)$相交\r\n\r\n### 2. 椭圆$\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}=1(a>b)$\r\n\r\n$c^2=a^2-b^2$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)离心率$e=\\dfrac ca∈(0,1)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)长轴2a(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)短轴2b\r\n\r\n### 3. 双曲线$\\dfrac{x^2}{a^2}-\\dfrac{y^2}{b^2}=1$\r\n\r\n$c^2=a^2+b^2$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)$e=\\dfrac ca>1$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)渐近线$y=±\\dfrac ba x$\r\n\r\n### 4. 抛物线$y^2=2px$\r\n\r\n焦点$(\\dfrac p2,0)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)准线$x=-\\dfrac p2$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)抛物线上点到焦点=到准线距离\r\n\r\n## 九、概率统计（必考大题12分）\r\n\r\n1. 古典概型：$P=\\dfrac{符合条件数}{总基本事件数}$\r\n2. 独立事件：$(P(AB)=P(A)P(B))$；对立事件$P(\\overline A)=1-P(A)$\r\n3. 频率分布直方图：每组面积=频率(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)中位数平分面积\r\n4. 线性回归：$\\hat y=\\hat bx+\\hat a$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)回归直线过样本中心$(\\bar x,\\bar y)$\r\n5. 二项分布$X\\sim B(n,p)$：$E(X)=np(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)D(X)=np(1-p)$\r\n6. 期望方差性质：$E(aX+b)=aE(X)+b(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)D(aX+b)=a^2D(X)$\r\n\r\n## 十、不等式、基本不等式（填空常用）\r\n\r\n$a+b≥2\\sqrt{ab}(a,b>0)$(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)一正二定三相等\r\n积定和最小(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)和定积最大；\r\n一元二次恒成立：$ax^2+bx+c>0$恒成立$\\begin{cases}a>0\\\\Delta<0\\end{cases}$\r\n\r\n## 十一、考场抢分技巧（临场救命）\r\n\r\n1. 选择填空不会就代特殊值：0、1、-1、端点、特殊三角形\r\n2. 几何题建坐标系向量硬算(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)不要死抠几何证明\r\n3. 大题按步骤给分：写公式、写条件、写第一问结论都有分\r\n4. 导数、解三角、数列、概率四道基础大题务必写完(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)保底60+\r\n5. 解析几何、导数第二问不会可以只联立\/求导拿步骤分(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)不空卷\r\n6. 时间分配：选择填空40分钟内做完(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)难题跳过(i^2=-1((\\dfrac{u}{v})'=\\dfrac{u'v-uv'}{v^2}(\\log_a a=1(\\sin^2x+\\cos^2x=1(V=\\dfrac43\\pi R^3(E(X)=np(E(aX+b)=aE(X)+b，D(aX+b)=a^2D(X))D(X)=np(1-p))S=4\\pi R^2)\\tan x=\\dfrac{\\sin x}{\\cos x})\\log_a 1=0)(uv)'=u'v+uv')i^4=1)先拿稳基础分",
-                "com_date": "2026-09-11 06:43:44",
-                "com_cid": "0000259",
-                "clikes": 0,
-                "com_images": [],
-                "com_device": "Windows PC"
             }
         ],
         "device": "Android"
@@ -849,7 +1103,7 @@
         "content": "教师节快乐#分享#",
         "pdate": "2026-09-09 06:25:08",
         "pid": "000142",
-        "plikes": 67,
+        "plikes": 68,
         "images": [
             "img\/post_000142_1788906308_6aa08b44cd973.webp",
             "img\/post_000142_1788906308_6aa08b44ce21a.webp",
@@ -906,7 +1160,7 @@
         "content": "<iframe src=\"https:\/\/scratch.mit.edu\/projects\/1379066115\/embed\" allowtransparency=\"true\" width=\"485\" height=\"402\" frameborder=\"0\" scrolling=\"no\" allowfullscreen><\/iframe>",
         "pdate": "2026-09-08 23:28:18",
         "pid": "000141",
-        "plikes": 62,
+        "plikes": 64,
         "images": [],
         "comments": [
             {
@@ -948,7 +1202,7 @@
         "content": "#分享#",
         "pdate": "2026-09-06 20:39:24",
         "pid": "000140",
-        "plikes": 42,
+        "plikes": 43,
         "images": [
             "banned_image.webp",
             "banned_image.webp"
@@ -1067,7 +1321,7 @@
         "content": "#分享#",
         "pdate": "2026-08-26 21:47:24",
         "pid": "000138",
-        "plikes": 44,
+        "plikes": 45,
         "images": [
             "img\/post_000138_1787752044_6a8eee6c92e29.webp",
             "img\/post_000138_1787752044_6a8eee6c9386c.webp",
@@ -1177,11 +1431,21 @@
         "content": "中国共产党优秀党员，我国航天事业开拓者之一，著名空间技术专家，中国科学院院士，国家“两弹一星功勋奖章”获得者，中国航天科技集团有限公司科学技术委员会原顾问，中国空间技术研究院技术顾问#王希季#同志，因病医治无效，于2026年8月12日在北京逝世，享年105岁。\r\n\r\n王希季是“两弹一星”元勋。他的逝世，是我国航天事业的巨大损失，是五院的巨大损失。我们沉痛悼念、深切缅怀这位为中国航天事业奉献了一生的杰出科学家。\r\n国家需要建设，所以我们回来了\r\n\r\n1921年7月26日，王希季出生于云南昆明。1933年，他以会考总分第一的好成绩从高小毕业。之后，以入学考试总分第一的成绩考入中学。1937年，他又以入学考试总分第一的成绩，被昆华高级工业职业学校土木工程科录取。\r\n\r\n当时正值“七七事变”发生，全昆明新入学的高中生和大学生都要进行3个月的军事训练。在军训期间，抗击日寇、保家卫国的氛围深深感染着学生们。“国家兴亡，匹夫有责！”年少的王希季凭着一股朴素的爱国热情，萌生了报名参军上前线、抗击日本侵略者的念头。虽然因为年纪太小而未被军队录取，但从那时起，王希季的思想发生了很大的变化，想的已经不再是学手艺谋生的个人问题，而是要为抗日胜利学本领。\r\n\r\n1938年暑期，西南联合大学在昆明面向全国招生，并允许不具备高中毕业资格的学生以同等学力报考。刚学完高一年级课程的王希季，抱着“开眼界，不论取否”的态度，以机械工程系为第一志愿报考，并被顺利录取。在这里，他深刻认识到能源是“工业的杠杆”，萌生了将来投身于建设和发展能源事业，为改变祖国落后面貌出力的意愿。\r\n1948年，他怀着“工业救国”的理想，前往美国弗吉尼亚理工学院留学，攻读动力及燃料专业，并在次年以优异成绩获得科学硕士学位。就在准备进一步攻读博士学位时，他从报纸上得知了中华人民共和国成立的消息。他果断放弃了继续深造的机会，与一批中国留学生一起登上“克利夫兰总统号”轮船，踏上了归国之路。\r\n\r\n有人问王希季，为什么不继续读博？即使一定要回去，为什么那么急，不等拿下博士学位再走？他回答：“从我出生时起，国家就一直在混乱中，支离破碎。我出去读书时国内还没统一，回来时已经统一了，这对我来说很重要。”\r\n\r\n回国之初，王希季先后在多所高校任教。1958年，他光荣地加入了中国共产党。他坚定理想信念，不畏艰难险阻，并用数十年如一日的报国之行践行了一名共产党员的初心使命，用奋斗奉献的光辉一生诠释了“两弹一星”精神的深刻内涵。\r\n\r\n1958年11月，在毛泽东发出“我们也要搞人造卫星”的伟大号召后不久，王希季被调到中国科学院上海机电设计院，担任探空火箭的技术负责人。虽然这与自己之前的研究领域完全不一样，但他明白这是国家的需要，毫不犹豫地答应了。中国发展航天事业和空间技术，改变了王希季的人生轨迹。\r\n\r\n任务开展之初，研制条件十分简陋，既没经验，又没资料，也没专家，一切都要从零开始。只有手摇式计算工具，为了计算一条弹道，几个人夜以继日干两个多月，计算用的纸比办公桌还高；没有发射场，他们把稻田当作发射场，用辘轳绞车把火箭吊上发射架，用打气筒加压给火箭加燃烧剂。1960年2月19日，王希季和他的团队在上海郊区的一处稻田里，成功发射了中国第一枚探空火箭“T-7M”。虽然飞行高度只有8公里，却标志着我国已经在奔向太空的征程中迈出了关键的第一步。王希季说，这是他航天事业中第一次也是最重要的一次成功。在此之后试验成功的18种探空火箭中，由王希季担任负责人的有12种。\r\n\r\n在后续“长征一号”的研制中，王希季创造性地把探空火箭技术和导弹技术结合起来，制定出我国第一枚卫星运载火箭“长征一号”的技术方案，主持了火箭方案和初样阶段研制，为我国之后首次发射卫星就获成功奠定了基础。1968年2月，王希季调入新成立的中国空间技术研究院，在航天报国的道路上继续奋斗。1970年4月24日，我国成功使用“长征一号”运载火箭将首颗人造地球卫星“东方红一号”送入太空，并由此成为第五个把卫星送入太空的国家。\r\n\r\n20世纪六七十年代，我国国土普查、资源勘探的战略需求迫切呼唤“太空视角”，返回式卫星成为国家战略的必然选择。王希季受命投入到我国第一颗返回式卫星的研制中。返回式卫星是一个复杂的航天飞行器，有数万个元件和零件，要在极为复杂恶劣的宇宙空间环境中做到稳妥可靠、万无一失，是很不容易的。这“对研制人员来说，确实是一个严重的挑战和难得的机遇”，但他仍毅然决然接下挑战，并带领研究团队进行了一次又一次的争论、讨论，最终确定了充分利用“长征二号”运载火箭能力、采用弹道式返回方式、由返回舱和仪器舱组成大返回舱的方案。这个方案几十年来一直是我国返回式卫星的基本方案。\r\n\r\n1975年11月26日，中国第一颗返回式卫星成功发射。当人们沉浸在发射成功的喜悦中时，王希季却提着行李匆匆赶往卫星测控中心——他要等卫星返回地面，发射试验才算真正成功。三天三夜没合眼，直到天空中出现了那顶红白相间的降落伞，他才放下心来。这次回收成功，带回了覆盖全国的首批高清遥感胶片，为国土普查、地形测绘等任务提供了基础数据支持，使中国成为继美国、苏联之后世界上第三个掌握卫星返回技术的国家。\r\n\r\n在带领队伍开展卫星研制的过程中，王希季高度重视质量工作，不仅亲自在现场指导技术人员，采取提高可靠性措施，而且对卫星的情况和动态了如指掌，从不肯放过哪怕细小的疏忽。他对身边的研制人员讲：“我们这个发展中国家不能和那些发达国家相比，我们对风险的承受力低。要体谅国家的难处，尽我们最大的努力去保证每一颗卫星的可靠性，以期用最小的投入去获取最大的效益。”\r\n\r\n王希季从不推诿责任，掷地有声地表示：“我是总设计师，一切由我负责。”对重要的数据，他会自己动手计算核实；对关键的部位，他甚至会打着手电筒钻进去亲自检查。一旦他提出问题，不仅问题尖锐具体，而且他总要刨根问底，容不得半点含糊。这样的作风深刻影响了整支队伍。\r\n\r\n在返回式卫星研制中，王希季还首次提出了试验新型国产彩色胶片的想法，当时遭到了不少专家的反对：国家投资研制一颗卫星不容易，一旦试验失败就会造成重大损失。黑白片已经试验成功了，清晰度很好，何必再“锦上添花”？\r\n\r\n王希季非常清楚这种不可小觑的风险，以及承担该风险要负的责任有多重。但他认为，这个风险值得承担。彩色片成功后会比黑白片获取到大得多的信息量，能为国家解决更多的问题，若能在万无一失的情况下创造更多的价值，“锦上添花”又有何不好？当装有大量彩色胶片的卫星成功回收后，一张张色彩纷呈、层次丰富、图像清晰的照片被冲洗出来，呈现了在众人面前。\r\n有人称赞王希季胆大有魄力，他回答道：“不是胆子和魄力问题，而是责任感问题，负责一件事，就要把事情了解清楚。我了解胶片的研制情况，知道研制人员做了充分的论证和试验，才敢决定在国土普查卫星上装那么多的新型胶片。”\r\n\r\n“有人说我一次又一次地充当开路先锋，其实我并无过人的胆识，只不过是对认定该做的事情不惜承担风险罢了。”\r\n\r\n太空的竞争非常激烈，我们应该具有开拓天疆的意识，不仅要争取拥有一席之地，还要争取一片之地\r\n\r\n不止是返回式卫星，王希季在载人航天和现代小卫星等工程领域也作出了突出贡献。他始终以极高的热情关注世界载人航天发展动态，在“863”计划启动后深度参与天地往返运输系统的论证，坚定支持飞船方案，力主中国载人航天应从研制飞船起步。载人航天工程立项后，他持续思考工程的未来发展，并参与多项工程技术把关工作。\r\n\r\n神舟七号载人飞船的主要任务，是实施中国航天员首次空间舱外活动。他鲜明提出“中国人第一次太空行走应该穿我们自己的航天服”。这个意见受到重视并被采纳。2008年9月，航天员翟志刚身穿由中国人自主研制生产的“飞天”舱外航天服在太空中挥舞五星红旗的精彩亮相，给世界留下了深刻印象。\r\n\r\n王希季倡导产品化理念和小卫星“快、好、省”的研制模式，有力推动了我国现代小卫星领域的快速发展。作为实践五号卫星首席专家，他将研究多年的“集同工程法”引入卫星研制工作，大胆使用工业级和商业器件降低成本，应用星务管理概念实现星上电子设备功能集成设计，出色完成了卫星研制任务，并创造了多个“第一”。\r\n\r\n在深厚的实践探索中，王希季始终科学求实、严谨务实，对我国航天事业发展有很多独到的见解，并持续推进空间技术发展战略研究，不断提出新概念、新思路。他曾经讲：“在技术问题上不能少数服从多数，而是要尊重客观规律，坚持实事求是，有时候少数人坚持的往往是正确的。”\r\n\r\n王希季敏锐地意识到，发展空间技术的意义不等同于一般高技术，这是一项开拓天疆、造福中华民族和全人类的宏伟事业。王希季利用各种机会和场合，不遗余力地宣传空间技术对我国开发利用太空资源的重要作用和深远意义。\r\n\r\n“开发利用空间资源与开发利用陆地、海洋和大气层资源一样，需要在空间建设适应国家和社会需求和促进其发展的、能为各行各业提供优质服务的空间基础设施。这就是在空间轨道上长期稳定运行的、具有提供给地上所需服务功能的各类航天器。”他在1998年发表的《建设我国的空间基础设施》等文章中，提出了“空间基础设施”的概念，并坚持不懈推动。他作为双组长之一，于2006-2007年主持完成了“高分辨率对地观测系统工程实施方案”的论证和编制，为该专项获得国家批准和立项研制奠定了基础。如今，国家民用空间基础设施早已变成实景图，天上的一系列高分卫星正在精准地遥瞰寰宇、感知天地。\r\n\r\n1999年9月18日，在庆祝中华人民共和国成立50周年之际，78岁的王希季被党中央、国务院和中央军委授予“两弹一星功勋奖章”，成为23位获此殊荣的科学家之一。面对这份至高的荣誉，他心中涌动着为祖国航天事业的进一步发展而奋斗的豪情，并以满腔热忱继续实干担当、强军报国。他说：“如果中国不发展空间技术，如果党、国家和人民不交给我负责研制火箭和卫星……我也不会成为现在的王希季。”\r\n\r\n步入鲐背之年，王希季对专业技术与社会发展依旧保持高度关注，依然思考并探寻着中国航天的未来。他关注空间太阳能电站发展，主持完成《空间太阳能电站发展预测和对策研究》并上报。2016年，他还主持开展“互联网+航天”课题研究，被媒体称为95岁的“航天创客”。期颐之年，他仍组织开展“中国探月工程的研讨”“关于载人空间站应用问题的讨论”两项课题研究。\r\n\r\n2020年4月，在第五个“中国航天日”和“东方红一号”卫星成功发射50周年到来之际，王希季和孙家栋、戚发轫等11位参与“东方红一号”任务的老科学家给习近平总书记写信，回顾了中国航天事业发展的辉煌历程，表达了对实现中国梦、航天梦的坚定信心。\r\n\r\n习近平总书记给他们回信，向他们致以诚挚的问候，指出：“当年，你们发愤图强、埋头苦干，创造了令全国各族人民自豪的非凡成就，彰显了中华民族自强不息的伟大精神。老一代航天人的功勋已经牢牢铭刻在新中国史册上。”在回信中，习近平总书记就弘扬“两弹一星”精神、加快航天强国建设向广大航天工作者提出殷切期望。\r\n\r\n2024年4月28日，在第九个“中国航天日”和“东方红一号”卫星成功发射54周年之际，经王希季本人授权的“两弹一星功勋奖章”与证书正式入驻五院展示中心。这一举动饱含着他对航天事业的无限热爱和对新一代航天人的热切期盼，给我们带来了巨大的勉励和鼓舞！\r\n\r\n“我感到生活的意义主要的就在于自己参与了这伟大的社会主义建设事业，能为此尽一份力量。我了解党的事业，并下定决心要争取作为一个共产党人。”这是王希季在入党申请书中的一句话。他认准了“做人还是要做共产党人”，用一生的行动践行了“我愿做太空的铺路石”的铮铮誓言！\r\n\r\n牧星耕宇一生报国丹心昭昭永耀星河我们沉痛悼念王希季院士！我们永远铭记他的卓著功勋！王希季院士千古！",
         "pdate": "2026-08-13 13:52:05",
         "pid": "000136",
-        "plikes": 59,
+        "plikes": 60,
         "images": [
             "img\/post_000136_1786600325_6a7d5b85ef052.webp"
         ],
         "comments": [
+            {
+                "com_pname": "武冈个人博客",
+                "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
+                "com_content": "晚安！😭",
+                "com_date": "2026-10-02 13:52:55",
+                "com_cid": "0000614",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "武冈事件墙",
                 "com_portrait": "portrait-img\/custom_1785662573_170ad9cac3f94eb9.jpg",
@@ -1424,12 +1688,22 @@
         "images": [],
         "comments": [
             {
+                "com_pname": "武冈个人博客",
+                "com_portrait": "portrait-img\/custom_1785984556_45fa6e7147bc9a00.jpg",
+                "com_content": "😭💔",
+                "com_date": "2026-10-02 13:47:57",
+                "com_cid": "0000611",
+                "clikes": 1,
+                "com_images": [],
+                "com_device": "Android"
+            },
+            {
                 "com_pname": "何夕永远",
                 "com_portrait": "portrait-img\/c12.jpg",
                 "com_content": "抱抱",
                 "com_date": "2026-09-12 00:26:00",
                 "com_cid": "0000314",
-                "clikes": 2,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "iPhone"
             },
@@ -1439,7 +1713,7 @@
                 "com_content": "会好的",
                 "com_date": "2026-09-12 00:25:00",
                 "com_cid": "0000313",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             }
@@ -1498,7 +1772,7 @@
                 "com_content": "秋天快乐",
                 "com_date": "2026-09-12 00:30:00",
                 "com_cid": "0000318",
-                "clikes": 2,
+                "clikes": 3,
                 "com_images": [],
                 "com_device": "iPhone"
             },
@@ -1781,7 +2055,7 @@
         "content": "提问:你成年后 最想做的第一件事是什么？ #交友# #emo# #故事集#",
         "pdate": "2026-07-30 23:19:34",
         "pid": "000123",
-        "plikes": 58,
+        "plikes": 59,
         "images": [
             "img\/post_000123_1785424774_6a6b6b866ca12.webp"
         ],
@@ -1792,7 +2066,7 @@
                 "com_content": "@烟花 乐子",
                 "com_date": "2026-09-12 13:27:49",
                 "com_cid": "0000579",
-                "clikes": 1,
+                "clikes": 2,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -1862,7 +2136,7 @@
                 "com_content": "上岸",
                 "com_date": "2026-07-30 23:29:39",
                 "com_cid": "0000220",
-                "clikes": 5,
+                "clikes": 6,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -1932,7 +2206,7 @@
                 "com_content": "用自己的身份证登游戏🤓🤓🤓",
                 "com_date": "2026-07-30 23:22:29",
                 "com_cid": "0000209",
-                "clikes": 5,
+                "clikes": 6,
                 "com_images": [],
                 "com_device": "Android"
             },
@@ -2802,7 +3076,7 @@
                 "com_content": "看完了",
                 "com_date": "2026-09-12 01:09:00",
                 "com_cid": "0000357",
-                "clikes": 3,
+                "clikes": 4,
                 "com_images": [],
                 "com_device": "iPhone"
             },
@@ -3640,7 +3914,7 @@
         "content": "基础款穿搭天花板——得物用户盐焗漾yang #分享#",
         "pdate": "2026-06-20 16:14:59",
         "pid": "000087",
-        "plikes": 22,
+        "plikes": 23,
         "images": [
             "img\/post_000087_1781943299_6a364c033f6bd.webp",
             "img\/post_000087_1781943299_6a364c033ff2d.webp",
@@ -3853,6 +4127,16 @@
             "img\/post_000083_1781775997_6a33be7d46172.webp"
         ],
         "comments": [
+            {
+                "com_pname": "数学退退",
+                "com_portrait": "portrait-img\/c94.jpg",
+                "com_content": "❤️❤️❤️",
+                "com_date": "2026-10-03 13:59:22",
+                "com_cid": "0000628",
+                "clikes": 0,
+                "com_images": [],
+                "com_device": "Android"
+            },
             {
                 "com_pname": "小懒猫",
                 "com_portrait": "portrait-img\/c81.jpg",
@@ -7848,7 +8132,7 @@
         "content": "你开心就好，反正我也不是非你不可。#腹黑#",
         "pdate": "2025-07-25 12:50:55",
         "pid": "000018",
-        "plikes": 49,
+        "plikes": 50,
         "images": [],
         "comments": [
             {
@@ -7986,7 +8270,7 @@
         "content": "求大神带飞，我喊666贼6！#游戏#",
         "pdate": "2025-06-03 09:45:33",
         "pid": "000022",
-        "plikes": 45,
+        "plikes": 46,
         "images": [],
         "comments": [
             {
@@ -8018,7 +8302,7 @@
         "content": "你的名字，是我读过最短的情书。#表白#",
         "pdate": "2025-05-22 17:05:30",
         "pid": "000023",
-        "plikes": 68,
+        "plikes": 69,
         "images": [],
         "comments": [
             {
@@ -8092,7 +8376,7 @@
         "content": "别把自己太当回事，你没那么重要。#腹黑#",
         "pdate": "2025-05-01 10:30:00",
         "pid": "000025",
-        "plikes": 50,
+        "plikes": 51,
         "images": [],
         "comments": [
             {
