@@ -381,7 +381,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             <!-- 插画裁剪层（限定在头部区域内） -->
 <div class="header-clip">
     <div class="corner-art" aria-hidden="true">
-        <img src="./doge.png" alt="武冈" loading="lazy" decoding="async" onerror="this.style.opacity='0.5'; this.style.background='linear-gradient(135deg, #8a6d9b, #4a6b8a)';this.src='a.svg'">
+        <img src="./doge.png" alt="武校圈" loading="lazy" decoding="async" onerror="this.style.opacity='0.5'; this.style.background='linear-gradient(135deg, #8a6d9b, #4a6b8a)';this.src='a.svg'">
     </div>
     </div>
         </div>
@@ -967,21 +967,21 @@ if (!isset($staticVer)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <!--user-scalable=no：锁住页面，不让用户缩放;viewport-fit=cover：页面全屏渲染，覆盖手机刘海 / 状态栏区域。-->
-    <meta name="description" content="武冈学生个人圈">
-    <meta name="keywords" content="个人博客、武冈、规范交流">
+    <meta name="description" content="武校圈学生个人圈">
+    <meta name="keywords" content="个人博客、武校圈、规范交流">
     <meta name="author" content="段游孤独一生">
     <meta property="og:url" content="http://an.kijk.top/">
-    <meta property="og:title" content="武冈 | 学生个人圈">
-    <meta property="og:description" content="武冈学生个人圈，分享和交流。">
+    <meta property="og:title" content="武校圈 | 学生个人圈">
+    <meta property="og:description" content="武校圈学生个人圈，分享和交流。">
     <meta property="og:image" content="http://an.kijk.top/a.svg">
-    <meta property="og:image:alt" content="武冈 | 网站封面图">
+    <meta property="og:image:alt" content="武校圈 | 网站封面图">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="武冈">
+    <meta property="og:site_name" content="武校圈">
     <meta name="wechat:share:image" content="http://an.kijk.top/a.svg">
     <link rel="shortcut icon" href="/a.svg">
-    <title>武冈</title> 
+    <title>武校圈</title> 
     <?php if (isset($_GET['pid'])): ?>
 <script>window.targetPid = '<?php echo htmlspecialchars($_GET['pid']); ?>';</script>
 <?php endif; ?>
@@ -1152,17 +1152,17 @@ if (!isset($staticVer)) {
     <div class="modal-mask" id="loginModal" style="z-index: 307;">
         <div class="modal-content">
             <button class="modal-close-btn" id="loginModalClose"></button>
-            <h3 class="modal-title">学生圈-登录</h3>
+            <h3 class="modal-title">武校圈</h3>
             
             <!-- ID重要性提醒 -->
             <div class="id-reminder">
                 <i class="fas fa-exclamation-circle"></i>
-                <strong>注意：</strong>显示不安全是因为我们没有经过安全认证
+                <strong>注意：</strong>注册时不要使用qq密码注册
             </div>
             
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginId">QQ号</label>
+                    <label for="loginId">请输入网站账号注册的QQ号</label>
                     <div class="input-with-tip">
                         <input type="text" id="loginId" name="id" required placeholder="请输入QQ号">
                         <div class="id-format-tip">QQ</div>
@@ -1175,15 +1175,15 @@ if (!isset($staticVer)) {
                 </div>
                 
                 <div class="form-group">
-                    <label for="loginPwd">密码</label>
+                    <label for="loginPwd">网站账号密码（非QQ密码）</label>
                     <input type="password" id="loginPwd" name="password" required placeholder="请输入密码">
                 </div>
                 
                 <button type="submit" class="btn" id="loginSubmitBtn">登录</button>
                 
                 <div class="register-btn-wrapper">
-                    <a href="register2.php" class="btn register-btn" id="registerBtn" target="_blank">
-                        还没有账号？去注册
+                    <a href="register2.php" class="btn register-btn" id="registerBtn">
+                        还没有网站账号?去注册
                     </a>
                 </div>
                 
@@ -1226,7 +1226,7 @@ if (!isset($staticVer)) {
                 
                 <form id="postForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="postContent">武冈</label>
+                        <label for="postContent">武校圈</label>
                         <textarea id="postContent" name="content" required placeholder="请输入你想分享的内容..." maxlength="2000"></textarea>
                         <div class="char-counter" id="postContentCounter">0 / 2000</div>
                     </div>
@@ -1338,7 +1338,7 @@ if (!isset($staticVer)) {
             <div class="modal-scrollable">
                 <form id="commentForm" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="commentContent">武冈</label>
+                        <label for="commentContent">武校圈</label>
                         <textarea id="commentContent" name="com_content" required placeholder="请输入你的评论..." maxlength="500"></textarea>
                          <div class="char-counter" id="commentContentCounter">0 / 500</div>
                     </div>
@@ -1447,7 +1447,7 @@ if (!isset($staticVer)) {
                     <div class="logo">
                         <img src="/a.svg" alt="logo" style="width: 40px; height: 40px;">
                     </div>
-                    <div class="service-name">武冈</div>
+                    <div class="service-name">武校圈</div>
                 </div>
                 <div class="nav-right">
                     <button id="toggleSearchBtn" class="fold-btn">
@@ -1455,7 +1455,7 @@ if (!isset($staticVer)) {
                     </button>
                     <!-- 导航栏区域 - 折叠/展开 Section3 按钮 -->
                     <button id="toggleSection3Btn" class="fold-btn">
-                    <i class="fas fa-chevron-up"></i> 更多服务
+                    <i class="fas fa-chevron-up"></i> 更多
                     </button>
                     <img src="default-avatar.jpg" alt="用户头像" class="user-avatar" id="userAvatar" style="display: none;" draggable="false" onerror="this.src='default-avatar.jpg'">
                     <!-- 用户信息面板 -->
@@ -1665,14 +1665,14 @@ if (!isset($staticVer)) {
             <!-- 加载更多按钮 -->
             <div class="load-more-container" id="loadMoreContainer" style="display: none;">
                 <button class="load-more-btn" id="loadMoreBtn">
-                    <span>加载更多</span>
+                    <span>查看更多·贪婪.jpg</span>
                 </button>
             </div>
             
             <!-- 加载中提示 -->
             <div class="loading-indicator" id="loadingIndicator" style="text-align: center; padding: 20px; display: none;">
                 <div class="loading-spinner"></div>
-                <div style="margin-top: 10px; color: #666;">加载中...</div>
+                <div style="margin-top: 10px; color: #666;">网络不佳，全速加载中...</div>
             </div>
         </div>
 
@@ -1682,7 +1682,7 @@ if (!isset($staticVer)) {
                 <div class="footer-logo">
                     <img src="/a.svg" alt="logo">
                 </div>
-                <div class="footer-service-name">武冈 | 湘ICP备13005896号</div>
+                <div class="footer-service-name">武校圈 | 湘ICP备13005896号</div>
             </div>
         </div>
     </div>
@@ -1697,7 +1697,7 @@ if (!isset($staticVer)) {
     <div id="postTipOverlay" class="post-tip-overlay">
     <div class="liquid-glass-tip">
     <div class="tip-arrow"></div>
-    <p>在这里开始思想漫步（轻触关闭）</p>
+    <p>发布帖子（轻触关闭）</p>
     </div>
     </div>
 
@@ -1779,7 +1779,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // 渲染内容
                 contentEl.innerHTML = `
                     <h3>${content.title || '每日通知'}</h3>
-                    <p>${content.content || '加载中'}</p>
+                    <p>${content.content || '网络不佳，全速加载中...'}</p>
                     ${content.subContent ? `<p style="margin-top: 8px; font-size: 14px;">${content.subContent}</p>` : ''}
                 `;
             } catch (err) {
@@ -1847,10 +1847,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (isSection3Collapsed) {
       section3.style.display = 'none';
-      toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> 更多服务';
+      toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> 更多';
     } else {
       section3.style.display = 'block'; // 如果是 flex 布局就改成 flex
-      toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> 轻触收起';
+      toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> 收起';
     }
   });
 });

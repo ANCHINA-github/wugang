@@ -2,73 +2,563 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>使用引导</title>
-    <!-- 沿用你项目图标库 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>使用引导 - 武校圈</title>
     <link rel="stylesheet" href="/repository/awesome/css/all.min.css">
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'dark' && t !== 'light') {
+                t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <style>
-        body {
+        * {
             margin: 0;
-            padding: 20px;
-            background: #F8F9FA;
-            font-family: sans-serif;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        .box {
-            max-width: 500px;
-            margin: 30px auto;
+
+        /* ---------- 主题变量 ---------- */
+        :root {
+            color-scheme: light;
+            --bg: #FFFBD6;
+            --surface: #FFFFFF;
+            --surface-hi: #FFFEF0;
+            --text: #1F2937;
+            --text-secondary: #6B7280;
+            --text-faint: #9CA3AF;
+            --separator: #ECE6C2;
+            --accent: #4F46E5;
+            --accent-hi: #4338CA;
+            --accent-soft: rgba(79, 70, 229, .12);
+            --warning-bg: #FEF3C7;
+            --warning-text: #92400E;
+            --success-bg: #ECFDF5;
+            --success-text: #065F46;
         }
-        h2 {
-            text-align: center;
-            color: #333;
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #121212;
+            --surface: #1E1E1E;
+            --surface-hi: #2A2A2A;
+            --text: #E8E8E8;
+            --text-secondary: #A0A0A0;
+            --text-faint: #707070;
+            --separator: #2E2E2E;
+            --accent: #818CF8;
+            --accent-hi: #A5B4FC;
+            --accent-soft: rgba(129, 140, 248, .18);
+            --warning-bg: #3A2E0A;
+            --warning-text: #FCD34D;
+            --success-bg: #103028;
+            --success-text: #6EE7B7;
         }
-        .item {
-            margin: 18px 0;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             font-size: 16px;
-            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color .25s ease, color .25s ease;
         }
-        .item i {
-            color: #409eff;
-            margin-right: 8px;
+
+        /* ---------- App bar ---------- */
+        .app-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 56px;
+            padding: 0 8px;
+            padding-top: env(safe-area-inset-top);
+            background: var(--bg);
+            border-bottom: 1px solid var(--separator);
+            transition: background-color .25s ease, border-color .25s ease;
         }
-        /* 返回按钮样式 */
-        .back-btn {
+        .app-bar-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: .2px;
+            color: var(--text);
+        }
+        .app-bar-btn {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            border-radius: 12px;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color .15s ease, transform .1s ease;
+        }
+        .app-bar-btn:hover { background: var(--surface); }
+        .app-bar-btn:active { transform: scale(.9); }
+        .app-bar-btn svg { display: block; }
+
+        /* ---------- Main ---------- */
+        .app-main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 20px 16px calc(48px + env(safe-area-inset-bottom));
+        }
+
+        .lead {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.65;
+            margin-bottom: 8px;
+            padding: 0 8px;
+        }
+
+        /* ---------- Section ---------- */
+        .section { margin-top: 26px; }
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            margin: 0 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-title i {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        /* ---------- List ---------- */
+        .list {
+            background: var(--surface);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: background-color .25s ease;
+        }
+        .row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--separator);
+            transition: border-color .25s ease;
+        }
+        .row:last-child { border-bottom: none; }
+
+        .row-icon {
+            flex: 0 0 auto;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: background-color .25s ease, color .25s ease;
+        }
+        .row-main {
+            flex: 1;
+            min-width: 0;
+            padding-top: 1px;
+        }
+        .row-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.35;
+            margin-bottom: 3px;
+        }
+        .row-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.55;
+        }
+        .row-desc code,
+        .row-title code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+            font-size: 12px;
+            background: var(--surface-hi);
+            color: var(--accent);
+            padding: 1px 6px;
+            border-radius: 5px;
+        }
+
+        /* ---------- Tip 卡片 ---------- */
+        .tip {
+            margin-top: 22px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: var(--warning-bg);
+            color: var(--warning-text);
+            font-size: 13px;
+            line-height: 1.65;
+            display: flex;
+            gap: 10px;
+        }
+        .tip i {
+            flex: 0 0 auto;
+            font-size: 15px;
+            margin-top: 1px;
+        }
+
+        .tip.success {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        /* ---------- Footer 返回按钮 ---------- */
+        .btn-back {
             display: block;
             width: 100%;
-            padding: 12px;
-            margin-top: 40px;
-            background: #409eff;
-            color: #fff;
+            margin-top: 28px;
+            padding: 15px;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
             font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: .3px;
             cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color .15s ease, transform .1s ease;
         }
-        .back-btn:hover {
-            background: #337ecc;
+        .btn-back:hover { background: var(--accent-hi); }
+        .btn-back:active { transform: scale(.98); }
+        .btn-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        .version {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-faint);
+            margin-top: 20px;
+            line-height: 1.6;
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2><i class="fas fa-book"></i> 网站使用引导</h2>
 
-        <div class="item">
-            <i class="fas fa-plus"></i> 点击右下角加号，发布图文动态
-        </div>
-        <div class="item">
-            <i class="fas fa-reply"></i> 点击评论，自动@对方楼中楼回复
-        </div>
-        <div class="item">
-            <i class="fas fa-hashtag"></i> 顶部标签，快速筛选内容
-        </div>
-        <div class="item">
-            <i class="fas fa-search"></i> 使用搜索框查找帖子和话题
-        </div>
-
-        <!-- 按钮形式返回主页 -->
-        <button class="back-btn" onclick="location.href='core.php'">
-            <i class="fas fa-arrow-left"></i> 返回主界面
+    <header class="app-bar">
+        <button type="button" class="app-bar-btn" id="back-btn" aria-label="返回">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
         </button>
-    </div>
+        <div class="app-bar-title">使用引导</div>
+        <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
+    </header>
+
+    <main class="app-main">
+
+        <p class="lead">欢迎来到武校圈 👋<br>几分钟看完，你就能熟练使用这个平台了</p>
+
+        <!-- ============ 1. 快速上手 ============ -->
+        <section class="section">
+            <div class="section-title">
+                <i class="fas fa-bolt"></i> 快速上手
+            </div>
+            <div class="list">
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-plus"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">发布动态</div>
+                        <div class="row-desc">点击主页右下角的加号按钮，可以发布图文动态。支持上传多张图片、使用表情，单条字数有限制。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-heart"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">点赞 / 取消点赞</div>
+                        <div class="row-desc">点一下爱心即可点赞，再点一下取消。你点过赞的帖子会记录在本机，换设备不通用。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-comment-dots"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">评论与楼中楼</div>
+                        <div class="row-desc">点评论后会自动 @ 对方，形成楼中楼回复。评论同样支持图片和 @ 好友。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-search"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">搜索帖子和话题</div>
+                        <div class="row-desc">顶部搜索框支持实时建议。输入关键词即可找到相关帖子和话题标签。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-hashtag"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">筛选内容</div>
+                        <div class="row-desc">主页顶部的标签可以按话题快速筛选内容，比如只看某一类动态。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 2. 个人中心 ============ -->
+        <section class="section">
+            <div class="section-title">
+                <i class="fas fa-user"></i> 个人中心
+            </div>
+            <div class="list">
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-id-card"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">「我的」页面</div>
+                        <div class="row-desc">查看你的头像、昵称、系统 ID、QQ 号、性别，并从这里进入各项账号操作。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-pen"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">修改签名</div>
+                        <div class="row-desc">在 <code>sign-edit</code> 页面修改你的个性签名。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-key"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">修改密码</div>
+                        <div class="row-desc">在 <code>change_password</code> 页面更改账号密码，需要验证原密码。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-lock"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">忘记密码</div>
+                        <div class="row-desc">在 <code>find</code> 页面输入 QQ 号和昵称验证身份，找回账号密码。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-calendar"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">登录记录</div>
+                        <div class="row-desc">在 <code>login-data</code> 页面查看你的历史登录时间和 IP。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-history"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">历史动态</div>
+                        <div class="row-desc">在 <code>posts_history</code> 页面查看和删除你发布过的帖子、评论。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-user-slash"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">申请注销</div>
+                        <div class="row-desc">在「我的」页面点「申请注销」，可提交账号注销申请。<strong>此操作不可恢复</strong>。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 3. 发现更多 ============ -->
+        <section class="section">
+            <div class="section-title">
+                <i class="fas fa-compass"></i> 发现更多
+            </div>
+            <div class="list">
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-address-book"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">实时好友档案</div>
+                        <div class="row-desc">在 <code>mp</code> 页面搜索账号，查看对方昵称、头像等公开信息。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">资源商城</div>
+                        <div class="row-desc">在 <code>sources</code> 页面下载学习资料：数学 / 英语 PDF、音频等。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-language"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">英语题库</div>
+                        <div class="row-desc">在 <code>en</code> 目录下的题库页面练习英语题目。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-gamepad"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">小游戏</div>
+                        <div class="row-desc">在 <code>game</code> 页面玩内置小游戏，放松一下。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-robot"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">AI 智能助手</div>
+                        <div class="row-desc">在 <code>AI</code> 目录下与智能助手对话，可以向它提问或闲聊。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-mobile-screen"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">下载 APP</div>
+                        <div class="row-desc">在「我的」页面点「下载武校圈 APP」，安装安卓客户端，访问更快捷。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-circle-question"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">反馈问题</div>
+                        <div class="row-desc">在「我的」页面点「反馈问题」，向开发者报告 Bug 或提出建议。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-crown"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">成为管理员</div>
+                        <div class="row-desc">在「我的」页面点「成为管理员」，填写问卷申请管理权限。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 4. 账号安全 ============ -->
+        <section class="section">
+            <div class="section-title">
+                <i class="fas fa-shield-halved"></i> 账号安全
+            </div>
+            <div class="list">
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-lock"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">密码不要设置得太简单</div>
+                        <div class="row-desc">建议使用 8 位以上的混合密码，不要和其他平台共用同一个密码。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-user-secret"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">不要在公开帖子暴露隐私</div>
+                        <div class="row-desc">发布动态时避免暴露真实姓名、住址、电话、身份证号等敏感信息。</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="row-icon"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div class="row-main">
+                        <div class="row-title">发现违规内容怎么办</div>
+                        <div class="row-desc">可以通过「反馈问题」向站长举报，管理员会在审核后台处理。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ 提示卡片 ============ -->
+        <div class="tip">
+            <i class="fas fa-circle-info"></i>
+            <div>小提示：本站使用 10 位系统 ID 作为内部标识，QQ 号用于登录。昵称在「搜索账号」页面可以查到。</div>
+        </div>
+
+        <div class="tip success">
+            <i class="fas fa-lightbulb"></i>
+            <div>遇到问题时，可以在「我的 → 反馈问题」告诉我们，每一条反馈都会认真处理。</div>
+        </div>
+
+        <!-- ============ 返回按钮 ============ -->
+        <button type="button" class="btn-back" id="back-btn-bottom">
+            <i class="fas fa-arrow-left"></i> 返回
+        </button>
+
+        <div class="version">
+            武校圈 · 使用引导<br>
+            &copy; <?php /* 静态页占位 */ echo date('Y'); ?> 武校圈
+        </div>
+
+    </main>
+
+    <script>
+        // ---------- 主题切换 ----------
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('theme-toggle');
+
+            function sync() {
+                var dark = root.getAttribute('data-theme') === 'dark';
+                btn.textContent = dark ? '☀️' : '🌙';
+                var label = dark ? '切换到浅色模式' : '切换到深色模式';
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+            }
+
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
+
+            sync();
+
+            try {
+                var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                var onSysChange = function (e) {
+                    var saved = null;
+                    try { saved = localStorage.getItem('theme'); } catch (err) {}
+                    if (saved) return;
+                    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    sync();
+                };
+                if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+                else if (mq.addListener) mq.addListener(onSysChange);
+            } catch (e) {}
+        })();
+
+        // ---------- 返回：从哪来回哪去 ----------
+        (function () {
+            var FALLBACK = 'core.php';
+
+            function resolveBackUrl() {
+                var ref = document.referrer;
+                if (!ref) return FALLBACK;
+                try {
+                    var u = new URL(ref);
+                    // 只接受同站来源，且不是当前页面
+                    if (u.host !== location.host) return FALLBACK;
+                    if (u.pathname === location.pathname) return FALLBACK;
+                    return ref;
+                } catch (e) {
+                    return FALLBACK;
+                }
+            }
+
+            function goBack() {
+                location.href = resolveBackUrl();
+            }
+
+            document.getElementById('back-btn').addEventListener('click', goBack);
+            document.getElementById('back-btn-bottom').addEventListener('click', goBack);
+        })();
+    </script>
 </body>
 </html>

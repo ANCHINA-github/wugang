@@ -6,28 +6,28 @@
     <!--仅对当前HTML有效，对页面里的CSS/JS/图片无效-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <!--user-scalable=no：锁住页面，不让用户缩放;viewport-fit=cover：页面全屏渲染，覆盖手机刘海 / 状态栏区域。-->
-    <meta name="description" content="武冈学生个人圈">
-    <meta name="keywords" content="个人博客、武冈、规范交流">
+    <meta name="description" content="武校圈学生个人圈">
+    <meta name="keywords" content="个人博客、武校圈、规范交流">
     <meta name="author" content="段游孤独一生">
     <meta property="og:url" content="http://an.kijk.top/">
-    <meta property="og:title" content="武冈 | 学生个人圈">
-    <meta property="og:description" content="武冈学生个人圈，分享和交流。">
+    <meta property="og:title" content="武校圈 | 学生个人圈">
+    <meta property="og:description" content="武校圈学生个人圈，分享和交流。">
     <meta property="og:image" content="http://an.kijk.top/a.svg">
-    <meta property="og:image:alt" content="武冈 | 网站封面图">
+    <meta property="og:image:alt" content="武校圈 | 网站封面图">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="武冈">
+    <meta property="og:site_name" content="武校圈">
     <meta name="wechat:share:image" content="http://an.kijk.top/a.svg">
     <link rel="shortcut icon" href="/a.svg">
     <link rel="preload" as="image" href="./a.svg" fetchpriority="high">
     <!---- 预加载网站图标，提升首屏加载速度-->
-    <title>武冈 | 学生圈</title>
+    <title>武校圈 | 学生圈</title>
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="/repository/awesome/css/all.min.css" onerror="this.href='https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css'">
 <script>
 (function () {
-    var version = '1.0.0'; // 每次更新文件改这个数字就行
+    var version = '3.0.0'; // 每次更新文件改这个数字
 
     function loadCSS(href) {
         var link = document.createElement('link');
@@ -87,6 +87,7 @@
             background-image: url('/a.svg');
             background-repeat: no-repeat;
             background-position: center;
+            background-size: contain;
             width: 80px;
             height: 80px;
             background-color: #ffffff00;
@@ -408,7 +409,7 @@
                 <!--
                 <div class="tab-item" data-tab="music" onclick="switchFramePage('./service/ancloud/')">
                     <div class="icon"><i class="fa-solid fa-mountain"></i></div>
-                    <span>武冈</span>
+                    <span>武校圈</span>
                 </div>
                 -->
 
@@ -649,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--script src="ad-popup.js"></script-->
 <script>
 // 更新网站时修改这里的版本号
-const VERSION = "2026091301";
+const VERSION = "202610102039";
 const localVer = localStorage.getItem("site_version");
 if(localVer !== VERSION){
     localStorage.setItem("site_version", VERSION);

@@ -6,6 +6,21 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+// ========== 记录/获取来源页 ==========
+$fallbackUrl = 'index.html';
+$self        = $_SERVER['PHP_SELF'];
+$referer     = $_SERVER['HTTP_REFERER'] ?? '';
+$fromUrl     = $_SESSION['register_from'] ?? $fallbackUrl;
+
+if ($referer !== '' && strpos($referer, $self) === false) {
+    $refHost = parse_url($referer, PHP_URL_HOST);
+    $curHost = $_SERVER['HTTP_HOST'] ?? '';
+    if ($refHost === null || $refHost === '' || strcasecmp($refHost, $curHost) === 0) {
+        $_SESSION['register_from'] = $referer;
+        $fromUrl = $referer;
+    }
+}
+
 // 常量定义
 define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 2MB
 define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'gif']);
@@ -15,12 +30,12 @@ define('UPLOAD_DIR', 'portrait-img/');
 // 初始化变量
 $msg = '';
 $msgType = '';
-$newSystemId = '';   // 新生成的10位数字ID
+$newSystemId = '';
 $formData = [
     'pname' => '',
     'gender' => '',
     'portrait' => DEFAULT_PORTRAIT,
-    'qq' => ''        // 新增QQ号字段
+    'qq' => ''
 ];
 
 // 2. 辅助函数
@@ -30,13 +45,12 @@ function sanitizeInput($data) {
 
 function validatePassword($password) {
     if (strlen($password) < 4) {
-        return '密码不对'; // 修改：统一提示密码不对
+        return '密码不对';
     }
     return true;
 }
 
 function validateUsername($username) {
-    // 修改：昵称限制8个字（16个字符，中文占2字符）
     $charLen = mb_strlen($username, 'UTF-8');
     if ($charLen < 2 || $charLen > 8) {
         return '昵称需2-8个字';
@@ -47,7 +61,6 @@ function validateUsername($username) {
     return true;
 }
 
-// 新增：验证QQ号码
 function validateQQ($qq) {
     if (!preg_match('/^[1-9][0-9]{4,11}$/', $qq)) {
         return 'QQ号码必须为5~12位数字，且不能以0开头';
@@ -64,7 +77,6 @@ function checkUsernameExists($username, $users) {
     return false;
 }
 
-// 检查QQ号是否已被注册（id字段）
 function checkQQExists($qq, $users) {
     foreach ($users as $user) {
         if (isset($user['id']) && $user['id'] == $qq) {
@@ -74,11 +86,9 @@ function checkQQExists($qq, $users) {
     return false;
 }
 
-// 生成新的系统ID（10位数字），基于system_id字段
 function getNextSystemId($users) {
     $maxId = 0;
     foreach ($users as $user) {
-        // 优先使用system_id，兼容旧数据（旧数据可能没有system_id，则用id转换为数字）
         $sid = isset($user['system_id']) ? $user['system_id'] : (isset($user['id']) && is_numeric($user['id']) ? $user['id'] : 0);
         if ($sid && (int)$sid > $maxId) {
             $maxId = (int)$sid;
@@ -93,44 +103,44 @@ function handleFileUpload($fileField, &$msg, &$msgType) {
         $msgType = 'error';
         return null;
     }
-    
+
     $file = $_FILES[$fileField];
-    
+
     if ($file['size'] > MAX_FILE_SIZE) {
         $msg = '文件大小不能超过2MB';
         $msgType = 'error';
         return null;
     }
-    
+
     $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     if (!in_array($fileExt, ALLOWED_EXTENSIONS)) {
         $msg = '只允许上传JPG、PNG、GIF格式的图片';
         $msgType = 'error';
         return null;
     }
-    
+
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $mime = finfo_file($finfo, $file['tmp_name']);
     finfo_close($finfo);
-    
+
     $allowedMimes = ['image/jpeg', 'image/png', 'image/gif'];
     if (!in_array($mime, $allowedMimes)) {
         $msg = '文件类型不被允许';
         $msgType = 'error';
         return null;
     }
-    
+
     if (!is_dir(UPLOAD_DIR)) {
         mkdir(UPLOAD_DIR, 0755, true);
     }
-    
+
     $safeName = 'custom_' . time() . '_' . bin2hex(random_bytes(8)) . '.' . $fileExt;
     $targetPath = UPLOAD_DIR . $safeName;
-    
+
     if (move_uploaded_file($file['tmp_name'], $targetPath)) {
         return $targetPath;
     }
-    
+
     $msg = '文件上传失败';
     $msgType = 'error';
     return null;
@@ -139,7 +149,7 @@ function handleFileUpload($fileField, &$msg, &$msgType) {
 // 3. 处理请求
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
-    
+
     // --- 处理头像上传 ---
     if ($action === 'upload_portrait') {
         if (isset($_FILES['custom_portrait'])) {
@@ -165,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-    
+
     // --- 处理头像选择 ---
     elseif ($action === 'select_portrait') {
         $selectedPortrait = $_POST['portrait'] ?? DEFAULT_PORTRAIT;
@@ -179,52 +189,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
         exit;
     }
-    
+
     // --- 处理注册 ---
     elseif ($action === 'register') {
-        // 获取并清理表单数据
         $pname = sanitizeInput($_POST['pname'] ?? '');
-        $qq = sanitizeInput($_POST['qq'] ?? '');          // 新增QQ号
+        $qq = sanitizeInput($_POST['qq'] ?? '');
         $password = $_POST['password'] ?? '';
         $confirmPwd = $_POST['confirmPwd'] ?? '';
         $gender = $_POST['gender'] ?? '';
-        
-        // 确定最终头像路径
+
         $finalPortrait = DEFAULT_PORTRAIT;
         if (isset($_SESSION['temp_portrait'])) {
             $finalPortrait = $_SESSION['temp_portrait'];
         } elseif (!empty($_POST['portrait'])) {
             $finalPortrait = $_POST['portrait'];
         }
-        
-        // 表单验证
+
         $errors = [];
-        
-        // 验证昵称
+
         $usernameValidation = validateUsername($pname);
         if ($usernameValidation !== true) {
             $errors[] = $usernameValidation;
         }
-        
-        // 验证QQ号
+
         $qqValidation = validateQQ($qq);
         if ($qqValidation !== true) {
             $errors[] = $qqValidation;
         }
-        
-        // 验证密码
+
         $passwordValidation = validatePassword($password);
         if ($passwordValidation !== true) {
             $errors[] = $passwordValidation;
         } elseif ($password !== $confirmPwd) {
-            $errors[] = '密码不对'; // 修改：统一提示密码不对
+            $errors[] = '密码不对';
         }
-        
-        // 验证性别
+
         if (!in_array($gender, ['男', '女', '保密'])) {
             $errors[] = '请选择有效的性别';
         }
-        
+
         if (!empty($errors)) {
             $msg = implode('<br>', $errors);
             $msgType = 'error';
@@ -235,44 +238,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $jsonContent = file_get_contents($jsonFile);
                 $users = json_decode($jsonContent, true) ?? [];
             }
-            
-            // 检查昵称是否已存在
+
             if (checkUsernameExists($pname, $users)) {
                 $msg = '该昵称已被注册，请更换一个';
                 $msgType = 'error';
             }
-            // 检查QQ号是否已被注册
             elseif (checkQQExists($qq, $users)) {
                 $msg = '该QQ号码已被绑定，请更换或联系管理员';
                 $msgType = 'error';
             }
             else {
-                // 生成新的系统ID（10位数字），存储到system_id字段
                 $newSystemId = getNextSystemId($users);
-                
-                // 构建新用户数据（注意：id字段存储QQ号码，system_id存储10位数字ID）
+
                 $newUser = [
-                    'id' => $qq,                      // 登录凭证：QQ号码
-                    'system_id' => $newSystemId,      // 系统内部10位数字ID
+                    'id' => $qq,
+                    'system_id' => $newSystemId,
                     'pname' => $pname,
-                    'password' => $password,          // 明文密码（建议改为哈希）
+                    'password' => $password,
                     'gender' => $gender,
                     'portrait' => $finalPortrait,
                     'created_at' => date('Y-m-d H:i:s')
                 ];
-                
+
                 $users[] = $newUser;
-                
+
                 if (file_put_contents(
-                    $jsonFile, 
+                    $jsonFile,
                     json_encode($users, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
                     LOCK_EX
                 )) {
-                    // 清除会话中的临时头像
                     if (isset($_SESSION['temp_portrait'])) {
                         unset($_SESSION['temp_portrait']);
                     }
-                    
+
                     $msg = '注册成功！您的QQ号码 ' . $qq . ' 已绑定，请使用QQ号登录。系统ID：' . $newSystemId . '（可用于找回账号）';
                     $msgType = 'success';
                 } else {
@@ -281,8 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-        
-        // 保存表单数据用于回显
+
         $formData = [
             'pname' => $pname,
             'gender' => $gender,
@@ -291,493 +288,702 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
     }
 }
+
+$fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
+$fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>注册 | 武冈</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>注册</title>
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'dark' && t !== 'light') {
+                t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <style>
-        /* 1. 删除动态背景，改为纯色 */
-        * { 
-            -webkit-tap-highlight-color: transparent; 
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 15px; 
-            color: #333; 
-            overflow-x: hidden;
-            /* 纯色背景 */
-            background-image: url('./poster.webp');
-            background-size: cover;
-            background-position: center;
-             /* 添加一个半透明的叠层，增加对比度 */
-            position: relative;
+
+        :root {
+            color-scheme: light;
+            --bg: #FFFBD6;
+            --surface: #FFFFFF;
+            --surface-hi: #FFFEF0;
+            --text: #1F2937;
+            --text-secondary: #6B7280;
+            --text-faint: #9CA3AF;
+            --separator: #ECE6C2;
+            --accent: #4F46E5;
+            --accent-hi: #4338CA;
+            --accent-ring: rgba(79, 70, 229, .18);
+            --danger-bg: #FEE2E2;
+            --danger-text: #DC2626;
+            --success-bg: #ECFDF5;
+            --success-text: #065F46;
+            --success-border: #A7F3D0;
+            --overlay: rgba(0, 0, 0, .45);
         }
-        
-        /* 2. 液态玻璃效果容器，简化布局，兼容多端 */
-        .register-container { 
-            background: rgba(255, 255, 255, 0.41); 
-            padding: 30px 20px; 
-            border-radius: 20px; 
-            width: 100%; 
-            max-width: 420px; 
-            /* 液态玻璃核心样式 */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-            transition: all 0.3s ease;
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #121212;
+            --surface: #1E1E1E;
+            --surface-hi: #2A2A2A;
+            --text: #E8E8E8;
+            --text-secondary: #A0A0A0;
+            --text-faint: #707070;
+            --separator: #2E2E2E;
+            --accent: #818CF8;
+            --accent-hi: #A5B4FC;
+            --accent-ring: rgba(129, 140, 248, .32);
+            --danger-bg: #3A1F1F;
+            --danger-text: #FCA5A5;
+            --success-bg: #103028;
+            --success-text: #6EE7B7;
+            --success-border: #065F46;
+            --overlay: rgba(0, 0, 0, .7);
         }
-        
-        h2 { 
-            text-align: center; 
-            color: #4a4a8c; 
-            margin: 0 0 25px 0; 
-            font-weight: 700; 
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color .25s ease, color .25s ease;
+        }
+
+        /* ---------- App bar ---------- */
+        .app-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 56px;
+            padding: 0 8px;
+            padding-top: env(safe-area-inset-top);
+            background: var(--bg);
+            border-bottom: 1px solid var(--separator);
+            transition: background-color .25s ease, border-color .25s ease;
+        }
+        .app-bar-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: .2px;
+            color: var(--text);
+        }
+        .app-bar-btn {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            border-radius: 12px;
             font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color .15s ease, transform .1s ease;
         }
-        
-        .msg-box { 
-            padding: 10px 12px; 
-            border-radius: 10px; 
-            margin-bottom: 20px; 
-            text-align: center; 
-            font-weight: 500; 
-            animation: fadeIn 0.5s ease; 
-            font-size: 14px; 
+        .app-bar-btn:hover { background: var(--surface); }
+        .app-bar-btn:active { transform: scale(.9); }
+        .app-bar-btn svg { display: block; }
+
+        /* ---------- Main ---------- */
+        .app-main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 16px calc(48px + env(safe-area-inset-bottom));
         }
-        .msg-box.success { 
-            background-color: #edf7ed; 
-            color: #155724; 
-            border: 1px solid #d5e6d5; 
+
+        .lead {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
         }
-        .msg-box.error { 
-            background-color: #fef3f2; 
-            color: #721c24; 
-            border: 1px solid #fde6e3; 
+
+        /* ---------- Banner ---------- */
+        .banner {
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.55;
+            margin-bottom: 18px;
         }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(-10px); } 
-            to { opacity: 1; transform: translateY(0); } 
+        .banner.success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            font-weight: 500;
         }
-        
-        .form-group { 
-            margin-bottom: 20px; 
+        .banner.error {
+            background: var(--danger-bg);
+            color: var(--danger-text);
         }
-        label { 
-            display: block; 
-            margin-bottom: 8px; 
-            color: #555; 
-            font-weight: 500; 
-            font-size: 14px; 
+
+        /* ---------- Form ---------- */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
         }
-        input[type="text"], input[type="password"] { 
-            width: 100%; 
-            padding: 12px 15px; 
-            border: 1px solid #e0e0e0; 
-            border-radius: 10px; 
-            box-sizing: border-box; 
-            font-size: 14px; 
-            transition: all 0.3s ease; 
-            background: rgba(255, 255, 255, 0.9);
+        .field {
+            display: flex;
+            flex-direction: column;
         }
-        input[type="text"]:focus, input[type="password"]:focus { 
-            border-color: #667eea; 
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15); 
-            outline: none; 
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            letter-spacing: .3px;
         }
-        
-        .gender-options { 
-            display: flex; 
-            gap: 15px; 
-            margin-top: 8px; 
-            flex-wrap: wrap;
+        .field .req { color: var(--danger-text); margin-left: 2px; }
+        .field input[type="text"],
+        .field input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: border-color .15s ease, box-shadow .15s ease,
+                        background-color .25s ease, color .25s ease;
         }
-        .gender-options label { 
-            display: flex; 
-            align-items: center; 
-            cursor: pointer; 
-            transition: color 0.2s ease; 
-            padding: 6px 12px; 
-            border-radius: 20px; 
-            font-size: 14px; 
+        .field input::placeholder { color: var(--text-faint); }
+        .field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-ring);
+            background: var(--surface-hi);
         }
-        .gender-options label:hover { 
-            color: #667eea; 
-            background: rgba(102, 126, 234, 0.05); 
+        .field input:-webkit-autofill {
+            -webkit-text-fill-color: var(--text);
+            -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
         }
-        
-        /* 3. 头像区域：优先上传，布局优化 */
-        .portrait-section { 
-            margin-bottom: 20px; 
+        .field-feedback {
+            font-size: 12px;
+            margin-top: 6px;
+            min-height: 16px;
+            line-height: 1.4;
+        }
+        .fb-ok   { color: #10B981; }
+        .fb-err  { color: var(--danger-text); }
+        .fb-wait { color: var(--text-faint); }
+        html[data-theme="dark"] .fb-ok { color: #34D399; }
+
+        /* ---------- Segmented control (性别) ---------- */
+        .segmented {
+            display: flex;
+            gap: 4px;
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 4px;
+            transition: background-color .25s ease;
+        }
+        .segmented-item {
+            position: relative;
+            flex: 1;
+            display: block;
+        }
+        .segmented-item input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .segmented-item span {
+            display: block;
+            padding: 11px 12px;
+            text-align: center;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            transition: background-color .18s ease, color .18s ease, transform .1s ease;
+        }
+        .segmented-item input:checked + span {
+            background: var(--accent);
+            color: #fff;
+        }
+        .segmented-item input:focus-visible + span {
+            box-shadow: 0 0 0 3px var(--accent-ring);
+        }
+        .segmented-item span:active { transform: scale(.98); }
+
+        /* ---------- Portrait ---------- */
+        .portrait-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 14px;
+        }
+        .portrait-preview {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--surface);
+            border: 2px solid var(--separator);
+            flex: 0 0 auto;
+            transition: border-color .25s ease;
         }
         .portrait-actions {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
         }
-        .upload-btn, .portrait-select-btn { 
-            padding: 10px 12px; 
-            background-color: #667eea; 
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            text-align: center; 
-            font-size: 14px; 
-            transition: all 0.3s ease; 
-            font-weight: 500;
+        .upload-label,
+        .portrait-select-btn {
+            display: block;
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            transition: background-color .15s ease, transform .1s ease;
         }
-        .upload-btn:hover, .portrait-select-btn:hover { 
-            background-color: #556cd6; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2); 
+        .upload-label {
+            background: var(--accent);
+            color: #fff;
         }
-        .portrait-preview-container { 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            margin-top: 10px;
+        .upload-label:hover { background: var(--accent-hi); }
+        .upload-label:active { transform: scale(.98); }
+        .portrait-select-btn {
+            background: var(--surface);
+            color: var(--text);
         }
-        .portrait-preview { 
-            width: 60px; 
-            height: 60px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            border: 2px solid #e0e0e0; 
-            transition: all 0.3s ease; 
+        .portrait-select-btn:hover { background: var(--surface-hi); }
+        .portrait-select-btn:active { transform: scale(.98); }
+        .upload-portrait input[type="file"] { display: none; }
+
+        /* ---------- Submit ---------- */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: .5px;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: background-color .15s ease, transform .1s ease, opacity .15s ease;
         }
-        
-        .upload-portrait { 
-            border: 2px dashed #ccc; 
-            padding: 12px; 
-            text-align: center; 
-            border-radius: 10px; 
-            transition: all 0.3s ease; 
-            margin-top: 5px; 
+        .btn-primary:hover:not(:disabled) { background: var(--accent-hi); }
+        .btn-primary:active:not(:disabled) { transform: scale(.98); }
+        .btn-primary:disabled {
+            background: var(--surface);
+            color: var(--text-faint);
+            cursor: not-allowed;
         }
-        .upload-portrait:hover { 
-            border-color: #667eea; 
-            background: rgba(102, 126, 234, 0.03); 
-        }
-        .upload-portrait input[type="file"] { 
-            display: none; 
-        }
-        .upload-portrait p { 
-            margin: 0 0 8px 0; 
-            font-size: 13px; 
-            color: #666;
-        }
-        .upload-label { 
-            display: inline-block; 
-            padding: 8px 15px; 
-            background-color: #28a745; 
-            color: white; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 13px; 
-            transition: all 0.3s ease; 
-            font-weight: 500; 
-        }
-        .upload-label:hover { 
-            background-color: #218838; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2); 
-        }
-        
-        .submit-btn { 
-            width: 100%; 
-            padding: 14px; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            color: white; 
-            border: none; 
-            border-radius: 10px; 
-            font-size: 16px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.3s ease; 
-            margin-top: 10px;
-        }
-        .submit-btn:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.2); 
-        }
-        .submit-btn:disabled { 
-            background: #e0e0e0; 
-            cursor: not-allowed; 
-            transform: none; 
-            box-shadow: none;
-            color: #999;
-        }
-        
-        /* 头像选择模态框 */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0,0,0,0.5); 
-            justify-content: center; 
-            align-items: center; 
-            backdrop-filter: blur(5px); 
-            opacity: 0; 
-            transition: opacity 0.3s ease; 
-        }
-        .modal.active { 
-            opacity: 1; 
-        }
-        .modal-content { 
-            background-color: #fff; 
-            margin: auto; 
-            padding: 20px; 
-            border: 1px solid #888; 
-            width: 90%; 
-            max-width: 600px; 
-            max-height: 80vh; 
-            overflow-y: auto; 
-            border-radius: 15px; 
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2); 
-            transform: translateY(30px) scale(0.95); 
-            transition: all 0.3s ease; 
-        }
-        .modal.active .modal-content { 
-            transform: translateY(0) scale(1); 
-        }
-        .close { 
-            color: #aaa; 
-            float: right; 
-            font-size: 24px; 
-            font-weight: bold; 
-            cursor: pointer; 
-            transition: all 0.2s ease; 
-            position: absolute; 
-            top: 15px; 
-            right: 15px; 
-            width: 25px; 
-            height: 25px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 50%; 
-        }
-        .close:hover { 
-            color: #dc3545; 
-            background: rgba(220, 53, 69, 0.1); 
-        }
-        .portrait-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); 
-            gap: 10px; 
-            margin-top: 15px; 
-        }
-        .portrait-item { 
-            width: 60px; 
-            height: 60px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            cursor: pointer; 
-            border: 2px solid transparent; 
-            transition: all 0.3s ease; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-        }
-        .portrait-item:hover { 
-            transform: scale(1.1) rotate(5deg); 
-            border-color: #667eea; 
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2); 
-        }
-        .portrait-item.selected { 
-            border-color: #667eea; 
-            transform: scale(1.05); 
-            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2); 
-        }
-        
-        /* 注册成功样式 */
-        .success-message { 
-            text-align: center; 
-            margin: 15px 0; 
-        }
-        .success-message .user-id { 
-            font-size: 22px; 
-            font-weight: bold; 
-            color: #764ba2; 
-            letter-spacing: 2px; 
-            margin: 10px 0; 
-            padding: 10px; 
-            background: rgba(118, 75, 162, 0.1); 
-            border-radius: 10px; 
-        }
-        .copy-notification { 
-            margin-top: 10px; 
-            padding: 5px 10px; 
-            background-color: #e3f2fd; 
-            color: #0d47a1; 
-            border-radius: 6px; 
-            font-size: 13px; 
-            display: inline-block; 
-        }
-        
-        /* 反馈提示样式 */
-        .field-feedback {
-            font-size: 12px;
-            margin-top: 5px;
-            height: 16px; /* 固定高度避免布局跳动 */
-        }
-        
-        /* 登录链接 */
+
         .login-link {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 18px;
             font-size: 14px;
-            color: #667eea;
+            color: var(--text-secondary);
         }
         .login-link a {
-            color: #667eea;
+            color: var(--accent);
             text-decoration: none;
+            font-weight: 600;
         }
-        .login-link a:hover {
+        .login-link a:hover { text-decoration: underline; }
+
+        /* ---------- 注册成功卡片 ---------- */
+        .success-card {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+            border-radius: 16px;
+            padding: 26px 20px;
+            text-align: center;
+            animation: pop .35s cubic-bezier(.2, .8, .3, 1.2);
+        }
+        @keyframes pop {
+            0%   { transform: scale(.94); opacity: 0; }
+            100% { transform: scale(1);   opacity: 1; }
+        }
+        .success-card .check {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 14px;
+            border-radius: 50%;
+            background: var(--success-text);
+            color: var(--success-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            line-height: 1;
+        }
+        .success-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .success-card .label {
+            font-size: 13px;
+            opacity: .8;
+            margin-bottom: 6px;
+        }
+        .user-id {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            background: rgba(255, 255, 255, .35);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin: 0 auto 12px;
+            max-width: 260px;
+            word-break: break-all;
+        }
+        html[data-theme="dark"] .user-id {
+            background: rgba(255, 255, 255, .08);
+        }
+        .success-card .meta {
+            font-size: 12px;
+            opacity: .8;
+            line-height: 1.6;
+        }
+        .success-card .meta a {
+            color: var(--success-text);
+            font-weight: 700;
             text-decoration: underline;
+        }
+        .copy-notification {
+            display: inline-block;
+            margin: 10px 0 4px;
+            padding: 5px 12px;
+            background: rgba(255, 255, 255, .4);
+            color: var(--success-text);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        html[data-theme="dark"] .copy-notification {
+            background: rgba(255, 255, 255, .1);
+        }
+
+        /* ---------- Modal ---------- */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: var(--overlay);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity .25s ease;
+        }
+        .modal.active { opacity: 1; }
+        .modal-card {
+            background: var(--surface);
+            color: var(--text);
+            width: 100%;
+            max-width: 520px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+            transform: translateY(20px) scale(.96);
+            transition: transform .25s ease;
+        }
+        .modal.active .modal-card { transform: translateY(0) scale(1); }
+        .modal-head {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--separator);
+        }
+        .modal-head h3 {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 24px;
+            line-height: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color .15s ease, color .15s ease, transform .1s ease;
+        }
+        .modal-close:hover { background: var(--surface-hi); color: var(--danger-text); }
+        .modal-close:active { transform: scale(.9); }
+        .portrait-grid {
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 12px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .portrait-item {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: var(--surface-hi);
+            transition: transform .15s ease, border-color .15s ease;
+        }
+        .portrait-item:hover { transform: scale(1.08); border-color: var(--accent); }
+        .portrait-item:active { transform: scale(.95); }
+        .portrait-item.selected {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-ring);
+        }
+
+        @media (max-width: 480px) {
+            .portrait-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .portrait-preview {
+                width: 64px;
+                height: 64px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="register-container">
-        <h2>注册</h2>
+    <header class="app-bar">
+        <a class="app-bar-btn" href="<?= $fromUrlEsc ?>" aria-label="返回">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </a>
+        <div class="app-bar-title">注册</div>
+        <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
+    </header>
+
+    <main class="app-main">
         <?php if (!empty($msg)): ?>
-            <div class="msg-box <?php echo $msgType; ?>"><?php echo $msg; ?></div>
+            <div class="banner <?= htmlspecialchars($msgType); ?>"><?= $msg; ?></div>
         <?php endif; ?>
 
         <?php if ($msgType === 'success' && !empty($newSystemId)): ?>
-            <!-- 注册成功后的提示 -->
-            <div class="success-message">
-                <p>注册成功！</p>
-                <p>您绑定的QQ号码：</p>
-                <div class="user-id" id="qqNumber"><?php echo htmlspecialchars($formData['qq']); ?></div>
-                <p style="font-size: 13px; color: #6c757d;">系统内部ID：<?php echo $newSystemId; ?>（仅用于找回账号）</p>
-                <p style="font-size: 13px; color: #6c757d; margin-top: 10px;">
-                    验证中...
-                    <br>
-                    <a href="index.html" style="color: #667eea;">立即登录</a>
-                </p>
+            <!-- 注册成功 -->
+            <div class="success-card">
+                <div class="check">✓</div>
+                <h3>注册成功</h3>
+
+                <div class="label">你绑定的 QQ 号码</div>
+                <div class="user-id" id="qqNumber"><?= htmlspecialchars($formData['qq']); ?></div>
+
+                <div class="meta">
+                    系统内部 ID：<?= htmlspecialchars($newSystemId); ?><br>
+                    仅用于找回账号
+                </div>
+
+                <div class="meta" style="margin-top: 16px;">
+                    2 秒后自动返回…<br>
+                    <a href="<?= $fromUrlEsc ?>">点此立即返回</a>
+                </div>
             </div>
+
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const qqElement = document.getElementById('qqNumber');
-                    const qqNumber = qqElement.textContent.trim();
-                    localStorage.setItem('lastLoginId', '<?php echo htmlspecialchars($formData['qq']); ?>');
-                    navigator.clipboard.writeText(qqNumber).then(() => {
-                        const notification = document.createElement('div');
-                        notification.className = 'copy-notification';
-                        notification.textContent = '✓ QQ号码已自动复制到剪贴板';
-                        qqElement.parentNode.insertBefore(notification, qqElement.nextSibling);
-                    }).catch(err => {
-                        console.error('复制失败:', err);
-                    });
+                document.addEventListener('DOMContentLoaded', function () {
+                    var qqElement = document.getElementById('qqNumber');
+                    var qqNumber = qqElement.textContent.trim();
+                    try { localStorage.setItem('lastLoginId', qqNumber); } catch (e) {}
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(qqNumber).then(function () {
+                            var n = document.createElement('div');
+                            n.className = 'copy-notification';
+                            n.textContent = '✓ QQ号码已自动复制到剪贴板';
+                            qqElement.parentNode.insertBefore(n, qqElement.nextSibling);
+                        }).catch(function (err) {
+                            console.error('复制失败:', err);
+                        });
+                    }
                 });
-                setTimeout(() => {
-                    window.location.href = 'index.html';
+                setTimeout(function () {
+                    window.location.href = <?= $fromUrlJs ?>;
                 }, 2000);
             </script>
         <?php else: ?>
-            <form id="registerForm" method="post" enctype="multipart/form-data">
+            <p class="lead">创建一个新账号，用于登录「武冈」</p>
+
+            <form id="registerForm" class="form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="register">
-                <input type="hidden" id="portraitInput" name="portrait" value="<?php echo htmlspecialchars($formData['portrait']); ?>">
-                
-                <div class="form-group">
-                    <label for="pname">昵称 <span style="color:#dc3545;">*</span></label>
-                    <input type="text" id="pname" name="pname" 
-                           value="<?php echo htmlspecialchars($formData['pname']); ?>" 
+                <input type="hidden" id="portraitInput" name="portrait" value="<?= htmlspecialchars($formData['portrait']); ?>">
+
+                <div class="field">
+                    <label for="pname">昵称<span class="req">*</span></label>
+                    <input type="text" id="pname" name="pname"
+                           value="<?= htmlspecialchars($formData['pname']); ?>"
                            required placeholder="2-8个字，支持中文/英文/数字/下划线"
                            oninput="checkUsernameAvailability()">
                     <div id="usernameFeedback" class="field-feedback"></div>
                 </div>
 
-                <!-- QQ号码输入框 -->
-                <div class="form-group">
-                    <label for="qq">QQ号码 <span style="color:#dc3545;">*</span></label>
-                    <input type="text" id="qq" name="qq" 
-                           value="<?php echo htmlspecialchars($formData['qq']); ?>" 
+                <div class="field">
+                    <label for="qq">QQ号码<span class="req">*</span></label>
+                    <input type="text" id="qq" name="qq"
+                           value="<?= htmlspecialchars($formData['qq']); ?>"
                            required placeholder="5~12位数字，不能以0开头"
+                           inputmode="numeric"
                            oninput="validateQQ()">
                     <div id="qqFeedback" class="field-feedback"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="password">密码 <span style="color:#dc3545;">*</span></label>
+
+                <div class="field">
+                    <label for="password">密码<span class="req">*</span></label>
                     <input type="password" id="password" name="password" required placeholder="至少4位">
-                    <div id="passwordLengthFeedback" class="field-feedback"></div> <!-- 移除实时验证 -->
+                    <div id="passwordLengthFeedback" class="field-feedback"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="confirmPwd">确认密码 <span style="color:#dc3545;">*</span></label>
+
+                <div class="field">
+                    <label for="confirmPwd">确认密码<span class="req">*</span></label>
                     <input type="password" id="confirmPwd" name="confirmPwd" required placeholder="再次输入密码">
-                    <div id="passwordMatchFeedback" class="field-feedback"></div> <!-- 移除实时验证 -->
+                    <div id="passwordMatchFeedback" class="field-feedback"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label>性别 <span style="color:#dc3545;">*</span></label>
-                    <div class="gender-options">
-                        <label><input type="radio" name="gender" value="男" <?php echo $formData['gender'] === '男' ? 'checked' : ''; ?> required> 男</label>
-                        <label><input type="radio" name="gender" value="女" <?php echo $formData['gender'] === '女' ? 'checked' : ''; ?>> 女</label>
-                        <label><input type="radio" name="gender" value="保密" <?php echo $formData['gender'] === '保密' ? 'checked' : ''; ?>> 保密</label>
+
+                <div class="field">
+                    <label>性别<span class="req">*</span></label>
+                    <div class="segmented">
+                        <label class="segmented-item">
+                            <input type="radio" name="gender" value="男" <?= $formData['gender'] === '男' ? 'checked' : ''; ?> required>
+                            <span>男</span>
+                        </label>
+                        <label class="segmented-item">
+                            <input type="radio" name="gender" value="女" <?= $formData['gender'] === '女' ? 'checked' : ''; ?>>
+                            <span>女</span>
+                        </label>
+                        <label class="segmented-item">
+                            <input type="radio" name="gender" value="保密" <?= $formData['gender'] === '保密' ? 'checked' : ''; ?>>
+                            <span>保密</span>
+                        </label>
                     </div>
                 </div>
 
-                <div class="portrait-section">
+                <div class="field">
                     <label>头像</label>
-                    <div class="portrait-preview-container">
-                        <img id="currentPortraitPreview" class="portrait-preview" src="<?php echo htmlspecialchars($formData['portrait']); ?>" alt="头像预览" loading="lazy">
-                    </div>
-                    <!-- 优先显示上传按钮，布局更合理 -->
-                    <div class="portrait-actions">
-                        <div class="upload-portrait">
-                            <p>上传自定义头像（小于2MB，支持JPG/PNG/GIF）</p>
-                            <label for="customPortraitInput" class="upload-label">自定义头像</label>
-                            <input type="file" id="customPortraitInput" name="custom_portrait" accept="image/*">
-                            <div id="uploadStatus" class="field-feedback"></div>
+                    <div class="portrait-row">
+                        <img id="currentPortraitPreview" class="portrait-preview"
+                             src="<?= htmlspecialchars($formData['portrait']); ?>" alt="头像预览" loading="lazy">
+                        <div class="portrait-actions">
+                            <div class="upload-portrait">
+                                <label for="customPortraitInput" class="upload-label">上传自定义头像</label>
+                                <input type="file" id="customPortraitInput" name="custom_portrait" accept="image/*">
+                            </div>
+                            <button type="button" class="portrait-select-btn" id="openPortraitModalBtn">从图库选择</button>
                         </div>
-                        <button type="button" class="portrait-select-btn" id="openPortraitModalBtn">从图库选择头像</button>
                     </div>
+                    <div id="uploadStatus" class="field-feedback"></div>
                 </div>
 
-                <button type="submit" class="submit-btn" id="submitBtn" disabled>注 册</button>
-                
+                <button type="submit" class="btn-primary" id="submitBtn" disabled>注 册</button>
+
                 <div class="login-link">
-                    <a href="./index.html">已有账号？去登录</a>
+                    <a href="<?= $fromUrlEsc ?>">已有账号？返回</a>
                 </div>
             </form>
         <?php endif; ?>
-    </div>
+    </main>
 
     <!-- 头像选择模态框 -->
     <div id="portraitModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>选择头像</h3>
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3>选择头像</h3>
+                <button type="button" class="modal-close" aria-label="关闭">&times;</button>
+            </div>
             <div class="portrait-grid" id="portraitGrid"></div>
         </div>
     </div>
 
     <script>
-        // 初始化逻辑
-        document.addEventListener('DOMContentLoaded', function() {
+        // ---------- 主题切换 ----------
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('theme-toggle');
+
+            function sync() {
+                var dark = root.getAttribute('data-theme') === 'dark';
+                btn.textContent = dark ? '☀️' : '🌙';
+                var label = dark ? '切换到浅色模式' : '切换到深色模式';
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+            }
+
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
+
+            sync();
+
+            try {
+                var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                var onSysChange = function (e) {
+                    var saved = null;
+                    try { saved = localStorage.getItem('theme'); } catch (err) {}
+                    if (saved) return;
+                    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    sync();
+                };
+                if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+                else if (mq.addListener) mq.addListener(onSysChange);
+            } catch (e) {}
+        })();
+
+        // ---------- 主逻辑 ----------
+        document.addEventListener('DOMContentLoaded', function () {
             const modal = document.getElementById('portraitModal');
             const modalBtn = document.getElementById('openPortraitModalBtn');
-            const closeBtn = document.querySelector('.close');
+            const closeBtn = document.querySelector('.modal-close');
             const portraitGrid = document.getElementById('portraitGrid');
             const portraitInput = document.getElementById('portraitInput');
             const currentPreview = document.getElementById('currentPortraitPreview');
@@ -786,21 +992,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const submitBtn = document.getElementById('submitBtn');
             const uploadStatus = document.getElementById('uploadStatus');
 
+            if (!form) return; // 注册成功页没有表单
+
             // 打开头像选择模态框
-            modalBtn.addEventListener('click', function() {
+            modalBtn.addEventListener('click', function () {
                 modal.style.display = 'flex';
                 setTimeout(() => modal.classList.add('active'), 10);
                 renderPortraits();
             });
 
-            // 关闭模态框
             function closeModal() {
                 modal.classList.remove('active');
                 setTimeout(() => modal.style.display = 'none', 300);
             }
             closeBtn.addEventListener('click', closeModal);
-            window.addEventListener('click', function(event) {
+            window.addEventListener('click', function (event) {
                 if (event.target === modal) closeModal();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
             });
 
             // 渲染系统头像列表
@@ -813,13 +1023,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     const img = document.createElement('img');
                     img.src = imgSrc;
                     img.alt = `头像 ${i}`;
+                    img.loading = 'lazy';
                     img.className = 'portrait-item' + (imgSrc === selectedValue ? ' selected' : '');
-                    img.addEventListener('click', function() { selectSystemPortrait(imgSrc); });
+                    img.addEventListener('click', function () { selectSystemPortrait(imgSrc); });
                     portraitGrid.appendChild(img);
                 }
             }
 
-            // 选择系统头像
             function selectSystemPortrait(imgSrc) {
                 fetch('', {
                     method: 'POST',
@@ -831,100 +1041,85 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (data.success) {
                         portraitInput.value = data.portraitPath;
                         currentPreview.src = data.portraitPath;
-                        uploadStatus.innerHTML = '<span style="color:#28a745;">✓ 已选择系统头像</span>';
+                        uploadStatus.innerHTML = '<span class="fb-ok">✓ 已选择系统头像</span>';
                         closeModal();
                     }
                 })
-                .catch(error => { 
-                    console.error(error); 
-                    uploadStatus.innerHTML = '<span style="color:#dc3545;">✗ 选择失败</span>'; 
+                .catch(error => {
+                    console.error(error);
+                    uploadStatus.innerHTML = '<span class="fb-err">✗ 选择失败</span>';
                 });
             }
 
             // 上传自定义头像
-            fileInput.addEventListener('change', function() {
+            fileInput.addEventListener('change', function () {
                 if (this.files && this.files[0]) {
                     const formData = new FormData();
                     formData.append('action', 'upload_portrait');
                     formData.append('custom_portrait', this.files[0]);
-                    uploadStatus.innerHTML = '<span style="color:#666;">上传中...</span>';
+                    uploadStatus.innerHTML = '<span class="fb-wait">上传中…</span>';
                     fetch('', { method: 'POST', body: formData })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             currentPreview.src = data.portraitPath;
                             portraitInput.value = data.portraitPath;
-                            uploadStatus.innerHTML = '<span style="color:#28a745;">✓ ' + data.message + '</span>';
+                            uploadStatus.innerHTML = '<span class="fb-ok">✓ ' + data.message + '</span>';
                         } else {
-                            uploadStatus.innerHTML = '<span style="color:#dc3545;">✗ ' + data.message + '</span>';
+                            uploadStatus.innerHTML = '<span class="fb-err">✗ ' + data.message + '</span>';
                         }
                     })
-                    .catch(error => { 
-                        console.error(error); 
-                        uploadStatus.innerHTML = '<span style="color:#dc3545;">✗ 上传失败</span>'; 
+                    .catch(error => {
+                        console.error(error);
+                        uploadStatus.innerHTML = '<span class="fb-err">✗ 上传失败</span>';
                     });
                 }
             });
 
-            // 实时验证表单，控制按钮状态
+            // 实时验证
             function validateForm() {
                 const username = document.getElementById('pname').value.trim();
                 const qq = document.getElementById('qq').value.trim();
                 const password = document.getElementById('password').value;
                 const confirmPwd = document.getElementById('confirmPwd').value;
                 const gender = document.querySelector('input[name="gender"]:checked');
-                
-                // 昵称验证（2-8字）
-                const isUsernameValid = (mbStrLen(username) >= 2 && mbStrLen(username) <= 8) 
+
+                const isUsernameValid = (mbStrLen(username) >= 2 && mbStrLen(username) <= 8)
                     && /^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(username);
-                
-                // QQ验证
+
                 const isQQValid = /^[1-9][0-9]{4,11}$/.test(qq);
-                
-                // 密码验证（仅检查长度，不检查匹配）
+
                 const isPasswordValid = password.length >= 4 && confirmPwd.length >= 4;
-                
-                // 性别验证
+
                 const isGenderValid = !!gender;
-                
-                // 所有项都有效才启用按钮
+
                 const isFormValid = isUsernameValid && isQQValid && isPasswordValid && isGenderValid;
                 submitBtn.disabled = !isFormValid;
-                
+
                 return isFormValid;
             }
 
-            // 辅助函数：计算中文字符长度（中文算1字，英文/数字算1字）
             function mbStrLen(str) {
-                return str ? mb_strlen(str, 'UTF-8') : 0;
-            }
-            // 兼容非PHP环境的mb_strlen
-            if (typeof mb_strlen === 'undefined') {
-                function mb_strlen(str, encoding) {
-                    if (encoding !== 'UTF-8') return str.length;
-                    return str.replace(/[^\x00-\xff]/g, 'aa').length / 2;
-                }
+                if (!str) return 0;
+                return str.replace(/[^\x00-\xff]/g, 'aa').length / 2;
             }
 
-            // 监听所有输入事件，实时验证
             const allInputs = form.querySelectorAll('input');
             allInputs.forEach(input => {
                 input.addEventListener('input', validateForm);
-                input.addEventListener('change', validateForm); // 单选框change事件
+                input.addEventListener('change', validateForm);
             });
 
-            // 表单提交验证
-            form.addEventListener('submit', function(e) {
+            form.addEventListener('submit', function (e) {
                 if (!validateForm()) {
                     e.preventDefault();
                     alert('请正确填写所有必填字段');
                     return;
                 }
                 submitBtn.disabled = true;
-                submitBtn.textContent = '注册中...';
+                submitBtn.textContent = '注册中…';
             });
 
-            // 初始化按钮状态
             validateForm();
         });
 
@@ -932,21 +1127,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function checkUsernameAvailability() {
             const username = document.getElementById('pname').value.trim();
             const feedback = document.getElementById('usernameFeedback');
-            const len = typeof mb_strlen !== 'undefined' ? mb_strlen(username, 'UTF-8') : username.replace(/[^\x00-\xff]/g, 'aa').length / 2;
-            
+            const len = username ? username.replace(/[^\x00-\xff]/g, 'aa').length / 2 : 0;
+
             if (username === '') {
                 feedback.innerHTML = '';
                 return;
             }
             if (len < 2 || len > 8) {
-                feedback.innerHTML = '<span style="color:#dc3545;">✗ 昵称需2-8个字</span>';
+                feedback.innerHTML = '<span class="fb-err">✗ 昵称需2-8个字</span>';
                 return;
             }
             if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(username)) {
-                feedback.innerHTML = '<span style="color:#dc3545;">✗ 只能包含中文、英文、数字和下划线</span>';
+                feedback.innerHTML = '<span class="fb-err">✗ 只能包含中文、英文、数字和下划线</span>';
                 return;
             }
-            feedback.innerHTML = '<span style="color:#28a745;">✓ 格式正确</span>';
+            feedback.innerHTML = '<span class="fb-ok">✓ 格式正确</span>';
         }
 
         // QQ号实时验证
@@ -958,15 +1153,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 return;
             }
             if (/^[1-9][0-9]{4,11}$/.test(qq)) {
-                feedback.innerHTML = '<span style="color:#28a745;">✓ QQ号格式正确</span>';
+                feedback.innerHTML = '<span class="fb-ok">✓ QQ号格式正确</span>';
             } else {
-                feedback.innerHTML = '<span style="color:#dc3545;">✗ 请输入5~12位数字，不能以0开头</span>';
+                feedback.innerHTML = '<span class="fb-err">✗ 请输入5~12位数字，不能以0开头</span>';
             }
         }
-
-        // 移除密码长度和匹配的实时验证函数
-        function validatePasswordLength() {}
-        function validatePasswordMatch() {}
     </script>
 </body>
 </html>

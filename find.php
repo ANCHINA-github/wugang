@@ -1,8 +1,27 @@
 <?php
 /**
- * 找回密码页面 - 液态玻璃效果版（纯色中性版）
+ * 找回密码页面 - App 风格
  * 功能：输入ID和昵称，匹配后显示密码
  */
+session_start();
+
+// ========== 记录/获取来源页 ==========
+$fallbackUrl = 'core.php';                 // 没有任何来源时的兜底
+$self        = $_SERVER['PHP_SELF'];
+$referer     = $_SERVER['HTTP_REFERER'] ?? '';
+$fromUrl     = $_SESSION['recover_from'] ?? $fallbackUrl;
+
+// 只接受“非本页”且“同站”的来源
+if ($referer !== '' && strpos($referer, $self) === false) {
+    $refHost = parse_url($referer, PHP_URL_HOST);
+    $curHost = $_SERVER['HTTP_HOST'] ?? '';
+    // 相对路径时 $refHost 为 null，也放行
+    if ($refHost === null || $refHost === '' || strcasecmp($refHost, $curHost) === 0) {
+        $_SESSION['recover_from'] = $referer;
+        $fromUrl = $referer;
+    }
+}
+
 $message = '';
 $foundPassword = '';
 $debugInfo = '';
@@ -49,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $foundPassword = $found['password'];
                     } else {
                         $message = "未找到匹配的用户，请检查ID和昵称是否完全一致（包括大小写和空格）。";
-                        // 调试信息（可关闭）
                         $debugInfo .= "当前用户列表：";
                         foreach ($users as $u) {
                             $debugInfo .= " [ID:{$u['id']}, 昵称:{$u['pname']}]";
@@ -60,258 +78,366 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+$fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
 ?>
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>找回密码 · 液态玻璃</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>找回密码</title>
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'dark' && t !== 'light') {
+                t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            margin: 0; padding: 0; box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
+        :root {
+            color-scheme: light;
+            --bg: #FFFBD6;
+            --surface: #FFFFFF;
+            --surface-hi: #FFFEF0;
+            --text: #1F2937;
+            --text-secondary: #6B7280;
+            --text-faint: #9CA3AF;
+            --separator: #ECE6C2;
+            --accent: #4F46E5;
+            --accent-hi: #4338CA;
+            --accent-ring: rgba(79, 70, 229, .18);
+            --danger-bg: #FEE2E2;
+            --danger-text: #DC2626;
+            --success-bg: #ECFDF5;
+            --success-text: #065F46;
+            --success-border: #A7F3D0;
+        }
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #121212;
+            --surface: #1E1E1E;
+            --surface-hi: #2A2A2A;
+            --text: #E8E8E8;
+            --text-secondary: #A0A0A0;
+            --text-faint: #707070;
+            --separator: #2E2E2E;
+            --accent: #818CF8;
+            --accent-hi: #A5B4FC;
+            --accent-ring: rgba(129, 140, 248, .32);
+            --danger-bg: #3A1F1F;
+            --danger-text: #FCA5A5;
+            --success-bg: #103028;
+            --success-text: #6EE7B7;
+            --success-border: #065F46;
+        }
+
         body {
-            min-height: 100vh;
-            background: linear-gradient(145deg, #1e3c3f 0%, #315d5f 40%, #5b8c8a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color .25s ease, color .25s ease;
+        }
+
+        /* ---------- App bar ---------- */
+        .app-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 56px;
+            padding: 0 8px;
+            padding-top: env(safe-area-inset-top);
+            background: var(--bg);
+            border-bottom: 1px solid var(--separator);
+            transition: background-color .25s ease, border-color .25s ease;
+        }
+        .app-bar-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: .2px;
+            color: var(--text);
+        }
+        .app-bar-btn {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* 液态玻璃背景装饰 */
-        body::before {
-            content: '';
-            position: absolute;
-            width: 240px;
-            height: 240px;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4), rgba(200,230,240,0.1));
-            border-radius: 50%;
-            top: 10%;
-            left: 5%;
-            filter: blur(60px);
-            z-index: 0;
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            width: 320px;
-            height: 320px;
-            background: radial-gradient(circle at 70% 80%, rgba(255,240,200,0.35), rgba(180,210,220,0.1));
-            border-radius: 50%;
-            bottom: 5%;
-            right: 5%;
-            filter: blur(70px);
-            z-index: 0;
-        }
-
-        /* 主卡片 - 液态玻璃效果 */
-        .glass-card {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 520px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(18px) saturate(180%);
-            -webkit-backdrop-filter: blur(18px) saturate(180%);
-            border-radius: 42px;
-            padding: 40px 36px;
-            box-shadow: 0 30px 50px rgba(0, 20, 20, 0.4),
-                        0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-                        0 0 30px rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            margin-bottom: 100px;
-        }
-
-        .glass-card:hover {
-            box-shadow: 0 35px 60px rgba(0, 30, 30, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.35) inset;
-            transform: translateY(-4px);
-        }
-
-        h1 {
-            color: white;
-            font-weight: 400;
-            font-size: 2.4rem;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            font-weight: 300;
-        }
-
-        .sub {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 30px;
-            font-size: 1rem;
-            font-weight: 300;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 18px;
-        }
-
-        .form-group {
-            margin-bottom: 28px;
-        }
-
-        label {
-            display: block;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding-left: 6px;
-        }
-
-        .glass-input {
-            width: 100%;
-            padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
-            border-radius: 34px;
-            font-size: 1rem;
-            color: white;
-            outline: none;
-            transition: all 0.25s ease;
-            box-shadow: 0 6px 12px rgba(0, 20, 20, 0.2);
-            backdrop-filter: blur(6px);
-        }
-
-        .glass-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 300;
-            font-size: 0.95rem;
-        }
-
-        .glass-input:focus {
-            border-color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.18);
-            box-shadow: 0 10px 22px rgba(0, 40, 40, 0.4), 0 0 0 3px rgba(255, 255, 255, 0.1);
-            transform: scale(1.01);
-        }
-
-        .glass-button {
-            width: 100%;
-            padding: 16px 22px;
-            background: rgba(255, 255, 255, 0.22);
-            border: 1.5px solid rgba(255, 255, 255, 0.35);
-            border-radius: 40px;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 400;
-            letter-spacing: 1px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            border-radius: 12px;
+            font-size: 20px;
+            line-height: 1;
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: all 0.25s ease;
-            box-shadow: 0 10px 20px rgba(0, 30, 30, 0.3);
-            text-transform: uppercase;
+            text-decoration: none;
+            transition: background-color .15s ease, transform .1s ease;
+        }
+        .app-bar-btn:hover { background: var(--surface); }
+        .app-bar-btn:active { transform: scale(.9); }
+        .app-bar-btn svg { display: block; }
+
+        /* ---------- Main ---------- */
+        .app-main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 16px calc(48px + env(safe-area-inset-bottom));
         }
 
-        .glass-button:hover {
-            background: rgba(255, 255, 255, 0.35);
-            border-color: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 15px 30px rgba(0, 50, 50, 0.5);
-            transform: translateY(-2px);
+        .lead {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 24px;
         }
 
-        .glass-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 5px 10px rgba(0, 20, 20, 0.4);
+        /* ---------- Banner ---------- */
+        .banner {
+            padding: 13px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.55;
+            margin-bottom: 18px;
+        }
+        .banner.error {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            text-align: left;
         }
 
-        /* 按钮组：垂直排列，增加间距 */
-        .button-group {
+        /* ---------- Result card ---------- */
+        .result {
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-text);
+            border-radius: 16px;
+            padding: 22px 20px;
+            margin-bottom: 22px;
+            text-align: center;
+            animation: pop .35s cubic-bezier(.2, .8, .3, 1.2);
+        }
+        @keyframes pop {
+            0%   { transform: scale(.94); opacity: 0; }
+            100% { transform: scale(1);   opacity: 1; }
+        }
+        .result-label {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: .5px;
+            opacity: .85;
+            margin-bottom: 10px;
+        }
+        .result-value {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            word-break: break-all;
+            line-height: 1.3;
+        }
+
+        /* ---------- Form ---------- */
+        .form {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 18px;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+        }
+        .field label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            letter-spacing: .3px;
+        }
+        .field .req { color: var(--danger-text); margin-left: 2px; }
+        .field input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text);
+            background: var(--surface);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: border-color .15s ease, box-shadow .15s ease,
+                        background-color .25s ease, color .25s ease;
+        }
+        .field input::placeholder { color: var(--text-faint); }
+        .field input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-ring);
+            background: var(--surface-hi);
+        }
+        .field input:-webkit-autofill {
+            -webkit-text-fill-color: var(--text);
+            -webkit-box-shadow: 0 0 0 1000px var(--surface) inset;
+        }
+        .hint {
             margin-top: 8px;
+            padding-left: 4px;
+            font-size: 12px;
+            color: var(--text-faint);
+            line-height: 1.5;
         }
+        .hint a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .hint a:hover { text-decoration: underline; }
 
-        /* 统一消息提示样式 - 纯玻璃效果，无彩色 */
-        .message {
-            margin-top: 28px;
-            padding: 16px 20px;
-            border-radius: 50px;
-            font-weight: 400;
-            background: rgba(0, 0, 0, 0.25);   /* 深色半透明，适配深色模式 */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 18px rgba(0, 20, 20, 0.3);
+        /* ---------- Button ---------- */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: .5px;
+            cursor: pointer;
+            margin-top: 4px;
+            transition: background-color .15s ease, transform .1s ease;
+        }
+        .btn-primary:hover { background: var(--accent-hi); }
+        .btn-primary:active { transform: scale(.98); }
+        .btn-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: var(--surface);
+            color: var(--text);
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: .5px;
+            cursor: pointer;
             text-align: center;
-            color: white;                      /* 白色文字，清晰可见 */
+            text-decoration: none;
+            display: block;
+            transition: background-color .15s ease, transform .1s ease;
         }
-
-        /* 调试信息额外样式（仍保持中性） */
-        .debug {
-            font-size: 0.9rem;
-            word-break: break-word;
-            background: rgba(0, 0, 0, 0.3);    /* 稍微深一点，但保持统一色调 */
-        }
-
-        .success strong {
-            font-weight: 500;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 40px;
-            margin-left: 6px;
-        }
-
-        /* 响应式 */
-        @media (max-width: 480px) {
-            .glass-card {
-                padding: 30px 22px;
-                border-radius: 32px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-        }
+        .btn-secondary:hover { background: var(--surface-hi); }
+        .btn-secondary:active { transform: scale(.98); }
     </style>
 </head>
 <body>
-    <div class="glass-card">
-        <h1>🔐 找回密码</h1>
-        <div class="sub">输入QQ号·昵称验证</div>
+    <header class="app-bar">
+        <a class="app-bar-btn" href="<?= $fromUrlEsc ?>" aria-label="返回">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </a>
+        <div class="app-bar-title">找回密码</div>
+        <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
+    </header>
 
-        <form method="post">
-            <div class="form-group">
-                <label for="id">QQ号</label>
-                <input type="text" id="id" name="id" class="glass-input" placeholder="例如 0000000001" value="<?php echo isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="pname">🧑 昵称（忘记的话去<a href="mp.html">搜索账号</a>找到自己的昵称）</label>
-                <input type="text" id="pname" name="pname" class="glass-input" placeholder="你的昵称" value="<?php echo isset($_POST['pname']) ? htmlspecialchars($_POST['pname']) : ''; ?>" required>
-            </div>
-
-            <!-- 按钮组：垂直排列两个按钮 -->
-            <div class="button-group">
-                <button type="submit" class="glass-button">验证并找回</button>
-                <button type="button" class="glass-button" onclick="window.location.href='core.php'">返回登录</button>
-            </div>
-        </form>
+    <main class="app-main">
+        <p class="lead">输入 QQ 号和昵称来验证身份</p>
 
         <?php if ($message !== ''): ?>
-            <div class="message"><?php echo htmlspecialchars($message); ?></div>
+            <div class="banner error"><?php echo htmlspecialchars($message); ?></div>
         <?php endif; ?>
 
         <?php if ($foundPassword !== ''): ?>
-            <div class="message success">
-                <span>🔑 你的密码是</span> <strong><?php echo htmlspecialchars($foundPassword); ?></strong>
+            <div class="result">
+                <div class="result-label">🔑 你的密码</div>
+                <div class="result-value"><?php echo htmlspecialchars($foundPassword); ?></div>
             </div>
         <?php endif; ?>
 
-    </div>
+        <form method="post" class="form">
+            <div class="field">
+                <label for="id">QQ号<span class="req">*</span></label>
+                <input type="text" id="id" name="id"
+                       inputmode="numeric" pattern="\d{10}" maxlength="10"
+                       placeholder="例如 0000000001"
+                       value="<?php echo isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>"
+                       oninput="value=value.replace(/[^0-9]/g,'')"
+                       required>
+            </div>
+
+            <div class="field">
+                <label for="pname">昵称<span class="req">*</span></label>
+                <input type="text" id="pname" name="pname"
+                       placeholder="你的昵称"
+                       value="<?php echo isset($_POST['pname']) ? htmlspecialchars($_POST['pname']) : ''; ?>"
+                       required>
+                <div class="hint">忘记昵称？去 <a href="mp.html">搜索账号</a> 找到自己的昵称</div>
+            </div>
+
+            <button type="submit" class="btn-primary">验证并找回</button>
+            <a href="<?= $fromUrlEsc ?>" class="btn-secondary">返回</a>
+        </form>
+    </main>
+
+    <script>
+        // ---------- 主题切换 ----------
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('theme-toggle');
+
+            function sync() {
+                var dark = root.getAttribute('data-theme') === 'dark';
+                btn.textContent = dark ? '☀️' : '🌙';
+                var label = dark ? '切换到浅色模式' : '切换到深色模式';
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+            }
+
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
+
+            sync();
+
+            try {
+                var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                var onSysChange = function (e) {
+                    var saved = null;
+                    try { saved = localStorage.getItem('theme'); } catch (err) {}
+                    if (saved) return;
+                    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    sync();
+                };
+                if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+                else if (mq.addListener) mq.addListener(onSysChange);
+            } catch (e) {}
+        })();
+    </script>
 </body>
 </html>
