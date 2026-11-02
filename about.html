@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#FFFBD6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+<title>关于 · 武冈学生圈</title>
+
+<style>
+/* ========== 设计令牌 ========== */
+:root {
+  --bg: #FFFBD6;
+  --fg: #0A0A0A;
+  --fg-secondary: rgba(10, 10, 10, 0.55);
+  --fg-tertiary: rgba(10, 10, 10, 0.35);
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-border: rgba(10, 10, 10, 0.06);
+  --accent: #0A0A0A;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --nav-height: 56px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --fg: #F5F5F0;
+    --fg-secondary: rgba(245, 245, 240, 0.55);
+    --fg-tertiary: rgba(245, 245, 240, 0.30);
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-border: rgba(255, 255, 255, 0.07);
+    --accent: #F5F5F0;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+    --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+  }
+}
+
+/* ========== 全局 ========== */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "HarmonyOS Sans", "MiSans", "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== 顶部导航 ========== */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: calc(var(--nav-height) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(24px);
+  -webkit-backdrop-filter: saturate(180%) blur(24px);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.nav-back {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.nav-back:active { background: var(--glass-border); }
+.nav-back svg { width: 20px; height: 20px; stroke: var(--fg); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.nav-title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  font-size: 15px; font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.nav-title.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== 滚动区 ========== */
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: env(safe-area-inset-bottom, 34px);
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+
+/* ========== Hero ========== */
+.hero {
+  padding: calc(var(--nav-height) + env(safe-area-inset-top) + 48px) 28px 40px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 100px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  font-size: 12px; font-weight: 500; color: var(--fg-secondary);
+  margin-bottom: 24px;
+  opacity: 0; animation: fadeUp 0.6s ease forwards 0.1s;
+}
+.hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--fg-tertiary); }
+
+.hero-title {
+  font-size: clamp(32px, 8vw, 44px);
+  font-weight: 700; line-height: 1.15; letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  opacity: 0; animation: fadeUp 0.6s ease forwards 0.2s;
+}
+.hero-title em { font-style: normal; color: var(--fg-secondary); font-weight: 500; }
+
+.hero-desc {
+  font-size: 16px; line-height: 1.7; color: var(--fg-secondary);
+  max-width: 480px;
+  opacity: 0; animation: fadeUp 0.6s ease forwards 0.3s;
+}
+
+/* ========== 品牌标识 ========== */
+.brand-mark {
+  margin: 8px 28px 48px;
+  padding: 40px 28px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--glass), transparent);
+  border: 1px solid var(--glass-border);
+  text-align: center;
+  position: relative; overflow: hidden;
+  opacity: 0; animation: fadeUp 0.6s ease forwards 0.4s;
+}
+.brand-mark::before {
+  content: ''; position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle at 30% 40%, var(--glass-border), transparent 60%);
+  pointer-events: none;
+}
+.brand-logo {
+  width: 64px; height: 64px;
+  margin: 0 auto 20px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--fg), var(--fg-secondary));
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+}
+.brand-logo::after { content: ''; width: 28px; height: 28px; border-radius: 6px; background: var(--bg); opacity: 0.9; }
+.brand-name { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; position: relative; z-index: 1; }
+.brand-tagline { font-size: 14px; color: var(--fg-tertiary); position: relative; z-index: 1; }
+
+/* ========== 亮点区 ========== */
+.highlights {
+  padding: 0 28px;
+  margin-bottom: 48px;
+}
+
+.section-label {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--fg-tertiary);
+  margin-bottom: 16px;
+}
+
+.highlight-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--glass-border);
+}
+.highlight-item:last-child { border-bottom: none; }
+
+.highlight-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 13px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.highlight-content h3 {
+  font-size: 15px; font-weight: 600;
+  margin-bottom: 4px; letter-spacing: -0.01em;
+}
+
+.highlight-content p {
+  font-size: 14px; line-height: 1.65;
+  color: var(--fg-secondary);
+}
+
+/* ========== 开发者区 ========== */
+.dev-section {
+  margin: 0 28px 48px;
+  padding: 28px;
+  border-radius: var(--radius-lg);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+}
+
+.dev-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 20px;
+}
+
+.dev-avatar {
+  width: 52px; height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #00F0FF, #9B2FFF, #FF48A8);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.dev-avatar::after { content: '段'; font-size: 22px; font-weight: 700; color: #fff; }
+
+.dev-meta h3 {
+  font-size: 17px; font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.dev-meta p {
+  font-size: 13px;
+  color: var(--fg-tertiary);
+}
+
+.dev-quote {
+  border-left: 3px solid;
+  border-image: linear-gradient(#00F0FF, #9B2FFF) 1;
+  padding: 14px 18px;
+  background: color-mix(in srgb, var(--fg) 2%, transparent);
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 20px;
+}
+
+.dev-quote p {
+  font-size: 14px; line-height: 1.8;
+  color: var(--fg-secondary);
+}
+
+.dev-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 20px;
+}
+
+.dev-tag {
+  padding: 5px 14px;
+  border-radius: 22px;
+  font-size: 12px; font-weight: 500;
+}
+
+.dev-tag:nth-child(1) { background: rgba(0,220,255,0.1); color: #00b4d8; border: 1px solid rgba(0,220,255,0.2); }
+.dev-tag:nth-child(2) { background: rgba(160,80,255,0.1); color: #9b2fff; border: 1px solid rgba(160,80,255,0.2); }
+.dev-tag:nth-child(3) { background: rgba(255,80,180,0.1); color: #ff46a0; border: 1px solid rgba(255,80,180,0.2); }
+.dev-tag:nth-child(4) { background: rgba(40,220,160,0.1); color: #28e0b0; border: 1px solid rgba(40,220,160,0.2); }
+
+.dev-tech {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.dev-tech-cell {
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--fg) 3%, transparent);
+  text-align: center;
+}
+
+.dev-tech-cell .tech-name {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dev-tech-cell .tech-desc {
+  font-size: 11px;
+  color: var(--fg-tertiary);
+}
+
+.dev-vision {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+}
+
+.dev-vision span {
+  background: linear-gradient(90deg, #00F0FF, #7B2FFF, #FF48A8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 16px; font-weight: 600;
+}
+
+/* ========== 底部 ========== */
+.footer {
+  padding: 32px 28px 48px;
+  text-align: center;
+}
+.footer-text {
+  font-size: 12px; color: var(--fg-tertiary); line-height: 1.8;
+}
+.footer-dot {
+  display: inline-block; width: 3px; height: 3px; border-radius: 50%;
+  background: var(--fg-tertiary); margin: 0 8px; vertical-align: middle;
+}
+
+/* ========== 动画 ========== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+* { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+</style>
+</head>
+
+<body>
+<div class="app-shell">
+
+  <!-- 顶部导航 -->
+  <nav class="top-nav">
+    <div class="nav-back" onclick="history.back()">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="nav-title" id="navTitle">关于</div>
+  </nav>
+
+  <main class="scroll-container" id="scroller">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-badge">武冈学生圈</div>
+      <h1 class="hero-title">本地学生<br><em>社交圈平台</em></h1>
+      <p class="hero-desc">面向武冈本地学生的移动端社交平台，提供帖子发布、互动交流、资源分享等完整社区体验。</p>
+    </section>
+
+    <!-- 品牌标识 -->
+    <section class="brand-mark reveal">
+      <div class="brand-logo"></div>
+      <div class="brand-name">武冈学生圈</div>
+      <div class="brand-tagline">武冈学生个人圈 · 本地社交平台</div>
+    </section>
+
+    <!-- 页面亮点 -->
+    <section class="highlights reveal">
+      <div class="section-label">— 页面亮点</div>
+
+      <div class="highlight-item">
+        <div class="highlight-num">1</div>
+        <div class="highlight-content">
+          <h3>移动端优先设计</h3>
+          <p>采用 viewport-fit=cover 适配刘海屏与灵动岛，全面贴合移动端操作习惯。</p>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-num">2</div>
+        <div class="highlight-content">
+          <h3>液态玻璃视觉风格</h3>
+          <p>毛玻璃导航栏、半透明卡片层次、渐变光效背景，营造接近原生 iOS 的质感。</p>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-num">3</div>
+        <div class="highlight-content">
+          <h3>系统级深色模式</h3>
+          <p>自动跟随系统切换浅色（#FFFBD6）与深色（#121212）主题，过渡平滑自然。</p>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-num">4</div>
+        <div class="highlight-content">
+          <h3>PWA 渐进式体验</h3>
+          <p>支持离线访问、添加到主屏幕，从浏览器到桌面应用的无缝过渡。</p>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-num">5</div>
+        <div class="highlight-content">
+          <h3>沉浸式交互细节</h3>
+          <p>滚动驱动导航标题渐显、元素进入视口渐入动画、按压态反馈，每一处交互都经过打磨。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 开发者 -->
+    <section class="dev-section reveal">
+      <div class="section-label" style="margin-bottom: 20px;">— 开发者</div>
+
+      <div class="dev-header">
+        <div class="dev-avatar"></div>
+        <div class="dev-meta">
+          <h3>段游孤独一生</h3>
+          <p>Code wanderer · 独行代码行者</p>
+        </div>
+      </div>
+
+      <div class="dev-quote">
+        <p>独行于代码旷野，以字符为路，以逻辑为炬。一人一屏，穿梭前后端、底层与数据库之间，在循环、指针与数据表中，搭建属于自己的数字天地。不喜人群喧嚣，只愿与代码长久相伴，独行不止。</p>
+      </div>
+
+      <div class="dev-tags">
+        <span class="dev-tag">持续自学</span>
+        <span class="dev-tag">全栈探索者</span>
+        <span class="dev-tag">底层爱好者</span>
+        <span class="dev-tag">独行开发者</span>
+      </div>
+
+      <div class="dev-tech">
+        <div class="dev-tech-cell">
+          <div class="tech-name">HTML / CSS / JS</div>
+          <div class="tech-desc">前端界面 · 交互逻辑 · 视觉开发</div>
+        </div>
+        <div class="dev-tech-cell">
+          <div class="tech-name">Python</div>
+          <div class="tech-desc">自动化脚本 · 数据处理</div>
+        </div>
+        <div class="dev-tech-cell">
+          <div class="tech-name">SQL</div>
+          <div class="tech-desc">数据库设计 · 数据查询</div>
+        </div>
+        <div class="dev-tech-cell">
+          <div class="tech-name">C</div>
+          <div class="tech-desc">底层原理 · 程序基础</div>
+        </div>
+      </div>
+
+      <div class="dev-vision">
+        <span>以代码渡独行之路，用技术筑无边山海</span>
+      </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="footer">
+      <div class="footer-text">
+        武冈学生圈
+        <span class="footer-dot"></span>
+        段游孤独一生 出品
+        <span class="footer-dot"></span>
+        © All code written alone
+      </div>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+const scroller = document.getElementById('scroller');
+const navTitle = document.getElementById('navTitle');
+
+scroller.addEventListener('scroll', () => {
+  if (scroller.scrollTop > 120) {
+    navTitle.classList.add('visible');
+  } else {
+    navTitle.classList.remove('visible');
+  }
+}, { passive: true });
+
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { root: scroller, rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+
+reveals.forEach(el => observer.observe(el));
+
+const meta = document.querySelector('meta[name="theme-color"]');
+const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+function updateThemeColor() {
+  meta.setAttribute('content', darkQuery.matches ? '#121212' : '#FFFBD6');
+}
+darkQuery.addEventListener('change', updateThemeColor);
+updateThemeColor();
+</script>
+
+</body>
+</html>

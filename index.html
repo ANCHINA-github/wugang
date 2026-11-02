@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Cache-Control" content="no-cache">
-    <!--仅对当前HTML有效，对页面里的CSS/JS/图片无效-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <!--user-scalable=no：锁住页面，不让用户缩放;viewport-fit=cover：页面全屏渲染，覆盖手机刘海 / 状态栏区域。-->
     <meta name="description" content="武校圈学生个人圈">
     <meta name="keywords" content="个人博客、武校圈、规范交流">
     <meta name="author" content="段游孤独一生">
@@ -21,51 +19,143 @@
     <meta name="wechat:share:image" content="http://an.kijk.top/a.svg">
     <link rel="shortcut icon" href="/a.svg">
     <link rel="preload" as="image" href="./a.svg" fetchpriority="high">
-    <!---- 预加载网站图标，提升首屏加载速度-->
     <title>武校圈 | 学生圈</title>
-    <!-- Font Awesome 6 -->
+
     <link rel="stylesheet" href="/repository/awesome/css/all.min.css" onerror="this.href='https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css'">
-<script>
-(function () {
-    var version = '3.0.0'; // 每次更新文件改这个数字
 
-    function loadCSS(href) {
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = href + '?v=' + version;
-        document.head.appendChild(link);
-    }
+    <!-- ========== ① 引导页跳转：优先执行，早于一切渲染 ========== -->
+    <script>
+    (function () {
+        var KEY   = 'wxq_guide_last_time';          // 上次展示引导页的时间戳
+        var CYCLE = 30 * 24 * 60 * 60 * 1000;       // 30 天
 
-    function loadJS(src) {
-        var script = document.createElement('script');
-        script.src = src + '?v=' + version;
-        script.defer = true;
-        document.head.appendChild(script);
-    }
+        var store = null;
+        try {
+            localStorage.setItem('__wxq_probe__', '1');
+            localStorage.removeItem('__wxq_probe__');
+            store = localStorage;
+        } catch (e) {
+            store = null;
+        }
+        if (!store) return;
 
-    window.loadCSS = loadCSS;
-    window.loadJS = loadJS;
-})();
-</script>
-    <!--link rel="stylesheet" href="ad-popup.css"-->
+        var jumpedThisSession = false;
+        try {
+            jumpedThisSession = sessionStorage.getItem('__wxq_guide_jump__') === '1';
+        } catch (e) {}
+
+        var last = 0;
+        try {
+            last = parseInt(store.getItem(KEY), 10) || 0;
+        } catch (e) {
+            last = 0;
+        }
+
+        if (!jumpedThisSession && (!last || (Date.now() - last) >= CYCLE)) {
+            try {
+                store.setItem(KEY, String(Date.now()));
+                sessionStorage.setItem('__wxq_guide_jump__', '1');
+            } catch (e) {}
+            window.location.href = 'guide.html';
+        }
+    })();
+    </script>
+
+    <!-- 静态资源版本号 -->
+    <script>
+    (function () {
+        var version = '3.0.1';
+        function loadCSS(href) {
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href + '?v=' + version;
+            document.head.appendChild(link);
+        }
+        function loadJS(src) {
+            var script = document.createElement('script');
+            script.src = src + '?v=' + version;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+        window.loadCSS = loadCSS;
+        window.loadJS  = loadJS;
+    })();
+    </script>
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            
         }
 
-        body, html {
+        html, body {
             width: 100%;
             height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             overflow: hidden;
-            background: #FFFBD6;
+            background-color: #FFFBD6;
         }
 
-        /* 开屏页 */
+        /* ========== ④ 非纯色背景 + 背景层 loading 图标 ========== */
+        body {
+            background-image:
+                radial-gradient(130% 85% at 50% 0%,   #FFFEF7 0%, #FFFBD6 42%, #FAF2BC 100%),
+                radial-gradient(60% 45% at 12% 92%,   rgba(255, 236, 160, .55) 0%, rgba(255, 236, 160, 0) 100%),
+                radial-gradient(55% 40% at 92% 85%,   rgba(255, 244, 190, .50) 0%, rgba(255, 244, 190, 0) 100%);
+            background-attachment: fixed;
+        }
+
+        /* 背景层加载图标 */
+        #bg-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .35s ease, visibility 0s linear .35s;
+        }
+        #bg-loader.show {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity .35s ease, visibility 0s linear 0s;
+        }
+        .bg-spinner {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 3px solid rgba(120, 110, 60, .14);
+            border-top-color: rgba(120, 110, 60, .55);
+            animation: bgSpin .85s linear infinite;
+            animation-play-state: paused;
+        }
+        #bg-loader.show .bg-spinner {
+            animation-play-state: running;
+        }
+        .bg-loader-text {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(120, 110, 60, .45);
+            font-weight: 500;
+        }
+        @keyframes bgSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ========== 开屏页 ========== */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -79,7 +169,7 @@
             align-items: center;
             z-index: 10002;
             opacity: 1;
-            transition: opacity 0.5s ease-out, background-color 0.3s ease;
+            transition: opacity .5s ease-out, background-color .3s ease;
             pointer-events: auto;
         }
 
@@ -93,12 +183,21 @@
             background-color: #ffffff00;
             border-radius: 20px;
             opacity: 0;
-            transform: scale(0.8);
-            animation: logoFadeIn 0.8s ease-out forwards;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transform: scale(.8);
+            animation: logoFadeIn .8s ease-out forwards;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
         }
 
-        /* 唯一iframe，只保留一个id：target-page 修复重复ID问题 */
+        @keyframes logoFadeIn {
+            0%   { opacity: 0; transform: scale(.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .splash-hidden {
+            display: none !important;
+        }
+
+        /* ========== ② iframe ========== */
         #target-page {
             position: fixed;
             top: 0;
@@ -108,38 +207,15 @@
             border: none;
             z-index: 9998;
             opacity: 0;
-            transition: opacity 0.5s ease-out;
+            background: transparent;
+            transition: opacity .32s cubic-bezier(.4, 0, .2, 1);
+            will-change: opacity;
+        }
+        #target-page.is-ready {
+            opacity: 1;
         }
 
-        @keyframes logoFadeIn {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .splash-hidden {
-            display: none !important;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            #splash-screen { background-color: #121212; }
-            body,html {
-                background: #121212;
-            }
-            .app-logo {
-                background-color: #ffffff;
-            }
-            p {
-                color: #e0e0e0;
-            }
-            span {
-                color: #e0e0e0;
-            }
-            .icon {
-                color: #e0e0e0;
-            }
-        }
-
-        /* 液态玻璃底部栏 */
+        /* ========== ① 底部导航栏 ========== */
         .glass-bottom-bar {
             position: fixed;
             left: 0;
@@ -150,14 +226,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            transition: transform .32s cubic-bezier(.2, .9, .4, 1.2);
             transform: translateY(0);
             will-change: transform;
             pointer-events: auto;
         }
 
         .glass-bottom-bar.hidden {
-            transform: translateY(130%); /* %向下移动几倍自身高度 */
+            transform: translateY(130%);
         }
 
         .bar-container {
@@ -171,29 +247,55 @@
             gap: 14px;
         }
 
-        /* ===== 胶囊：降低透明度，提高不透明感 ===== */
         .capsule {
             position: relative;
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: space-around;
-            /* 底层实色 + 上层高光，整体更"实" */
-            background-color: rgba(255, 255, 255, 0.88);
-            background-image: linear-gradient(45deg,
-                rgba(255,255,255,0.65) 0%,
-                rgba(255,255,255,0.10) 25%,
-                rgba(255,255,255,0.10) 75%,
-                rgba(255,255,255,0.65) 100%);
-            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.18);
-            border: 1px double rgba(51,51,51,0.08);
-            border-radius: 60px;
             height: 54pt;
-            backdrop-filter: blur(18px) saturate(180%);
-            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            border-radius: 60px;
+
+            background-color: rgba(255, 255, 255, .42);
+            background-image: linear-gradient(135deg,
+                rgba(255, 255, 255, .58)   0%,
+                rgba(255, 255, 255, .14)  38%,
+                rgba(255, 255, 255, .08)  62%,
+                rgba(255, 255, 255, .46) 100%);
+
+            border: 1px solid rgba(255, 255, 255, .62);
+
+            -webkit-backdrop-filter: blur(26px) saturate(200%);
+            backdrop-filter: blur(26px) saturate(200%);
+
+            box-shadow:
+                0 8px 28px rgba(0, 0, 0, .14),
+                0 2px 8px  rgba(0, 0, 0, .06),
+                inset 0 1px 0   rgba(255, 255, 255, .92),
+                inset 0 -1px 0  rgba(255, 255, 255, .38),
+                inset 1px 0 0   rgba(255, 255, 255, .50),
+                inset -1px 0 0  rgba(255, 255, 255, .50),
+                inset 0 0 14px  rgba(255, 255, 255, .18);
+        }
+
+        .capsule::after {
+            content: "";
+            position: absolute;
+            left: 5%;
+            right: 5%;
+            top: 2px;
+            height: 44%;
+            border-radius: 60px 60px 50% 50% / 60px 60px 26px 26px;
+            background: linear-gradient(180deg,
+                rgba(255, 255, 255, .70) 0%,
+                rgba(255, 255, 255, .10) 65%,
+                rgba(255, 255, 255, 0)   100%);
+            pointer-events: none;
+            z-index: 2;
         }
 
         .tab-item {
+            position: relative;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -205,59 +307,114 @@
             color: #1c1c1e;
             cursor: pointer;
             z-index: 3;
-            transition: transform 0.05s linear;
             border-radius: 40px;
             padding: 6px 0;
+            transition: color .2s ease, transform .12s ease;
         }
-        .tab-item i { font-size: 20pt; filter: drop-shadow(0 1px 0 rgba(255,255,255,0.5)); }
-        .tab-item span { font-size: 10pt; font-weight: 500; }
-        .tab-item:active { background: rgba(0,0,0,0.05); }
-        .tab-item.active { color: #000000; }
+        .tab-item .icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .tab-item i {
+            font-size: 20pt;
+            filter: drop-shadow(0 1px 1px rgba(255, 255, 255, .75));
+            transition: transform .22s cubic-bezier(.2, .9, .4, 1.3), color .2s ease;
+        }
+        .tab-item span {
+            font-size: 10pt;
+            font-weight: 500;
+            letter-spacing: .5px;
+            transition: color .2s ease;
+        }
+        .tab-item:active {
+            background: rgba(255, 255, 255, .35);
+        }
+        .tab-item.active {
+            color: #000000;
+        }
+        .tab-item.active i {
+            transform: translateY(-1.5px) scale(1.08);
+        }
 
+        /* ---- 核心修复：高光默认透明，计算好宽度后才显示 ---- */
         .slider-bg {
             position: absolute;
             top: 5px;
             bottom: 5px;
-            background: rgba(80,80,90,0.18);
+            background: rgba(255, 255, 255, .78);
+            border: 1px solid rgba(255, 255, 255, .95);
             border-radius: 50px;
-            transition: left 0.28s cubic-bezier(0.2,0.9,0.4,1.2), width 0.28s cubic-bezier(0.2,0.9,0.4,1.2);
-            backdrop-filter: blur(3px);
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, .10),
+                inset 0 1px 0 rgba(255, 255, 255, .95);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+            transition:
+                left  .28s cubic-bezier(.2, .9, .4, 1.2),
+                width .28s cubic-bezier(.2, .9, .4, 1.2),
+                opacity .2s ease; /* 增加透明度过渡 */
             z-index: 1;
             pointer-events: none;
+            opacity: 0; /* 默认隐藏，防止初始变成一条白线 */
+        }
+        .slider-bg.is-ready {
+            opacity: 1; /* 宽度正确时显示 */
         }
 
-        /* 圆形加号按钮 */
         .search-circle {
             width: 52pt;
             height: 52pt;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.88);
-            background-image: linear-gradient(45deg,
-                rgba(255,255,255,0.65) 0%,
-                rgba(255,255,255,0.10) 25%,
-                rgba(255,255,255,0.10) 75%,
-                rgba(255,255,255,0.65) 100%);
-            box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.9), inset -2px 2px 1px -1px rgba(255,255,255,0.9), inset 6px -6px 1px -6px rgba(255,255,255,0.55), inset -6px 6px 1px -6px rgba(255,255,255,0.55), inset 0 0 2px rgba(0,0,0,0.8), 0 4px 12px rgba(0,0,0,0.18);
-            border: 1px double rgba(51,51,51,0.08);
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: transform 0.12s ease;
-            flex-shrink: 0;
-            backdrop-filter: blur(18px) saturate(180%);
-            -webkit-backdrop-filter: blur(18px) saturate(180%);
+
+            background-color: rgba(255, 255, 255, .42);
+            background-image: linear-gradient(135deg,
+                rgba(255, 255, 255, .58)   0%,
+                rgba(255, 255, 255, .14)  38%,
+                rgba(255, 255, 255, .08)  62%,
+                rgba(255, 255, 255, .46) 100%);
+            border: 1px solid rgba(255, 255, 255, .62);
+
+            -webkit-backdrop-filter: blur(26px) saturate(200%);
+            backdrop-filter: blur(26px) saturate(200%);
+
+            box-shadow:
+                0 8px 28px rgba(0, 0, 0, .14),
+                0 2px 8px  rgba(0, 0, 0, .06),
+                inset 0 1px 0   rgba(255, 255, 255, .92),
+                inset 0 -1px 0  rgba(255, 255, 255, .38),
+                inset 0 0 14px  rgba(255, 255, 255, .18);
+            transition: transform .12s ease;
+        }
+        .search-circle::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 50%;
+            top: 2px;
+            border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
+            background: linear-gradient(180deg,
+                rgba(255, 255, 255, .70) 0%,
+                rgba(255, 255, 255, 0)   100%);
+            pointer-events: none;
         }
         .search-circle:active {
-            transform: scale(0.94);
+            transform: scale(.94);
         }
         .search-circle i {
             font-size: 28pt;
             color: #1c1c1e;
-            filter: drop-shadow(0 1px 1px rgba(255,255,255,0.6));
+            filter: drop-shadow(0 1px 1px rgba(255, 255, 255, .75));
+            position: relative;
+            z-index: 2;
         }
 
-        /* ===== 隐藏导航栏按钮（底部栏右上角） ===== */
         .toggle-hide-btn {
             position: absolute;
             right: 18px;
@@ -268,20 +425,19 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, .55);
             color: #1c1c1e;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-            backdrop-filter: blur(14px) saturate(180%);
-            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, .70);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .16), inset 0 1px 0 rgba(255, 255, 255, .9);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            backdrop-filter: blur(18px) saturate(180%);
             cursor: pointer;
             z-index: 10001;
-            transition: transform 0.12s ease, background 0.2s ease;
+            transition: transform .12s ease, background .2s ease;
         }
-        .toggle-hide-btn:active { transform: scale(0.9); }
+        .toggle-hide-btn:active { transform: scale(.9); }
         .toggle-hide-btn i { font-size: 13px; }
 
-        /* ===== 恢复导航栏按钮（屏幕右侧边缘） ===== */
         .nav-restore-btn {
             position: fixed;
             right: 0;
@@ -292,26 +448,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, .55);
             color: #1c1c1e;
-            border: 1px solid rgba(0,0,0,0.06);
+            border: 1px solid rgba(255, 255, 255, .70);
             border-right: none;
-            box-shadow: -3px 0 12px rgba(0,0,0,0.16);
-            backdrop-filter: blur(14px) saturate(180%);
-            -webkit-backdrop-filter: blur(14px) saturate(180%);
+            box-shadow: -4px 0 16px rgba(0, 0, 0, .16), inset 0 1px 0 rgba(255, 255, 255, .9);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
+            backdrop-filter: blur(18px) saturate(180%);
             z-index: 10001;
             cursor: pointer;
             opacity: 0;
             pointer-events: none;
             transform: translate(100%, -50%);
-            transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2,0.9,0.4,1.2);
+            transition: opacity .25s ease, transform .3s cubic-bezier(.2, .9, .4, 1.2);
         }
         .nav-restore-btn.show {
             opacity: 1;
             pointer-events: auto;
             transform: translate(0, -50%);
         }
-        .nav-restore-btn:active { transform: translate(0, -50%) scale(0.94); }
+        .nav-restore-btn:active {
+            transform: translate(0, -50%) scale(.94);
+        }
         .nav-restore-btn i { font-size: 14px; }
 
         @media (max-width: 520px) {
@@ -333,183 +491,282 @@
             .nav-restore-btn { width: 26px; height: 50px; }
         }
 
-        /* ===== 深色模式适配 ===== */
+        /* ========== 深色模式 ========== */
         @media (prefers-color-scheme: dark) {
-            .capsule {
-                background-color: rgba(38, 38, 42, 0.90);
-                background-image: linear-gradient(45deg,
-                    rgba(255,255,255,0.12) 0%,
-                    rgba(255,255,255,0.02) 25%,
-                    rgba(255,255,255,0.02) 75%,
-                    rgba(255,255,255,0.12) 100%);
-                border-color: rgba(255,255,255,0.10);
-                box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.14), inset -2px 2px 1px -1px rgba(255,255,255,0.14), inset 0 0 2px rgba(0,0,0,0.9), 0 4px 14px rgba(0,0,0,0.5);
+            #splash-screen { background-color: #121212; }
+            html, body { background-color: #121212; }
+            body {
+                background-image:
+                    radial-gradient(130% 85% at 50% 0%,  #1e1e24 0%, #131316 45%, #0a0a0c 100%),
+                    radial-gradient(60% 45% at 12% 92%,  rgba(70, 70, 90, .28) 0%, rgba(70, 70, 90, 0) 100%),
+                    radial-gradient(55% 40% at 92% 85%,  rgba(60, 60, 80, .24) 0%, rgba(60, 60, 80, 0) 100%);
+                background-attachment: fixed;
             }
-            .search-circle {
-                background-color: rgba(38, 38, 42, 0.90);
-                background-image: linear-gradient(45deg,
-                    rgba(255,255,255,0.12) 0%,
-                    rgba(255,255,255,0.02) 25%,
-                    rgba(255,255,255,0.02) 75%,
-                    rgba(255,255,255,0.12) 100%);
-                border-color: rgba(255,255,255,0.10);
-                box-shadow: inset 2px -2px 1px -1px rgba(255,255,255,0.14), inset -2px 2px 1px -1px rgba(255,255,255,0.14), inset 0 0 2px rgba(0,0,0,0.9), 0 4px 14px rgba(0,0,0,0.5);
+            .app-logo { background-color: #ffffff; }
+            .bg-spinner {
+                border-color: rgba(255, 255, 255, .12);
+                border-top-color: rgba(255, 255, 255, .58);
             }
-            .search-circle i { color: #f0f0f0; }
+            .bg-loader-text { color: rgba(255, 255, 255, .40); }
+
+            .capsule, .search-circle {
+                background-color: rgba(38, 38, 44, .46);
+                background-image: linear-gradient(135deg,
+                    rgba(255, 255, 255, .16)  0%,
+                    rgba(255, 255, 255, .04) 38%,
+                    rgba(255, 255, 255, .02) 62%,
+                    rgba(255, 255, 255, .12) 100%);
+                border-color: rgba(255, 255, 255, .14);
+                box-shadow:
+                    0 8px 28px rgba(0, 0, 0, .55),
+                    0 2px 8px  rgba(0, 0, 0, .35),
+                    inset 0 1px 0   rgba(255, 255, 255, .18),
+                    inset 0 -1px 0  rgba(255, 255, 255, .06),
+                    inset 0 0 14px  rgba(255, 255, 255, .04);
+            }
+            .capsule::after, .search-circle::after {
+                background: linear-gradient(180deg,
+                    rgba(255, 255, 255, .18) 0%,
+                    rgba(255, 255, 255, 0)   100%);
+            }
+            .slider-bg {
+                background: rgba(255, 255, 255, .16);
+                border-color: rgba(255, 255, 255, .20);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .14);
+            }
+            .search-circle i { color: #f0f0f0; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .5)); }
             .tab-item { color: #d8d8d8; }
             .tab-item.active { color: #ffffff; }
-            .slider-bg { background: rgba(255,255,255,0.16); }
-            .toggle-hide-btn,
-            .nav-restore-btn {
-                background: rgba(38, 38, 42, 0.92);
+            .tab-item i { filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .5)); }
+            .tab-item:active { background: rgba(255, 255, 255, .08); }
+
+            .toggle-hide-btn, .nav-restore-btn {
+                background: rgba(38, 38, 44, .58);
                 color: #f0f0f0;
-                border-color: rgba(255,255,255,0.10);
-                box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+                border-color: rgba(255, 255, 255, .14);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .12);
             }
-            .nav-restore-btn { box-shadow: -3px 0 14px rgba(0,0,0,0.6); }
+            .nav-restore-btn { box-shadow: -4px 0 18px rgba(0, 0, 0, .6), inset 0 1px 0 rgba(255, 255, 255, .12); }
+            p, span, .icon { color: #e0e0e0; }
+            .tab-item.active span { color: #ffffff; }
         }
     </style>
-    <script>
-        // 时间戳函数：用于静态资源缓存刷新
-        function getVer() {
-            return Date.now();
-        }
-
-        // 核心函数：切换iframe页面，仅内部刷新，父页面不跳转
-        function switchFramePage(url) {
-            const frame = document.getElementById('target-page');
-            frame.src = url + "?v=" + getVer();
-        }
-    </script>
 </head>
 <body>
+
+    <div id="bg-loader" aria-hidden="true">
+        <div class="bg-spinner"></div>
+        <div class="bg-loader-text">加 载 中</div>
+    </div>
+
     <div id="splash-screen">
         <div class="app-logo"></div>
         <p style="font-size: small;">初次加载需要一些时间，稍候...</p>
     </div>
 
-    <!-- 只保留唯一 id="target-page"，删除重复ID -->
     <iframe id="target-page" src="core.php" frameborder="0"></iframe>
 
-    <!-- 导航栏隐藏后，屏幕右侧边缘的"恢复"按钮 -->
     <div class="nav-restore-btn" id="navRestoreBtn" title="显示导航栏">
         <i class="fas fa-chevron-left"></i>
     </div>
 
-    <!-- 底部导航栏：全部改为调用 switchFramePage，只切换iframe，不整页跳转 -->
     <div class="glass-bottom-bar" id="bottomBar">
         <div class="bar-container">
             <div class="capsule" id="capsuleContainer">
                 <div class="slider-bg" id="sliderBg"></div>
-                <!-- 圈子 -->
+
                 <div class="tab-item" data-tab="circle" onclick="switchFramePage('core.php')">
                     <div class="icon"><i class="fas fa-users"></i></div>
                     <span>圈子</span>
                 </div>
-                <!--
-                <div class="tab-item" data-tab="music" onclick="switchFramePage('./service/ancloud/')">
-                    <div class="icon"><i class="fa-solid fa-mountain"></i></div>
-                    <span>武校圈</span>
+                <div class="tab-item" data-tab="mall" onclick="switchFramePage('./en')">
+                    <div class="icon"><i class="fa-solid fa-coins"></i></div>
+                    <span>单词过关</span>
                 </div>
-                -->
-
-                <div class="tab-item" data-tab="music" onclick="switchFramePage('./sources.html')">
-                    <div class="icon"><i class="fa-solid fa-coins"></i></div> 
-                    <span>资源商城</span>
-                </div>
-
-                <!-- 我的 -->
                 <div class="tab-item" data-tab="profile" onclick="switchFramePage('profile.php')">
                     <div class="icon"><i class="fas fa-user"></i></div>
                     <span>我的</span>
                 </div>
             </div>
+
             <div class="search-circle" id="searchCircle">
                 <i class="fas fa-plus"></i>
             </div>
         </div>
-        <!-- 隐藏导航栏按钮 -->
+
         <div class="toggle-hide-btn" id="toggleHideBtn" title="隐藏导航栏">
             <i class="fas fa-chevron-down"></i>
         </div>
     </div>
 
 <script>
-(function() {
-    const splash = document.getElementById('splash-screen');
-    const targetPage = document.getElementById('target-page');
-    const minDisplayTime = 800;
-    const startTime = Date.now();
-    let bottomBarInitialized = false;
+(function () {
+    'use strict';
 
-    function initBottomBarAndScroll() {
-        if (bottomBarInitialized) return;
-        bottomBarInitialized = true;
+    var splash      = document.getElementById('splash-screen');
+    var targetPage  = document.getElementById('target-page');
+    var bgLoader    = document.getElementById('bg-loader');
+    var bottomBar   = document.getElementById('bottomBar');
+    var hideBtn     = document.getElementById('toggleHideBtn');
+    var restoreBtn  = document.getElementById('navRestoreBtn');
+    var capsule     = document.getElementById('capsuleContainer');
+    var sliderBg    = document.getElementById('sliderBg');
+    var searchCircle= document.getElementById('searchCircle');
+    var tabItems    = Array.prototype.slice.call(document.querySelectorAll('.tab-item'));
 
-        const capsule = document.getElementById('capsuleContainer');
-        const tabItems = document.querySelectorAll('.tab-item');
-        const sliderBg = document.getElementById('sliderBg');
-        const searchCircle = document.getElementById('searchCircle');
-        const bottomBar = document.getElementById('bottomBar');
-        const hideBtn = document.getElementById('toggleHideBtn');
-        const restoreBtn = document.getElementById('navRestoreBtn');
+    var MIN_SPLASH_TIME = 800;
+    var NAV_PAD_SHOWN   = '85pt';
+    var NAV_PAD_HIDDEN  = '20pt';
+
+    var startTime        = Date.now();
+    var firstLoadDone    = false;
+    var bottomBarReady   = false;
+    var iframeBodyStyle  = null;
+    var loaderTimer      = null;
+    var currentUrl       = 'core.php';
+
+    function showLoader(delay) {
+        if (!bgLoader) return;
+        clearTimeout(loaderTimer);
+        loaderTimer = setTimeout(function () {
+            bgLoader.classList.add('show');
+        }, typeof delay === 'number' ? delay : 180);
+    }
+    function hideLoader() {
+        clearTimeout(loaderTimer);
+        if (bgLoader) bgLoader.classList.remove('show');
+    }
+
+    window.switchFramePage = function (url) {
+        if (!targetPage || !url) return;
+        if (url === currentUrl && targetPage.getAttribute('src')) {
+            return;
+        }
+        currentUrl = url;
+        targetPage.classList.remove('is-ready');
+        showLoader(200);
+        targetPage.src = url + '?v=' + Date.now();
+    };
+
+    function applyIframePadding(hidden) {
+        if (!iframeBodyStyle) return;
+        iframeBodyStyle.textContent =
+            'html,body{margin:0;min-height:100%;}' +
+            'body{padding-bottom:' + (hidden ? NAV_PAD_HIDDEN : NAV_PAD_SHOWN) + ' !important;}';
+    }
+
+    function setupIframeDoc() {
+        try {
+            var doc  = targetPage.contentDocument ||
+                      (targetPage.contentWindow && targetPage.contentWindow.document);
+            if (!doc || !doc.head) return;
+
+            if (!iframeBodyStyle || !doc.head.contains(iframeBodyStyle)) {
+                iframeBodyStyle = doc.createElement('style');
+                doc.head.appendChild(iframeBodyStyle);
+            }
+            applyIframePadding(bottomBar && bottomBar.classList.contains('hidden'));
+        } catch (e) {}
+    }
+
+    function onFrameLoad() {
+        hideLoader();
+        targetPage.classList.add('is-ready');
+        setupIframeDoc();
+
+        if (!firstLoadDone) {
+            firstLoadDone = true;
+            var elapsed  = Date.now() - startTime;
+            var waitTime = Math.max(0, MIN_SPLASH_TIME - elapsed);
+
+            setTimeout(function () {
+                splash.style.opacity = '0';
+                setTimeout(function () {
+                    splash.classList.add('splash-hidden');
+                    initBottomBar();
+                }, 500);
+            }, waitTime);
+        }
+    }
+    targetPage.addEventListener('load', onFrameLoad);
+
+    setTimeout(function () {
+        if (firstLoadDone) return;
+        splash.style.opacity = '0';
+        showLoader(0);
+        setTimeout(function () {
+            splash.classList.add('splash-hidden');
+            initBottomBar();
+        }, 500);
+    }, 3000);
+
+    function initBottomBar() {
+        if (bottomBarReady) return;
+        bottomBarReady = true;
 
         if (!capsule || !sliderBg || tabItems.length === 0) return;
 
-        let activeIndex = 0;
-        function setActiveTab(index, fromClick = false) {
+        var activeIndex = 0;
+
+        function updateSliderPosition() {
+            var activeItem = tabItems[activeIndex];
+            if (!activeItem) return;
+
+            var capsuleRect = capsule.getBoundingClientRect();
+            var itemRect    = activeItem.getBoundingClientRect();
+            
+            // 核心修复：如果宽度太小（字体没加载出来），就退出，不计算不显示
+            if (!itemRect.width || itemRect.width < 10) return;
+
+            var pad = 3;
+            sliderBg.style.left  = (itemRect.left - capsuleRect.left + pad) + 'px';
+            sliderBg.style.width = (itemRect.width - pad * 2) + 'px';
+            
+            // 宽度正常计算完毕后，才给高光加上显示类
+            sliderBg.classList.add('is-ready');
+        }
+
+        function setActiveTab(index, fromClick) {
             if (index === activeIndex && fromClick) {
-                const current = tabItems[activeIndex];
-                if (current) {
-                    current.style.transform = 'scale(0.97)';
-                    setTimeout(() => { if (current) current.style.transform = ''; }, 100);
+                var cur = tabItems[activeIndex];
+                if (cur) {
+                    cur.style.transform = 'scale(.96)';
+                    setTimeout(function () { if (cur) cur.style.transform = ''; }, 110);
                 }
                 return;
             }
+
             activeIndex = index;
-            tabItems.forEach(item => item.classList.remove('active'));
+            tabItems.forEach(function (item) { item.classList.remove('active'); });
             tabItems[activeIndex].classList.add('active');
             updateSliderPosition();
+
             if (fromClick) {
-                const clicked = tabItems[activeIndex];
+                var clicked = tabItems[activeIndex];
                 if (clicked) {
-                    clicked.style.background = 'rgba(0, 0, 0, 0.05)';
-                    setTimeout(() => { if (clicked) clicked.style.background = ''; }, 120);
+                    clicked.style.background = 'rgba(255,255,255,.35)';
+                    setTimeout(function () { if (clicked) clicked.style.background = ''; }, 130);
                 }
             }
         }
 
-        function updateSliderPosition() {
-            if (!capsule || !sliderBg || !tabItems[activeIndex]) return;
-            const activeItem = tabItems[activeIndex];
-            const capsuleRect = capsule.getBoundingClientRect();
-            const itemRect = activeItem.getBoundingClientRect();
-            let leftOffset = itemRect.left - capsuleRect.left;
-            let itemWidth = itemRect.width;
-            const pad = 3;
-            sliderBg.style.left = (leftOffset + pad) + 'px';
-            sliderBg.style.width = (itemWidth - pad * 2) + 'px';
-        }
-
-        tabItems.forEach((item, idx) => {
-            item.addEventListener('click', (e) => {
+        tabItems.forEach(function (item, idx) {
+            item.addEventListener('click', function (e) {
                 e.stopPropagation();
                 setActiveTab(idx, true);
             });
         });
 
-        // 加号按钮逻辑
         if (searchCircle) {
-            searchCircle.addEventListener('click', () => {
-                const icon = searchCircle.querySelector('i');
+            searchCircle.addEventListener('click', function () {
+                var icon = searchCircle.querySelector('i');
                 if (icon) {
-                    icon.style.transform = 'scale(0.9)';
-                    setTimeout(() => { if (icon) icon.style.transform = ''; }, 120);
+                    icon.style.transform = 'scale(.88)';
+                    setTimeout(function () { if (icon) icon.style.transform = ''; }, 130);
                 }
-                const iframe = document.getElementById('target-page');
-                if (iframe && iframe.contentWindow) {
+                if (targetPage && targetPage.contentWindow) {
                     try {
-                        iframe.contentWindow.callPublishModal();
+                        targetPage.contentWindow.callPublishModal();
                     } catch (e) {
                         console.warn('调用内部发帖弹窗失败');
                     }
@@ -517,146 +774,86 @@
             });
         }
 
-        /* ========== 导航栏 隐藏 / 恢复 ========== */
-        let iframeBodyStyle = null;
-
-        function applyIframePadding(hidden) {
-            if (iframeBodyStyle) {
-                iframeBodyStyle.textContent = hidden
-                    ? 'body { padding-bottom: 20pt !important; margin: 0; min-height: 100%; }'
-                    : 'body { padding-bottom: 85pt !important; margin: 0; min-height: 100%; }';
-            }
-        }
-
         function hideNavBar() {
-            if (bottomBar) bottomBar.classList.add('hidden');
+            if (bottomBar)  bottomBar.classList.add('hidden');
             if (restoreBtn) restoreBtn.classList.add('show');
             applyIframePadding(true);
         }
-
         function showNavBar() {
-            if (bottomBar) bottomBar.classList.remove('hidden');
+            if (bottomBar)  bottomBar.classList.remove('hidden');
             if (restoreBtn) restoreBtn.classList.remove('show');
             applyIframePadding(false);
-            // 恢复后重新校准滑块位置
             setTimeout(updateSliderPosition, 320);
         }
 
         if (hideBtn) {
-            hideBtn.addEventListener('click', (e) => {
+            hideBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 hideNavBar();
             });
         }
         if (restoreBtn) {
-            restoreBtn.addEventListener('click', (e) => {
+            restoreBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
                 showNavBar();
             });
         }
 
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            if (resizeTimer) clearTimeout(resizeTimer);
+        var resizeTimer;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimer);
             resizeTimer = setTimeout(updateSliderPosition, 100);
         });
-        const resizeObserver = new ResizeObserver(updateSliderPosition);
-        resizeObserver.observe(capsule);
+
+        if (typeof ResizeObserver !== 'undefined') {
+            var ro = new ResizeObserver(function () { updateSliderPosition(); });
+            ro.observe(capsule);
+        }
+
         setActiveTab(0);
 
-        // iframe 底部栏 - 直接常驻显示
-        if (targetPage && bottomBar) {
-            // 1. 强制底部栏显示（移除 hidden 类，确保它一直在那里）
-            bottomBar.classList.remove('hidden');
-            if (restoreBtn) restoreBtn.classList.remove('show');
+        requestAnimationFrame(function () {
+            updateSliderPosition();
+            setTimeout(updateSliderPosition, 60);
+        });
 
-            function attachIframeScroll() {
-                try {
-                    const iframeDoc = targetPage.contentDocument || targetPage.contentWindow.document;
-                    if (!iframeDoc) return false;
-                    const iframeWin = targetPage.contentWindow;
-                    if (!iframeWin) return false;
-
-                    // 2. 给 iframe 的 body 留出底边距，防止文章最底部被底部栏遮住
-                    const style = iframeDoc.createElement('style');
-                    style.textContent = `body { padding-bottom: 85pt !important; margin: 0; min-height: 100%; }`;
-                    iframeDoc.head.appendChild(style);
-                    iframeBodyStyle = style;   // 保存引用，隐藏时可动态调整
-
-                    // 3. 滚动时更新 UI
-                    if (typeof updateSliderPosition === 'function') {
-                        iframeWin.addEventListener('scroll', () => {
-                            updateSliderPosition();
-                        });
-                    }
-
-                    return true;
-                } catch(e) {
-                    console.warn("iframe滚动监听受限");
-                    return false;
-                }
-            }
-
-            if (targetPage.contentDocument && targetPage.contentDocument.readyState === 'complete') {
-                attachIframeScroll();
-            } else {
-                targetPage.addEventListener('load', () => setTimeout(attachIframeScroll, 100));
-            }
+        // 核心修复：监听字体加载完成，字体加载完重新校准位置
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(function () {
+                updateSliderPosition();
+            });
         }
     }
 
-    targetPage.onload = function() {
-        const elapsed = Date.now() - startTime;
-        const waitTime = Math.max(0, minDisplayTime - elapsed);
-        setTimeout(() => {
-            splash.style.opacity = '0';
-            targetPage.style.opacity = '1';
-            setTimeout(() => {
-                splash.classList.add('splash-hidden');
-                initBottomBarAndScroll();
-            }, 500);
-        }, waitTime);
-    };
-
-    setTimeout(() => {
-        if (!splash.classList.contains('splash-hidden')) {
-            splash.style.opacity = '0';
-            targetPage.style.opacity = '1';
-            setTimeout(() => {
-                splash.classList.add('splash-hidden');
-                initBottomBarAndScroll();
-            }, 500);
+    document.addEventListener('DOMContentLoaded', function () {
+        var publishBtn = document.getElementById('publishPostBtn');
+        if (publishBtn) {
+            publishBtn.onclick = function () {
+                window.switchFramePage('core.php');
+                var iframe = document.getElementById('target-page');
+                if (iframe && iframe.contentWindow) {
+                    setTimeout(function () {
+                        try { iframe.contentWindow.location.hash = 'anchina1'; } catch (e) {}
+                    }, 300);
+                }
+            };
         }
-    }, 3000);
+    });
+
 })();
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const publishBtn = document.getElementById('publishPostBtn');
-    if (publishBtn) {
-        publishBtn.onclick = function(){
-            switchFramePage('core.php');
-            const iframe = document.getElementById('target-page');
-            if (iframe && iframe.contentWindow) {
-                setTimeout(() => {
-                    iframe.contentWindow.location.hash = 'anchina1';
-                }, 300);
-            }
-        };
-    }
-});
-</script>
-<!--script src="ad-popup.js"></script-->
-<script>
-// 更新网站时修改这里的版本号
-const VERSION = "202610102039";
-const localVer = localStorage.getItem("site_version");
-if(localVer !== VERSION){
-    localStorage.setItem("site_version", VERSION);
-    // true 强制绕过缓存，从服务器拉取最新index.html
-    location.reload(true);
-}
+(function () {
+    var VERSION = '202610102039';
+    try {
+        var localVer = localStorage.getItem('site_version');
+        if (localVer !== VERSION) {
+            localStorage.setItem('site_version', VERSION);
+            location.reload(true);
+        }
+    } catch (e) {}
+})();
 </script>
 </body>
 </html>

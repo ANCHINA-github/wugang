@@ -1,564 +1,400 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="color-scheme" content="light dark">
-    <title>使用引导 - 武校圈</title>
-    <link rel="stylesheet" href="/repository/awesome/css/all.min.css">
-    <script>
-        (function () {
-            var t = null;
-            try { t = localStorage.getItem('theme'); } catch (e) {}
-            if (t !== 'dark' && t !== 'light') {
-                t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.setAttribute('data-theme', t);
-        })();
-    </script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* ---------- 主题变量 ---------- */
-        :root {
-            color-scheme: light;
-            --bg: #FFFBD6;
-            --surface: #FFFFFF;
-            --surface-hi: #FFFEF0;
-            --text: #1F2937;
-            --text-secondary: #6B7280;
-            --text-faint: #9CA3AF;
-            --separator: #ECE6C2;
-            --accent: #4F46E5;
-            --accent-hi: #4338CA;
-            --accent-soft: rgba(79, 70, 229, .12);
-            --warning-bg: #FEF3C7;
-            --warning-text: #92400E;
-            --success-bg: #ECFDF5;
-            --success-text: #065F46;
-        }
-        html[data-theme="dark"] {
-            color-scheme: dark;
-            --bg: #121212;
-            --surface: #1E1E1E;
-            --surface-hi: #2A2A2A;
-            --text: #E8E8E8;
-            --text-secondary: #A0A0A0;
-            --text-faint: #707070;
-            --separator: #2E2E2E;
-            --accent: #818CF8;
-            --accent-hi: #A5B4FC;
-            --accent-soft: rgba(129, 140, 248, .18);
-            --warning-bg: #3A2E0A;
-            --warning-text: #FCD34D;
-            --success-bg: #103028;
-            --success-text: #6EE7B7;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-            transition: background-color .25s ease, color .25s ease;
-        }
-
-        /* ---------- App bar ---------- */
-        .app-bar {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            height: 56px;
-            padding: 0 8px;
-            padding-top: env(safe-area-inset-top);
-            background: var(--bg);
-            border-bottom: 1px solid var(--separator);
-            transition: background-color .25s ease, border-color .25s ease;
-        }
-        .app-bar-title {
-            flex: 1;
-            font-size: 17px;
-            font-weight: 600;
-            text-align: center;
-            letter-spacing: .2px;
-            color: var(--text);
-        }
-        .app-bar-btn {
-            flex: 0 0 auto;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            background: transparent;
-            color: var(--text);
-            border-radius: 12px;
-            font-size: 20px;
-            line-height: 1;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color .15s ease, transform .1s ease;
-        }
-        .app-bar-btn:hover { background: var(--surface); }
-        .app-bar-btn:active { transform: scale(.9); }
-        .app-bar-btn svg { display: block; }
-
-        /* ---------- Main ---------- */
-        .app-main {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 20px 16px calc(48px + env(safe-area-inset-bottom));
-        }
-
-        .lead {
-            text-align: center;
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.65;
-            margin-bottom: 8px;
-            padding: 0 8px;
-        }
-
-        /* ---------- Section ---------- */
-        .section { margin-top: 26px; }
-        .section-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-            letter-spacing: .8px;
-            text-transform: uppercase;
-            margin: 0 4px 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .section-title i {
-            color: var(--accent);
-            font-size: 12px;
-        }
-
-        /* ---------- List ---------- */
-        .list {
-            background: var(--surface);
-            border-radius: 14px;
-            overflow: hidden;
-            transition: background-color .25s ease;
-        }
-        .row {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--separator);
-            transition: border-color .25s ease;
-        }
-        .row:last-child { border-bottom: none; }
-
-        .row-icon {
-            flex: 0 0 auto;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--accent-soft);
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            transition: background-color .25s ease, color .25s ease;
-        }
-        .row-main {
-            flex: 1;
-            min-width: 0;
-            padding-top: 1px;
-        }
-        .row-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--text);
-            line-height: 1.35;
-            margin-bottom: 3px;
-        }
-        .row-desc {
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.55;
-        }
-        .row-desc code,
-        .row-title code {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
-            font-size: 12px;
-            background: var(--surface-hi);
-            color: var(--accent);
-            padding: 1px 6px;
-            border-radius: 5px;
-        }
-
-        /* ---------- Tip 卡片 ---------- */
-        .tip {
-            margin-top: 22px;
-            padding: 14px 16px;
-            border-radius: 14px;
-            background: var(--warning-bg);
-            color: var(--warning-text);
-            font-size: 13px;
-            line-height: 1.65;
-            display: flex;
-            gap: 10px;
-        }
-        .tip i {
-            flex: 0 0 auto;
-            font-size: 15px;
-            margin-top: 1px;
-        }
-
-        .tip.success {
-            background: var(--success-bg);
-            color: var(--success-text);
-        }
-
-        /* ---------- Footer 返回按钮 ---------- */
-        .btn-back {
-            display: block;
-            width: 100%;
-            margin-top: 28px;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: var(--accent);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 600;
-            font-family: inherit;
-            letter-spacing: .3px;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color .15s ease, transform .1s ease;
-        }
-        .btn-back:hover { background: var(--accent-hi); }
-        .btn-back:active { transform: scale(.98); }
-        .btn-back:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
-        .version {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text-faint);
-            margin-top: 20px;
-            line-height: 1.6;
-        }
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>APP新手引导</title>
+<style>
+:root{
+  --bg:#FFFBD6;
+  --text:#222222;
+  --primary:#6366f1;
+  --card-bg:rgba(255,255,255,0.45);
+  --shadow:0 8px 32px rgba(0,0,0,0.12);
+  /* 柔光变量 浅色 */
+  --welcome-grad: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.12), transparent 55%);
+  --end-grad: radial-gradient(circle at 70% 70%, rgba(236,72,153,0.12), transparent 55%);
+}
+[data-theme="dark"]{
+  --bg:#121212;
+  --text:#f0f0f0;
+  --primary:#6366f1;
+  --card-bg:rgba(40,40,40,0.6);
+  --shadow:0 8px 32px rgba(0,0,0,0.35);
+  /* 柔光变量 深色，亮度提高一点 */
+  --welcome-grad: radial-gradient(circle at 30% 30%, rgba(99,102,241,0.18), transparent 55%);
+  --end-grad: radial-gradient(circle at 70% 70%, rgba(236,72,153,0.18), transparent 55%);
+}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",system-ui,sans-serif;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  transition: background 0.4s ease, color 0.4s ease;
+  overflow:hidden;
+}
+/* 主题切换按钮 右上角 */
+.theme-toggle{
+  position:fixed;
+  top:24px;
+  right:24px;
+  z-index:99;
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  border:none;
+  background:var(--card-bg);
+  backdrop-filter:blur(10px);
+  box-shadow:var(--shadow);
+  cursor:pointer;
+  font-size:20px;
+  display:grid;
+  place-items:center;
+  transition:0.3s;
+}
+.theme-toggle:hover{
+  transform:scale(1.08);
+}
+.wrap{
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  padding: 60px 24px 40px;
+}
+/* 滑动容器，APP引导核心 */
+.slide-wrap{
+  flex:1;
+  position:relative;
+  width:100%;
+}
+.slide{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:18px;
+  opacity:0;
+  transform:translateX(40px);
+  transition: all 0.45s cubic-bezier(0.22,1,0.36,1);
+  pointer-events:none;
+}
+.slide.active{
+  opacity:1;
+  transform:translateX(0);
+  pointer-events:auto;
+}
+/* 欢迎页 & 结束页文字样式 */
+.welcome h1, .ending h1{
+  font-size:clamp(2rem,8vw,3rem);
+  margin-bottom:16px;
+  background:linear-gradient(90deg,#6366f1,#ec4899,#f59e0b);
+  -webkit-background-clip:text;
+  color:transparent;
+  text-align:center;
+  z-index:2;
+}
+.welcome p, .ending p{
+  font-size:1.05rem;
+  opacity:0.8;
+  text-align:center;
+  z-index:2;
+}
+/* 欢迎页底层柔光 */
+.welcome::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: var(--welcome-grad);
+  z-index:1;
+  pointer-events:none;
+}
+/* 结束页底层柔光 */
+.ending::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: var(--end-grad);
+  z-index:1;
+  pointer-events:none;
+}
+/* ✅ 图片自适应核心：适配横图/竖图/正方形，只限制可用空间，不固定宽高 */
+.guide-img{
+  max-width: 90%;
+  max-height: calc(100% - 80px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  z-index:2;
+}
+.desc{
+  font-size:1.05rem;
+  opacity:0.85;
+  text-align:center;
+  padding:0 16px;
+  z-index:2;
+}
+/* 底部指示器 + 按钮区域 */
+.bottom-area{
+  width:100%;
+  text-align:center;
+}
+.dots{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:28px;
+}
+.dot{
+  width:10px;
+  height:10px;
+  border-radius:99px;
+  background:var(--text);
+  opacity:0.22;
+  transition:0.3s;
+}
+.dot.active{
+  width:28px;
+  opacity:0.9;
+  background:#6366f1;
+}
+.btns{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  align-items:center;
+}
+/* 箭头按钮样式 */
+.btn{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  border:1px solid rgba(99,102,241,0.24);
+  font-size:22px;
+  cursor:pointer;
+  transition: 0.25s ease;
+  backdrop-filter: blur(12px);
+  display:grid;
+  place-items:center;
+}
+#prevBtn{
+  background: rgba(255,255,255,0.16);
+  color: var(--text);
+}
+#nextBtn{
+  background: var(--primary);
+  color: #ffffff;
+  border-color: var(--primary);
+}
+.btn:disabled{
+  opacity:0.18;
+  cursor:not-allowed;
+  transform:none;
+}
+#prevBtn:hover:not(:disabled){
+  background: rgba(255,255,255,0.28);
+  transform: translateY(-2px);
+}
+#nextBtn:hover:not(:disabled){
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+.btn:active:not(:disabled){
+  transform: translateY(0px);
+}
+/* 最后一页替换成开始使用方形按钮 */
+.start-btn{
+  padding:14px 36px;
+  border-radius:14px;
+  border:none;
+  background: var(--primary);
+  color:#fff;
+  font-size:1rem;
+  cursor:pointer;
+  transition:0.25s ease;
+}
+.start-btn:hover{
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+.start-btn:active{
+  transform: translateY(0);
+}
+</style>
 </head>
 <body>
+<button class="theme-toggle" id="themeBtn">🌓</button>
+<div class="wrap">
+  <div class="slide-wrap" id="slideWrap">
+    <!-- 第0页 欢迎页 -->
+    <div class="slide active welcome" data-index="0">
+      <h1>哈喽哈喽</h1>
+      <p>接下来带你快速了解全部功能</p>
+    </div>
+    <!-- 预留5张图片位置 -->
+    <div class="slide" data-index="1">
+      <img class="guide-img" src="" alt="引导图1" data-src="guide-img2/main-light.jpg">
+      <div class="desc">首页的浅色模式并非是白色，而是更护眼的米白哦</div>
+    </div>
+    <div class="slide" data-index="2">
+      <img class="guide-img" src="" alt="引导图2" data-src="guide-img2/main-dark.jpg">
+      <div class="desc">深色模式下的首页</div>
+    </div>
+    <div class="slide" data-index="3">
+      <img class="guide-img" src="" alt="引导图3" data-src="guide-img2/profile-dark.jpg">
+      <div class="desc">个人主页</div>
+    </div>
+    <div class="slide" data-index="4">
+      <img class="guide-img" src="" alt="引导图4" data-src="guide-img2/profile-dark-function.jpg">
+      <div class="desc">一些必要功能</div>
+    </div>
+    <div class="slide" data-index="5">
+      <img class="guide-img" src="" alt="引导图5" data-src="guide-img2/comment-area-light.jpg">
+      <div class="desc">评论区</div>
+    </div>
+    <!-- 第6页：结束语页面 -->
+    <div class="slide ending" data-index="6">
+      <h1>准备就绪</h1>
+      <p>全部功能介绍完毕，现在开始体验吧！</p>
+    </div>
+  </div>
+  <!-- 底部区域 -->
+  <div class="bottom-area">
+    <div class="dots" id="dotsWrap"></div>
+    <div class="btns" id="btnGroup">
+      <button class="btn" id="prevBtn">←</button>
+      <button class="btn" id="nextBtn">→</button>
+    </div>
+  </div>
+</div>
 
-    <header class="app-bar">
-        <button type="button" class="app-bar-btn" id="back-btn" aria-label="返回">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                 stroke="currentColor" stroke-width="2.2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-        </button>
-        <div class="app-bar-title">使用引导</div>
-        <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
-    </header>
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsWrap = document.getElementById('dotsWrap');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const btnGroup = document.getElementById('btnGroup');
+const themeBtn = document.getElementById('themeBtn');
+const slideWrap = document.getElementById('slideWrap');
+const total = slides.length;
+let current = 0;
 
-    <main class="app-main">
+// 触摸滑动变量
+let touchStartX = 0;
+let touchEndX = 0;
+const minSwipeDistance = 50;
 
-        <p class="lead">欢迎来到武校圈 👋<br>几分钟看完，你就能熟练使用这个平台了</p>
+// 生成圆点指示器
+for(let i=0;i<total;i++){
+  const d = document.createElement('span');
+  d.className = 'dot';
+  if(i===0) d.classList.add('active');
+  dotsWrap.appendChild(d);
+}
+const dots = document.querySelectorAll('.dot');
 
-        <!-- ============ 1. 快速上手 ============ -->
-        <section class="section">
-            <div class="section-title">
-                <i class="fas fa-bolt"></i> 快速上手
-            </div>
-            <div class="list">
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-plus"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">发布动态</div>
-                        <div class="row-desc">点击主页右下角的加号按钮，可以发布图文动态。支持上传多张图片、使用表情，单条字数有限制。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-heart"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">点赞 / 取消点赞</div>
-                        <div class="row-desc">点一下爱心即可点赞，再点一下取消。你点过赞的帖子会记录在本机，换设备不通用。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-comment-dots"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">评论与楼中楼</div>
-                        <div class="row-desc">点评论后会自动 @ 对方，形成楼中楼回复。评论同样支持图片和 @ 好友。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-search"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">搜索帖子和话题</div>
-                        <div class="row-desc">顶部搜索框支持实时建议。输入关键词即可找到相关帖子和话题标签。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-hashtag"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">筛选内容</div>
-                        <div class="row-desc">主页顶部的标签可以按话题快速筛选内容，比如只看某一类动态。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+// 图片预加载
+function preloadImages(nearIndex){
+  const preloadRange = [nearIndex, nearIndex+1, nearIndex+2];
+  preloadRange.forEach(idx=>{
+    if(idx >= total) return;
+    const img = slides[idx].querySelector('img');
+    if(!img) return;
+    const src = img.dataset.src;
+    if(!src || img.src === src) return;
+    img.src = src;
+  })
+}
 
-        <!-- ============ 2. 个人中心 ============ -->
-        <section class="section">
-            <div class="section-title">
-                <i class="fas fa-user"></i> 个人中心
-            </div>
-            <div class="list">
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-id-card"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">「我的」页面</div>
-                        <div class="row-desc">查看你的头像、昵称、系统 ID、QQ 号、性别，并从这里进入各项账号操作。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-pen"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">修改签名</div>
-                        <div class="row-desc">在 <code>sign-edit</code> 页面修改你的个性签名。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-key"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">修改密码</div>
-                        <div class="row-desc">在 <code>change_password</code> 页面更改账号密码，需要验证原密码。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-lock"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">忘记密码</div>
-                        <div class="row-desc">在 <code>find</code> 页面输入 QQ 号和昵称验证身份，找回账号密码。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-calendar"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">登录记录</div>
-                        <div class="row-desc">在 <code>login-data</code> 页面查看你的历史登录时间和 IP。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-history"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">历史动态</div>
-                        <div class="row-desc">在 <code>posts_history</code> 页面查看和删除你发布过的帖子、评论。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-user-slash"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">申请注销</div>
-                        <div class="row-desc">在「我的」页面点「申请注销」，可提交账号注销申请。<strong>此操作不可恢复</strong>。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+function render(){
+  slides.forEach(s=>s.classList.remove('active'));
+  dots.forEach(d=>d.classList.remove('active'));
+  slides[current].classList.add('active');
+  dots[current].classList.add('active');
 
-        <!-- ============ 3. 发现更多 ============ -->
-        <section class="section">
-            <div class="section-title">
-                <i class="fas fa-compass"></i> 发现更多
-            </div>
-            <div class="list">
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-address-book"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">实时好友档案</div>
-                        <div class="row-desc">在 <code>mp</code> 页面搜索账号，查看对方昵称、头像等公开信息。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-book-open"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">资源商城</div>
-                        <div class="row-desc">在 <code>sources</code> 页面下载学习资料：数学 / 英语 PDF、音频等。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-language"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">英语题库</div>
-                        <div class="row-desc">在 <code>en</code> 目录下的题库页面练习英语题目。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-gamepad"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">小游戏</div>
-                        <div class="row-desc">在 <code>game</code> 页面玩内置小游戏，放松一下。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-robot"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">AI 智能助手</div>
-                        <div class="row-desc">在 <code>AI</code> 目录下与智能助手对话，可以向它提问或闲聊。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-mobile-screen"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">下载 APP</div>
-                        <div class="row-desc">在「我的」页面点「下载武校圈 APP」，安装安卓客户端，访问更快捷。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-circle-question"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">反馈问题</div>
-                        <div class="row-desc">在「我的」页面点「反馈问题」，向开发者报告 Bug 或提出建议。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-crown"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">成为管理员</div>
-                        <div class="row-desc">在「我的」页面点「成为管理员」，填写问卷申请管理权限。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+  // 最后一页：替换为【开始使用】按钮
+  if(current === total -1){
+    btnGroup.innerHTML = `<button class="start-btn" id="startBtn">开始使用</button>`;
+    document.getElementById('startBtn').onclick = ()=>{
+      location.href = "http://an.kijk.top";
+    }
+  }else{
+    btnGroup.innerHTML = `
+      <button class="btn" id="prevBtn">←</button>
+      <button class="btn" id="nextBtn">→</button>
+    `;
+    const newPrev = document.getElementById('prevBtn');
+    const newNext = document.getElementById('nextBtn');
+    newPrev.disabled = current === 0;
+    newPrev.onclick = ()=>{ if(current>0){ current--; render(); } }
+    newNext.onclick = ()=>{ if(current < total-1){ current++; render(); } }
+  }
+  preloadImages(current);
+}
 
-        <!-- ============ 4. 账号安全 ============ -->
-        <section class="section">
-            <div class="section-title">
-                <i class="fas fa-shield-halved"></i> 账号安全
-            </div>
-            <div class="list">
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-lock"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">密码不要设置得太简单</div>
-                        <div class="row-desc">建议使用 8 位以上的混合密码，不要和其他平台共用同一个密码。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-user-secret"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">不要在公开帖子暴露隐私</div>
-                        <div class="row-desc">发布动态时避免暴露真实姓名、住址、电话、身份证号等敏感信息。</div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="row-icon"><i class="fas fa-triangle-exclamation"></i></div>
-                    <div class="row-main">
-                        <div class="row-title">发现违规内容怎么办</div>
-                        <div class="row-desc">可以通过「反馈问题」向站长举报，管理员会在审核后台处理。</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+// 触摸滑动监听
+slideWrap.addEventListener('touchstart', (e)=>{
+  touchStartX = e.changedTouches[0].screenX;
+})
+slideWrap.addEventListener('touchend', (e)=>{
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+})
+function handleSwipe(){
+  const diff = touchEndX - touchStartX;
+  if(Math.abs(diff) < minSwipeDistance) return;
+  if(diff < 0){
+    // 左滑 → 下一页
+    if(current < total -1){
+      current++;
+      render();
+    }
+  }else{
+    // 右滑 → 上一页
+    if(current > 0){
+      current--;
+      render();
+    }
+  }
+}
 
-        <!-- ============ 提示卡片 ============ -->
-        <div class="tip">
-            <i class="fas fa-circle-info"></i>
-            <div>小提示：本站使用 10 位系统 ID 作为内部标识，QQ 号用于登录。昵称在「搜索账号」页面可以查到。</div>
-        </div>
+// 主题切换
+const darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
+function setTheme(isDark){
+  if(isDark){
+    document.documentElement.setAttribute('data-theme','dark');
+  }else{
+    document.documentElement.removeAttribute('data-theme');
+  }
+}
+setTheme(darkMedia.matches);
+darkMedia.addEventListener('change',e=>{
+  if(!userOverride) setTheme(e.matches);
+})
+let userOverride = false;
+let userDark = false;
+themeBtn.onclick = ()=>{
+  userOverride = true;
+  userDark = !userDark;
+  setTheme(userDark);
+}
 
-        <div class="tip success">
-            <i class="fas fa-lightbulb"></i>
-            <div>遇到问题时，可以在「我的 → 反馈问题」告诉我们，每一条反馈都会认真处理。</div>
-        </div>
-
-        <!-- ============ 返回按钮 ============ -->
-        <button type="button" class="btn-back" id="back-btn-bottom">
-            <i class="fas fa-arrow-left"></i> 返回
-        </button>
-
-        <div class="version">
-            武校圈 · 使用引导<br>
-            &copy; <?php /* 静态页占位 */ echo date('Y'); ?> 武校圈
-        </div>
-
-    </main>
-
-    <script>
-        // ---------- 主题切换 ----------
-        (function () {
-            var root = document.documentElement;
-            var btn = document.getElementById('theme-toggle');
-
-            function sync() {
-                var dark = root.getAttribute('data-theme') === 'dark';
-                btn.textContent = dark ? '☀️' : '🌙';
-                var label = dark ? '切换到浅色模式' : '切换到深色模式';
-                btn.setAttribute('aria-label', label);
-                btn.setAttribute('title', label);
-            }
-
-            btn.addEventListener('click', function () {
-                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                root.setAttribute('data-theme', next);
-                try { localStorage.setItem('theme', next); } catch (e) {}
-                sync();
-            });
-
-            sync();
-
-            try {
-                var mq = window.matchMedia('(prefers-color-scheme: dark)');
-                var onSysChange = function (e) {
-                    var saved = null;
-                    try { saved = localStorage.getItem('theme'); } catch (err) {}
-                    if (saved) return;
-                    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-                    sync();
-                };
-                if (mq.addEventListener) mq.addEventListener('change', onSysChange);
-                else if (mq.addListener) mq.addListener(onSysChange);
-            } catch (e) {}
-        })();
-
-        // ---------- 返回：从哪来回哪去 ----------
-        (function () {
-            var FALLBACK = 'core.php';
-
-            function resolveBackUrl() {
-                var ref = document.referrer;
-                if (!ref) return FALLBACK;
-                try {
-                    var u = new URL(ref);
-                    // 只接受同站来源，且不是当前页面
-                    if (u.host !== location.host) return FALLBACK;
-                    if (u.pathname === location.pathname) return FALLBACK;
-                    return ref;
-                } catch (e) {
-                    return FALLBACK;
-                }
-            }
-
-            function goBack() {
-                location.href = resolveBackUrl();
-            }
-
-            document.getElementById('back-btn').addEventListener('click', goBack);
-            document.getElementById('back-btn-bottom').addEventListener('click', goBack);
-        })();
-    </script>
+render();
+</script>
 </body>
 </html>

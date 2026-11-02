@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#FFFBD6" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)" />
+<title>更新记录</title>
+
+<style>
+:root {
+  --bg: #FFFBD6;
+  --fg: #0A0A0A;
+  --fg-secondary: rgba(10, 10, 10, 0.50);
+  --fg-tertiary: rgba(10, 10, 10, 0.28);
+  --line: rgba(10, 10, 10, 0.07);
+  --dot: rgba(10, 10, 10, 0.25);
+  --nav-height: 56px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121212;
+    --fg: #F5F5F0;
+    --fg-secondary: rgba(245, 245, 240, 0.50);
+    --fg-tertiary: rgba(245, 245, 240, 0.26);
+    --line: rgba(255, 255, 255, 0.08);
+    --dot: rgba(255, 255, 255, 0.22);
+  }
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "HarmonyOS Sans", "Inter", sans-serif;
+  font-size: 15px; line-height: 1.55;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 导航 */
+.top-nav {
+  flex-shrink: 0;
+  height: calc(var(--nav-height) + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
+  display: flex; align-items: center;
+  padding: 0 16px;
+  border-bottom: 0.5px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.nav-back {
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; cursor: pointer;
+}
+.nav-back:active { background: var(--line); }
+.nav-back svg { width: 20px; height: 20px; stroke: var(--fg); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+.nav-title {
+  font-size: 16px; font-weight: 600;
+  margin-left: 8px;
+  letter-spacing: -0.01em;
+}
+
+/* 滚动区 */
+.scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 12px 16px calc(env(safe-area-inset-bottom) + 24px);
+}
+.scroll-container::-webkit-scrollbar { display: none; }
+
+/* 时间线 */
+.timeline {
+  position: relative;
+}
+
+.tl-item {
+  display: flex;
+  padding: 14px 0;
+  position: relative;
+}
+
+/* 竖线 */
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: 70px;
+  top: 38px;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+.tl-item:last-child::before { display: none; }
+
+/* 日期 */
+.tl-date {
+  flex-shrink: 0;
+  width: 60px;
+  padding-right: 14px;
+  text-align: right;
+  padding-top: 2px;
+}
+
+.tl-date .day {
+  font-size: 18px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2;
+}
+
+.tl-date .month {
+  font-size: 12px; color: var(--fg-tertiary); font-weight: 500; line-height: 1.2;
+}
+
+/* 圆点 */
+.tl-dot {
+  flex-shrink: 0;
+  width: 20px;
+  display: flex; justify-content: center;
+  padding-top: 7px;
+  position: relative;
+  z-index: 1;
+}
+
+.tl-dot::after {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--dot);
+  flex-shrink: 0;
+}
+
+/* 内容 */
+.tl-body {
+  flex: 1;
+  padding-left: 12px;
+  min-width: 0;
+}
+
+.tl-version {
+  font-size: 13px; font-weight: 600;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+}
+
+.tl-text {
+  font-size: 14px; line-height: 1.6;
+  color: var(--fg-secondary);
+}
+
+.tl-text + .tl-text {
+  margin-top: 2px;
+}
+
+/* 分隔月份标题 */
+.tl-month-header {
+  font-size: 12px; font-weight: 600;
+  color: var(--fg-tertiary);
+  padding: 20px 0 4px 72px;
+  letter-spacing: 0.04em;
+}
+
+/* 深浅切换过渡 */
+* { transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+</style>
+</head>
+
+<body>
+<div class="app-shell">
+
+  <nav class="top-nav">
+    <div class="nav-back" onclick="history.back()">
+      <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+    </div>
+    <div class="nav-title">更新记录</div>
+  </nav>
+
+  <main class="scroll-container" id="scroller">
+
+    <div class="timeline">
+
+      <div class="tl-month-header">2026年11月</div>
+
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">2</div><div class="month">Nov</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.4</div>
+          <div class="tl-text"><strong>-bug修复：</strong><br>无</div>
+          <div class="tl-text"><strong>-功能改动：</strong><br>index.html中取消了重复刷新式再次打开（代码中 switchFramePage 有：if (url === currentUrl && targetPage.getAttribute('src')) return; 所以点击当前页面项目不会重新加载。但注意：底部 tab 的 onclick 调用 switchFramePage('core.php') 等，如果 currentUrl 等于 url，直接 return。）；优化了tab栏的样式（更加通透）；加入了页面切换过渡；加入了引导步骤（用户在初次访问这个页面的时候先跳转到使用引导页面，地址是同目录下的guide.html，记录这个值，一个月内不再执行此操作，但是若超过一个月则需要执行此操作）；加入了背景加载图标；更改了音乐播放器样式和文件名识别方式；修改了主页面在深色模式下发布动态、评论区、发布评论模态框的透明度（改为不透明）；为单词抽查页面新增了深色/浅色模式切换</div>
+          <div class="tl-text"><strong>-删减/新增：</strong><br>永久删除资源商城版块；新增单词过关版块；永久删除文件存储版块；永久删除ancloud版块；</div>
+        </div>
+        </div>
+
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">1</div><div class="month">Nov</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.3</div>
+          <div class="tl-text"><strong>-bug修复：</strong><br>解决在加载历史较久远的帖子时出现大面积空白的问题（增加加载反馈）；解决js文件在css渲染完成后未及时就位导致的页面布局混乱问题（增加遮罩层）；</div>
+          <div class="tl-text"><strong>-功能改动：</strong><br>“最新”改为“全部”；用户能够不填写文本只发表图片了（去除限制）；在帖子图片的右下角增加双击查看完整图片的提示，在多图情况下只显示图标，在阅读模式下为点击放大提示；更改了深色模式下导航栏、切换栏、搜索框、推荐搜索、页脚、模态框的透明度（改为0）；发帖、评论、评论区区域改为全屏显示；评论区增加分界线；时间显示忽略秒（数据依然带秒但是前端不再显示时间到秒）；对各个分类版块的描述进行了更改（全部：全部动态；交友：交友-谨防诈骗；emo：失恋博物馆；游戏：电子竞技的魅力；故事集：陌生人的故事；投稿：校园投稿）；头像更改后，在其他已登录此账户的设备上原本保留着原来的头像地址信息，这次改动强制让其使用最新的头像地址发动态和评论，并且在更改完头像后自动检测最新的头像并且及时更新账户信息；</div>
+          <div class="tl-text"><strong>-新增：</strong><br>新增使用引导页面（替换了旧的页面）</div>
+        </div>
+        </div>
+
+        <div class="tl-month-header">2026年10月</div>
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">18</div><div class="month">Oct</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.2</div>
+          <div class="tl-text">更新了帖子右下角的<strong>更多</strong>（增加<strong>反馈</strong>；删除了残留的帖子删除未生效代码）；优化“我的”页面（删除了代码--修改完头像后不再删除原有的头像文件），恢复了因为这个问题意外删除的<code>portrait-img/custom_1781180984_3617f1e59a352d99.jpg</code>；修复了反馈页面中显示ID的潜在账户泄露风险问题；优化历史动态查看页面中图片的布局（适应显示任意尺寸的图片），增加图片查看模态框，无需打开新标签页，修复溢出问题；更改了注册页面的些许信息；新增<strong>笔记本功能</strong>(本地存储);</div>
+        </div>
+        </div>
+
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">17</div><div class="month">Oct</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.1</div>
+          <div class="tl-text">从今日开始使用<strong>五号线</strong>赠送的键帽编写此平台,是我莫大的幸福；今日紧急修复发帖功能失败的问题，原因是在core.php中，<code>form id="postForm"</code>的开始标签丢了，只剩下了 <code>/form</code> 结束标签;刷赞系统更新评论刷赞功能（clikes 小于 10，则随机改为 20-60 之间的整数，已达到阈值的帖子/评论不做任何更改）；</div>
+        </div>
+        </div>
+
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">16</div><div class="month">Oct</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2</div>
+          <div class="tl-text">历史动态页面新增不可编辑提示和置顶按钮；新增“关于我们”页面；新增更新日志页面；修复表情输入时软键盘反复弹跳出来的bug；新增发帖草稿留存功能并且在发帖输入框新增一键清除按钮；对刷赞系统进行刷赞范围（plikes 小于 20 才修改/随机生成 100-300 之间的整数）修改；修改“追星”分类为“投稿”，替换为#投稿#关键词；分享功能升级（若文本超过了20个字则把后面的字用省略号代替 但是保留帖子中的关键词，然后再接上“查看该动态http://anchina.xyz”。）；评论新增分享和举报功能；新增热度值（点赞数乘30）；修改火花标记出现条件（大于等于100个赞就会出现火花标记）；</div>
+        </div>
+        </div>
+
+        <div class="tl-item">
+        <div class="tl-date"><div class="day">1</div><div class="month">Oct</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.0</div>
+          <div class="tl-text">优化密码找回页面、主框架页面、反馈系统页面；新增资源商城页面；“我的”新增app下载渠道；历史帖子、评论可删除（包括删除单个评论）；新增输入框字数限制；新增表情输入区域；修复@好友后输入框未清除问题</div>
+        </div>
+        </div>
+      <!--===========================================================-->
+      <div class="tl-month-header">2025年10月 ~ 2026年9月</div>
+
+      <div class="tl-item">
+        <div class="tl-date"><div class="day">—</div><div class="month">2025.10 ~ 2026.09</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.0.0 ~ v2.4.0</div>
+          <div class="tl-text">液态玻璃视觉升级，全局毛玻璃导航栏</div>
+          <div class="tl-text">深色模式平滑过渡动画</div>
+          <div class="tl-text">关于页面与更新记录页面上线</div>
+          <div class="tl-text">修复刘海屏安全区计算偏差</div>
+          <div class="tl-text">帖子图片长按预览大图</div>
+          <div class="tl-text">帖子列表缓存策略优化</div>
+          <div class="tl-text">修复评论区 @好友 跳转异常</div>
+          <div class="tl-text">修复图片压缩后方向信息丢失</div>
+          <div class="tl-text">AI 智能助手模块上线</div>
+          <div class="tl-text">系统级深色模式自动切换</div>
+          <div class="tl-text">首页动态流加载速度提升约 30%</div>
+          <div class="tl-text">评论支持图片与 @好友，新增点赞动画反馈</div>
+          <div class="tl-text">好友档案页面上线</div>
+          <div class="tl-text">图片自动压缩阈值调整为 1MB</div>
+          <div class="tl-text">资源商城上线（学习资料下载）</div>
+          <div class="tl-text">英语题库模块</div>
+          <div class="tl-text">小游戏入口</div>
+          <div class="tl-text">问卷反馈功能</div>
+          <div class="tl-text">移动端优先重新设计，液态玻璃风格</div>
+          <div class="tl-text">统一 API 入口重构</div>
+          <div class="tl-text">PWA 支持，可添加到主屏幕</div>
+          <div class="tl-text">DevConsole 管理后台</div>
+          <div class="tl-text">进行了全面扩展，新增无数功能和页面</div>
+          <div class="tl-text">优化页面性能，提升使用体验</div>
+          <div class="tl-text">用户注册与登录</div>
+          <div class="tl-text">基础帖子流</div>
+        </div>
+      </div>
+
+      <!-- ============ 模板：复制下面这块来添加新记录 ============ -->
+      <!--
+      <div class="tl-item">
+        <div class="tl-date"><div class="day">16</div><div class="month">Oct</div></div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-version">v2.5.0</div>
+          <div class="tl-text">更新内容一</div>
+          <div class="tl-text">更新内容二</div>
+          <div class="tl-text">更新内容三</div>
+        </div>
+      </div>
+      -->
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+// theme-color 同步
+const meta = document.querySelector('meta[name="theme-color"]');
+const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+function updateThemeColor() {
+  meta.setAttribute('content', darkQuery.matches ? '#121212' : '#FFFBD6');
+}
+darkQuery.addEventListener('change', updateThemeColor);
+updateThemeColor();
+</script>
+
+</body>
+</html>

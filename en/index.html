@@ -20,24 +20,29 @@ body{
   -webkit-tap-highlight-color:transparent;
 }
 body.dark{ background-color:#04060f; }
-
 /* ============ 星空画布 ============ */
 #stars{
   position:fixed; inset:0; z-index:1; pointer-events:none;
   opacity:0; transition:opacity 1.5s ease;
 }
 #stars.on{ opacity:1; }
-
 /* ============ 主界面 ============ */
 #home{
   position:fixed; inset:0; z-index:3;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:5vh 5vw;
-  background:#ffffff;
-  transition:opacity .7s ease, transform .8s ease;
+  background:#FFFBD6;
+  transition:opacity .7s ease, transform .8s ease, background-color .45s ease;
   overflow-y:auto;
 }
 #home.leaving{ opacity:0; transform:scale(1.05); pointer-events:none; }
+
+/* ---- 首页主题：自动跟随系统 + 手动覆盖（隔离在 #home 内） ---- */
+@media (prefers-color-scheme: dark){
+  #home{ background:#121212; }
+}
+#home[data-theme="light"]{ background:#FFFBD6; }
+#home[data-theme="dark"] { background:#121212; }
 
 .home-title{
   font-size:clamp(24px,3.4vw,44px);
@@ -47,6 +52,60 @@ body.dark{ background-color:#04060f; }
 .home-sub{
   font-size:clamp(12px,1.1vw,15px); color:#9a9a9a;
   letter-spacing:.28em; margin:0 0 clamp(26px,5vh,54px);
+}
+@media (prefers-color-scheme: dark){
+  .home-title{ color:#f5f5f5; }
+  .home-sub  { color:#8a8a8a; }
+}
+#home[data-theme="light"] .home-title{ color:#111; }
+#home[data-theme="light"] .home-sub  { color:#9a9a9a; }
+#home[data-theme="dark"]  .home-title{ color:#f5f5f5; }
+#home[data-theme="dark"]  .home-sub  { color:#8a8a8a; }
+
+/* ---- 首页主题切换按钮（只在首页显示，进入抽查时由 JS 隐藏） ---- */
+.theme-toggle{
+  position:fixed;
+  top:max(18px, env(safe-area-inset-top, 0px) + 14px);
+  right:20px;
+  z-index:50;
+  width:46px; height:46px;
+  border-radius:50%;
+  border:1px solid rgba(0,0,0,.08);
+  background:rgba(255,255,255,.55);
+  color:#333;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+  -webkit-tap-highlight-color:transparent;
+  transition:background .25s, color .25s, border-color .25s, transform .15s;
+}
+.theme-toggle:hover{ transform:scale(1.06); }
+.theme-toggle:active{ transform:scale(.92); }
+.theme-toggle svg{ width:20px; height:20px; }
+.theme-toggle .ic-light,
+.theme-toggle .ic-dark{ display:none; }
+.theme-toggle[data-mode="light"] .ic-auto{ display:none; }
+.theme-toggle[data-mode="light"] .ic-light{ display:block; }
+.theme-toggle[data-mode="dark"]  .ic-auto{ display:none; }
+.theme-toggle[data-mode="dark"]  .ic-dark { display:block; }
+
+/* 按钮自身的深色适配（auto 时跟随系统，light/dark 时强制） */
+@media (prefers-color-scheme: dark){
+  .theme-toggle{
+    border-color:rgba(255,255,255,.12);
+    background:rgba(255,255,255,.08);
+    color:#eaeaea;
+  }
+}
+.theme-toggle[data-mode="light"]{
+  border-color:rgba(0,0,0,.08);
+  background:rgba(255,255,255,.55);
+  color:#333;
+}
+.theme-toggle[data-mode="dark"]{
+  border-color:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.08);
+  color:#eaeaea;
 }
 
 .cards{
@@ -74,7 +133,6 @@ body.dark{ background-color:#04060f; }
 .card:active{ transform:translateY(-2px) scale(.985); }
 .card-title{ font-size:clamp(21px,2.1vw,33px); font-weight:700; letter-spacing:.1em; text-shadow:0 2px 8px rgba(0,0,0,.2); }
 .card-sub{ font-size:clamp(11px,.95vw,14px); letter-spacing:.18em; opacity:.92; }
-
 /* ============ 抽查界面 ============ */
 #quiz{
   position:fixed; inset:0; z-index:2;
@@ -82,7 +140,6 @@ body.dark{ background-color:#04060f; }
   transition:opacity .9s ease;
 }
 #quiz.show{ opacity:1; pointer-events:auto; }
-
 .quiz-top{
   position:absolute; top:clamp(18px,3.6vh,40px); left:clamp(18px,4vw,48px);
   z-index:6; pointer-events:none;
@@ -99,7 +156,6 @@ body.dark{ background-color:#04060f; }
   letter-spacing:.2em;
   font-variant-numeric:tabular-nums;
 }
-
 /* ---- 单词显示区 ---- */
 #wordArea{
   position:absolute; inset:0;
@@ -114,7 +170,6 @@ body.dark{ background-color:#04060f; }
   transform-origin:center center;
   will-change:transform;
 }
-
 /* 单词 + 喇叭 */
 #wordWrap{
   display:flex;
@@ -126,7 +181,6 @@ body.dark{ background-color:#04060f; }
   cursor:pointer;
   -webkit-tap-highlight-color:transparent;
 }
-
 #word{
   font-family:'Baloo 2','Varela Round','Arial Rounded MT Bold','Comic Sans MS',system-ui,sans-serif;
   font-weight:600;
@@ -145,7 +199,6 @@ body.dark{ background-color:#04060f; }
 #word.speaking{
   text-shadow:0 0 88px rgba(170,210,255,1), 0 0 34px rgba(120,170,255,.9), 0 2px 30px rgba(0,0,0,.65);
 }
-
 #speaker{
   flex:none;
   width:calc(var(--word-size,72px) * .52);
@@ -166,7 +219,6 @@ body.dark{ background-color:#04060f; }
   from{ transform:scale(1);    opacity:.6; }
   to  { transform:scale(1.14); opacity:1;  }
 }
-
 #ipa{
   font-size:var(--ipa-size,26px);
   color:rgba(150,182,228,.88);
@@ -186,7 +238,6 @@ body.dark{ background-color:#04060f; }
   box-shadow:0 0 44px rgba(80,140,255,.2);
   line-height:1.45; max-width:100%;
 }
-
 @keyframes popIn{
   from{ opacity:0; transform:translateY(16px) scale(.96); }
   to  { opacity:1; transform:translateY(0) scale(1); }
@@ -195,7 +246,6 @@ body.dark{ background-color:#04060f; }
 #wordWrap.pop{ animation-delay:0s; }
 #ipa.pop { animation-delay:.05s; }
 #mean.pop{ animation-delay:.1s; }
-
 /* ---- 加载/错误提示 ---- */
 .hint{
   position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
@@ -205,7 +255,6 @@ body.dark{ background-color:#04060f; }
   opacity:0; transition:opacity .35s; z-index:4;
 }
 .hint.show{ opacity:1; }
-
 /* ---- 底部上一个 / 下一个 ---- */
 .bottom-bar{
   position:absolute; left:50%; bottom:clamp(22px,3.8vh,44px);
@@ -235,7 +284,6 @@ body.dark{ background-color:#04060f; }
   box-shadow:0 10px 30px -10px rgba(90,150,255,.95);
 }
 .nav-btn.primary:hover{ box-shadow:0 14px 36px -10px rgba(120,150,255,1); }
-
 /* ---- 右下角功能面板 ---- */
 .panel{
   position:absolute; right:clamp(14px,2.4vw,32px); bottom:clamp(14px,2.4vh,32px);
@@ -259,23 +307,30 @@ body.dark{ background-color:#04060f; }
 .panel.collapsed .panel-head .chev{ transform:rotate(-90deg); }
 
 .panel-body{
-  padding:2px 18px 18px;
+  padding-left:18px;
+  padding-right:18px;
+  padding-top:2px;
+  padding-bottom:18px;
   max-height:min(460px, 62vh);
   overflow-y:auto;
   opacity:1;
-  transition:max-height .35s ease, opacity .25s ease, padding .35s ease;
+  transition:max-height .35s ease, opacity .25s ease;
   scrollbar-width:thin;
 }
+.panel.collapsed .panel-body{
+  max-height:0;
+  opacity:0;
+  padding-top:0;
+  padding-bottom:0;
+}
+
 .panel-body::-webkit-scrollbar{ width:5px; }
 .panel-body::-webkit-scrollbar-thumb{ background:rgba(130,170,255,.3); border-radius:4px; }
-.panel.collapsed .panel-body{ max-height:0; opacity:0; padding-top:0; padding-bottom:0; }
-
 .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:9px 0; }
 .row.col{ display:block; }
 .row-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
 .label{ font-size:13px; color:#a9bfe0; letter-spacing:.1em; }
 .val{ font-size:12px; color:#6f8ec4; font-variant-numeric:tabular-nums; }
-
 /* 滑块 */
 input[type=range]{
   -webkit-appearance:none; appearance:none;
@@ -296,7 +351,6 @@ input[type=range]::-moz-range-thumb{
   background:linear-gradient(140deg,#8ab6ff,#a98cff);
   box-shadow:0 0 14px rgba(120,160,255,.95); cursor:pointer;
 }
-
 /* 开关 */
 .switch{ position:relative; display:inline-block; width:46px; height:26px; flex:none; }
 .switch input{ opacity:0; width:0; height:0; }
@@ -311,7 +365,6 @@ input[type=range]::-moz-range-thumb{
 }
 .switch input:checked + .slider-sw{ background:linear-gradient(140deg,#5a96ff,#8f6bff); }
 .switch input:checked + .slider-sw::before{ transform:translateX(20px); background:#fff; }
-
 /* 下拉框 */
 select{
   width:100%;
@@ -325,7 +378,7 @@ select{
   outline:none;
   cursor:pointer;
   -webkit-appearance:none; appearance:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237f9cd0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>");
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237f9cd0' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6' /></svg>");
   background-repeat:no-repeat;
   background-position:right 11px center;
   transition:border-color .22s, background-color .22s;
@@ -333,7 +386,6 @@ select{
 }
 select:hover{ border-color:rgba(150,190,255,.5); background-color:rgba(120,170,255,.12); }
 select option{ background:#0f1730; color:#cfe0ff; }
-
 /* ---- Toast ---- */
 #toast{
   position:fixed; left:50%; bottom:120px;
@@ -349,7 +401,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
   white-space:nowrap;
 }
 #toast.show{ opacity:1; transform:translate(-50%,0); }
-
 /* 小屏适配 */
 @media (max-width:640px){
   .bottom-bar{ bottom:16px; gap:10px; }
@@ -360,24 +411,34 @@ select option{ background:#0f1730; color:#cfe0ff; }
 </style>
 </head>
 <body>
-
 <!-- 星空 -->
 <canvas id="stars"></canvas>
-
 <!-- ========== 主界面 ========== -->
 <div id="home">
   <h1 class="home-title">305班英语单词随机抽查</h1>
   <p class="home-sub">SELECT A UNIT</p>
   <div class="cards" id="cards"></div>
 </div>
-
+<!-- 首页主题切换按钮（进入抽查时会被隐藏） -->
+<button id="themeToggle" class="theme-toggle" type="button" title="主题：自动" aria-label="切换首页主题">
+  <svg class="ic-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M12 3 a9 9 0 0 0 0 18 z" fill="currentColor" stroke="none"/>
+  </svg>
+  <svg class="ic-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+  </svg>
+  <svg class="ic-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </svg>
+</button>
 <!-- ========== 抽查界面 ========== -->
 <div id="quiz">
   <div class="quiz-top">
     <div class="unit-name" id="unitName">必修一</div>
     <div class="progress" id="progress">0 / 0</div>
   </div>
-
   <div id="wordArea">
     <div id="wordContent">
       <div id="wordWrap" title="点击朗读">
@@ -386,9 +447,9 @@ select option{ background:#0f1730; color:#cfe0ff; }
           <svg viewBox="0 0 24 24" width="100%" height="100%" fill="none"
                stroke="currentColor" stroke-width="2"
                stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 5 6 9H2v6h4l5 4V5z"/>
-            <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
-            <path d="M18.5 5.5a9 9 0 0 1 0 13"/>
+            <path d="M11 5 6 9H2v6h4l5 4V5z" />
+            <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+            <path d="M18.5 5.5a9 9 0 0 1 0 13" />
           </svg>
         </div>
       </div>
@@ -397,12 +458,10 @@ select option{ background:#0f1730; color:#cfe0ff; }
     </div>
     <div class="hint" id="hint"></div>
   </div>
-
   <div class="bottom-bar">
     <button class="nav-btn" id="prevBtn">‹ 上一个</button>
     <button class="nav-btn primary" id="nextBtn">下一个 ›</button>
   </div>
-
   <!-- 功能面板 -->
   <div class="panel" id="panel">
     <button class="panel-head" id="panelHead">
@@ -410,7 +469,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
       <span class="chev">▾</span>
     </button>
     <div class="panel-body">
-
       <div class="row">
         <span class="label">显示释义</span>
         <label class="switch">
@@ -418,7 +476,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
           <span class="slider-sw"></span>
         </label>
       </div>
-
       <div class="row" id="autoSpeakRow">
         <span class="label">自动发音</span>
         <label class="switch">
@@ -426,7 +483,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
           <span class="slider-sw"></span>
         </label>
       </div>
-
       <div class="row col">
         <div class="row-head">
           <span class="label">单词大小</span>
@@ -434,7 +490,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
         </div>
         <input type="range" id="wordSize" min="28" max="140" step="1" value="72">
       </div>
-
       <div class="row col">
         <div class="row-head">
           <span class="label">音标大小</span>
@@ -442,7 +497,6 @@ select option{ background:#0f1730; color:#cfe0ff; }
         </div>
         <input type="range" id="ipaSize" min="14" max="56" step="1" value="26">
       </div>
-
       <div class="row col" id="rateRow">
         <div class="row-head">
           <span class="label">朗读语速</span>
@@ -450,20 +504,16 @@ select option{ background:#0f1730; color:#cfe0ff; }
         </div>
         <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="0.9">
       </div>
-
       <div class="row col" id="voiceRow" style="display:none">
         <div class="row-head">
           <span class="label">口音 / 音色</span>
         </div>
         <select id="voiceSelect"></select>
       </div>
-
     </div>
   </div>
 </div>
-
 <div id="toast"></div>
-
 <script>
 /* =========================================================
    1. 单元配置
@@ -473,11 +523,13 @@ const UNITS = [
   { key:'bx2', name:'必修二', file:'bx2.json', c1:'#ffc07a', c2:'#f08c1a' },
   { key:'bx3', name:'必修三', file:'bx3.json', c1:'#ffe27a', c2:'#efc000' },
   { key:'xx1', name:'选修一', file:'xx1.json', c1:'#8ce99a', c2:'#2f9e44' },
-  { key:'xx2', name:'选修二', file:'xx2.json', c1:'#63e6be', c2:'#0b8f6b' },
+  { key:'xx2', name:'选修二', file:'xx2.json', c1:'#63e6be', c2:'#0b8f6b' }
+];
+/*省略了必修三和四 因为还没资源
+,
   { key:'xx3', name:'选修三', file:'xx3.json', c1:'#8ecbff', c2:'#1c7ed6' },
   { key:'xx4', name:'选修四', file:'xxs.json', c1:'#c0b0ff', c2:'#6741d9' }
-];
-
+*/
 /* =========================================================
    2. DOM
    ========================================================= */
@@ -512,41 +564,75 @@ const rateVal     = document.getElementById('rateVal');
 const prevBtn     = document.getElementById('prevBtn');
 const nextBtn     = document.getElementById('nextBtn');
 const toastEl     = document.getElementById('toast');
+const themeToggleBtn = document.getElementById('themeToggle');
+
+/* =========================================================
+   2.5 首页主题切换（隔离在 #home，进入抽查后隐藏按钮）
+   ========================================================= */
+let themeMode = 'auto'; // 'auto' | 'light' | 'dark'
+
+function applyHomeTheme(){
+  if (themeMode === 'auto'){
+    homeEl.removeAttribute('data-theme');
+  } else {
+    homeEl.setAttribute('data-theme', themeMode);
+  }
+  themeToggleBtn.dataset.mode = themeMode;
+  const titles = {
+    auto : '主题：自动（点击切换为浅色）',
+    light: '主题：浅色（点击切换为深色）',
+    dark : '主题：深色（点击切换为自动）'
+  };
+  themeToggleBtn.title = titles[themeMode];
+  themeToggleBtn.setAttribute('aria-label', titles[themeMode]);
+  try {
+    if (themeMode === 'auto') localStorage.removeItem('home-theme');
+    else localStorage.setItem('home-theme', themeMode);
+  } catch (e) {}
+}
+
+(function initHomeTheme(){
+  try {
+    const saved = localStorage.getItem('home-theme');
+    if (saved === 'light' || saved === 'dark') themeMode = saved;
+  } catch (e) {}
+  applyHomeTheme();
+})();
+
+themeToggleBtn.addEventListener('click', () => {
+  // auto → light → dark → auto
+  if (themeMode === 'auto')      themeMode = 'light';
+  else if (themeMode === 'light') themeMode = 'dark';
+  else                            themeMode = 'auto';
+  applyHomeTheme();
+});
 
 /* =========================================================
    3. 状态
    ========================================================= */
-let NAMES       = {};
 let queue       = [];
 let index       = 0;
 let showMean    = false;
 let transitioning = false;
-
 /* =========================================================
    4. 语音合成（Web Speech API）
    ========================================================= */
 const speechSupported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-
-let voices        = [];      // 可用英文语音列表
-let currentVoice  = null;    // 当前选中的语音
-let autoSpeak     = false;   // 是否自动朗读
-let speechRate    = 0.9;     // 语速
-
+let voices        = [];
+let currentVoice  = null;
+let autoSpeak     = false;
+let speechRate    = 0.9;
 function refreshVoices(){
   if (!speechSupported) return;
   const all = speechSynthesis.getVoices() || [];
-  // 优先过滤出英文语音
   let en = all.filter(v => /^en([-_]|$)/i.test(v.lang) || /english/i.test(v.name));
   if (!en.length) en = all.slice();
-
   voices = en;
   voiceSelect.innerHTML = '';
-
   if (!voices.length){
     voiceRow.style.display = 'none';
     return;
   }
-
   voices.forEach((v, i) => {
     const opt = document.createElement('option');
     opt.value = i;
@@ -554,27 +640,22 @@ function refreshVoices(){
     voiceSelect.appendChild(opt);
   });
   voiceRow.style.display = '';
-
-  // 选一个最合适的作为默认
   let idx = voices.findIndex(v =>
     /en[-_]US/i.test(v.lang) && /google|natural|samantha|aria|jenny|zira/i.test(v.name)
   );
   if (idx < 0) idx = voices.findIndex(v => /en[-_]US/i.test(v.lang));
   if (idx < 0) idx = 0;
-
   voiceSelect.value = idx;
   currentVoice = voices[idx];
 }
-
 function setSpeaking(on){
   wordEl.classList.toggle('speaking', on);
   speakerEl.classList.toggle('speaking', on);
 }
-
 function speak(text){
   if (!speechSupported || !text) return;
   try {
-    speechSynthesis.cancel();  // 打断上一句
+    speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang  = currentVoice ? currentVoice.lang : 'en-US';
     if (currentVoice) u.voice = currentVoice;
@@ -584,30 +665,25 @@ function speak(text){
     u.onend   = () => setSpeaking(false);
     u.onerror = () => setSpeaking(false);
     speechSynthesis.speak(u);
-  } catch (e){ /* 静默失败 */ }
+  } catch (e){}
 }
-
 if (speechSupported){
   refreshVoices();
   if (typeof speechSynthesis.onvoiceschanged !== 'undefined'){
     speechSynthesis.onvoiceschanged = refreshVoices;
   }
-  // 有些浏览器语音列表是异步加载的，多试几次
   setTimeout(refreshVoices, 300);
   setTimeout(refreshVoices, 1200);
 } else {
-  // 不支持就隐藏发音相关的行
   autoSpeakRow.style.display = 'none';
   rateRow.style.display = 'none';
   voiceRow.style.display = 'none';
 }
-
 /* =========================================================
    5. 星空背景
    ========================================================= */
 const ctx = canvasEl.getContext('2d');
 let stars = [], meteors = [], rafId = null, starsRunning = false;
-
 function resizeCanvas(){
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
   canvasEl.width  = Math.floor(innerWidth  * dpr);
@@ -617,7 +693,6 @@ function resizeCanvas(){
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   buildStars();
 }
-
 function buildStars(){
   const w = innerWidth, h = innerHeight;
   const count = Math.max(60, Math.min(320, Math.round(w * h / 7000)));
@@ -633,11 +708,9 @@ function buildStars(){
     });
   }
 }
-
 function drawStars(){
   const w = innerWidth, h = innerHeight;
   ctx.clearRect(0, 0, w, h);
-
   for (const s of stars){
     s.a += s.da;
     if (s.a > 1)   { s.a = 1;   s.da *= -1; }
@@ -649,7 +722,6 @@ function drawStars(){
       : `rgba(255,255,255,${s.a})`;
     ctx.fill();
   }
-
   if (Math.random() < 0.0035 && meteors.length < 2){
     meteors.push({
       x: Math.random() * w * 0.8,
@@ -675,22 +747,18 @@ function drawStars(){
     ctx.lineTo(m.x - m.len, m.y - m.len * 0.52);
     ctx.stroke();
   }
-
   rafId = requestAnimationFrame(drawStars);
 }
-
 function startStars(){
   if (starsRunning) return;
   starsRunning = true;
   resizeCanvas();
   drawStars();
 }
-
 window.addEventListener('resize', () => {
   if (starsRunning) resizeCanvas();
   fitContent();
 });
-
 /* =========================================================
    6. 操作音效（Web Audio）
    ========================================================= */
@@ -704,7 +772,6 @@ function getAudio(){
   if (audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
-
 function playTone(f1, f2, dur, vol, type){
   const ac = getAudio(); if (!ac) return;
   const t = ac.currentTime;
@@ -719,7 +786,6 @@ function playTone(f1, f2, dur, vol, type){
   osc.connect(gain); gain.connect(ac.destination);
   osc.start(t); osc.stop(t + dur + 0.03);
 }
-
 function playSound(kind){
   if (kind === 'next'){
     playTone(620, 1080, 0.15, 0.17, 'sine');
@@ -731,7 +797,6 @@ function playSound(kind){
     playTone(880, 880, 0.07, 0.09, 'sine');
   }
 }
-
 function playSwoosh(){
   const ac = getAudio(); if (!ac) return;
   const t = ac.currentTime;
@@ -755,7 +820,6 @@ function playSwoosh(){
   src.connect(filter); filter.connect(g); g.connect(ac.destination);
   src.start(t); src.stop(t + 0.55);
 }
-
 /* =========================================================
    7. 主界面卡片
    ========================================================= */
@@ -770,46 +834,24 @@ UNITS.forEach(u => {
   btn.addEventListener('click', () => enterQuiz(u));
   cardsEl.appendChild(btn);
 });
-
 /* =========================================================
    8. 进入抽查界面
    ========================================================= */
 function enterQuiz(unit){
   if (transitioning) return;
   transitioning = true;
-
   playSwoosh();
-
+  // 进入抽查：立即隐藏主题切换按钮，且不改变抽查页面任何样式
+  themeToggleBtn.style.display = 'none';
   homeEl.classList.add('leaving');
   document.body.classList.add('dark');
   startStars();
   canvasEl.classList.add('on');
-
   setTimeout(() => quizEl.classList.add('show'), 380);
   setTimeout(() => { homeEl.style.display = 'none'; }, 900);
-
-  unitNameEl.textContent = NAMES[unit.key] || unit.name;
+  unitNameEl.textContent = unit.name;
   loadUnit(unit);
 }
-
-/* =========================================================
-   9. name.json（可选）
-   ========================================================= */
-async function loadNames(){
-  try {
-    const res = await fetch('name.json', { cache: 'no-store' });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (Array.isArray(data)){
-      data.forEach(item => {
-        if (item && typeof item === 'object' && item.key) NAMES[item.key] = item.name;
-      });
-    } else if (data && typeof data === 'object'){
-      NAMES = data;
-    }
-  } catch (e){ /* 没有 name.json 就用内置名字 */ }
-}
-
 /* =========================================================
    10. 读取词库
    ========================================================= */
@@ -825,21 +867,18 @@ function normalizeWords(raw){
     }))
     .filter(o => o.word);
 }
-
 async function loadUnit(unit){
   setHint('加载中…');
   wordEl.textContent = '';
   ipaEl.textContent  = '';
   meanEl.textContent = '';
   progressEl.textContent = '0 / 0';
-
   try {
     const res = await fetch(unit.file, { cache: 'no-store' });
     if (!res.ok) throw new Error('无法读取 ' + unit.file + '（HTTP ' + res.status + '）');
     const raw = await res.json();
     const list = normalizeWords(raw);
     if (!list.length) throw new Error(unit.file + ' 中没有有效的单词数据');
-
     queue = shuffle(list);
     index = 0;
     setHint('');
@@ -849,7 +888,6 @@ async function loadUnit(unit){
       '\n\n请确认：\n1) 词库文件与该页面在同一目录\n2) 使用本地服务器打开（例如：php -S localhost:8000）\n3) 直接双击 file:// 打开时浏览器会拦截 JSON 读取');
   }
 }
-
 /* =========================================================
    11. 洗牌 & 渲染
    ========================================================= */
@@ -861,7 +899,6 @@ function shuffle(arr){
   }
   return a;
 }
-
 function reshuffleKeepingLastOut(){
   const last = queue.length ? queue[queue.length - 1] : null;
   const a = shuffle(queue);
@@ -870,33 +907,24 @@ function reshuffleKeepingLastOut(){
   }
   return a;
 }
-
 function render(){
   const item = queue[index];
   if (!item) return;
-
   wordEl.textContent = item.word || '';
   ipaEl.textContent  = item.ipa  || '';
   meanEl.textContent = item.mean || '';
   meanEl.style.display = showMean ? '' : 'none';
-
   progressEl.textContent = (index + 1) + ' / ' + queue.length;
-
-  // 重播入场动画
   [wordWrapEl, ipaEl, meanEl].forEach(el => el.classList.remove('pop'));
   void wordEl.offsetWidth;
   [wordWrapEl, ipaEl, meanEl].forEach(el => el.classList.add('pop'));
-
   requestAnimationFrame(fitContent);
-
-  // 自动发音（延迟一点点，避免与翻页音效打架）
   if (autoSpeak && speechSupported && item.word){
     setTimeout(() => {
       if (queue[index] && queue[index].word === item.word) speak(item.word);
     }, 90);
   }
 }
-
 /* =========================================================
    12. 自适应缩放
    ========================================================= */
@@ -907,20 +935,16 @@ function fitContent(){
   const padR = parseFloat(cs.paddingRight) || 0;
   const padT = parseFloat(cs.paddingTop)   || 0;
   const padB = parseFloat(cs.paddingBottom)|| 0;
-
   const availW = rect.width  - padL - padR;
   const availH = rect.height - padT - padB;
   if (availW <= 0 || availH <= 0) return;
-
   const w = contentEl.offsetWidth;
   const h = contentEl.offsetHeight;
   if (!w || !h) return;
-
   let s = Math.min(availW / w, availH / h, 1);
   if (!isFinite(s) || s <= 0) s = 1;
   contentEl.style.transform = 'scale(' + s.toFixed(4) + ')';
 }
-
 if (window.ResizeObserver){
   new ResizeObserver(() => fitContent()).observe(wordAreaEl);
 }
@@ -928,14 +952,12 @@ window.addEventListener('orientationchange', () => setTimeout(fitContent, 260));
 if (document.fonts && document.fonts.ready){
   document.fonts.ready.then(() => fitContent());
 }
-
 /* =========================================================
    13. 上一个 / 下一个
    ========================================================= */
 function nextWord(){
   if (!queue.length) return;
   playSound('next');
-
   if (index >= queue.length - 1){
     queue = reshuffleKeepingLastOut();
     index = 0;
@@ -945,11 +967,9 @@ function nextWord(){
   }
   render();
 }
-
 function prevWord(){
   if (!queue.length) return;
   playSound('prev');
-
   if (index <= 0){
     toast('已经是第一个单词了');
     return;
@@ -957,10 +977,8 @@ function prevWord(){
   index--;
   render();
 }
-
 nextBtn.addEventListener('click', nextWord);
 prevBtn.addEventListener('click', prevWord);
-
 window.addEventListener('keydown', e => {
   if (!quizEl.classList.contains('show')) return;
   if (e.key === 'ArrowRight'){ e.preventDefault(); nextWord(); }
@@ -968,17 +986,14 @@ window.addEventListener('keydown', e => {
   if (e.key === 'h' || e.key === 'H'){ toggleMean(); }
   if (e.key === ' '){ e.preventDefault(); if (queue[index]) speak(queue[index].word); }
 });
-
 /* =========================================================
    14. 点击单词发音
    ========================================================= */
 wordWrapEl.addEventListener('click', () => {
-  // 如果用户正在选中文本，就不触发发音
   const sel = window.getSelection();
   if (sel && sel.toString().trim()) return;
   if (queue[index]) speak(queue[index].word);
 });
-
 /* =========================================================
    15. 功能面板
    ========================================================= */
@@ -986,8 +1001,6 @@ panelHead.addEventListener('click', () => {
   panelEl.classList.toggle('collapsed');
   playSound('toggle');
 });
-
-// 显示 / 隐藏释义
 function toggleMean(){
   showMean = !showMean;
   meanSwitch.checked = showMean;
@@ -1001,43 +1014,32 @@ meanSwitch.addEventListener('change', () => {
   playSound('toggle');
   requestAnimationFrame(fitContent);
 });
-
-// 自动发音
 autoSpeakSwitch.addEventListener('change', () => {
   autoSpeak = autoSpeakSwitch.checked;
   playSound('toggle');
   if (autoSpeak && queue[index]) speak(queue[index].word);
 });
-
-// 单词大小
 wordSizeEl.addEventListener('input', e => {
   const v = +e.target.value;
   wordSizeVal.textContent = v;
   contentEl.style.setProperty('--word-size', v + 'px');
   requestAnimationFrame(fitContent);
 });
-
-// 音标大小
 ipaSizeEl.addEventListener('input', e => {
   const v = +e.target.value;
   ipaSizeVal.textContent = v;
   contentEl.style.setProperty('--ipa-size', v + 'px');
   requestAnimationFrame(fitContent);
 });
-
-// 朗读语速
 rateEl.addEventListener('input', e => {
   speechRate = +e.target.value;
   rateVal.textContent = speechRate.toFixed(2);
 });
-
-// 口音 / 音色选择（切换后试听）
 voiceSelect.addEventListener('change', e => {
   const v = voices[+e.target.value];
   if (v) currentVoice = v;
   speak('Hello');
 });
-
 /* =========================================================
    16. 提示工具
    ========================================================= */
@@ -1048,7 +1050,6 @@ function toast(msg){
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1900);
 }
-
 function setHint(text){
   if (!text){
     hintEl.classList.remove('show');
@@ -1058,7 +1059,6 @@ function setHint(text){
   hintEl.textContent = text;
   hintEl.classList.add('show');
 }
-
 /* =========================================================
    17. 初始化
    ========================================================= */
@@ -1067,9 +1067,7 @@ function setHint(text){
   contentEl.style.setProperty('--ipa-size',  ipaSizeEl.value  + 'px');
   meanEl.style.display = 'none';
   meanSwitch.checked = false;
-
   resizeCanvas();
-  loadNames();
 })();
 </script>
 </body>

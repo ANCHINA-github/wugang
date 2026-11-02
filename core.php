@@ -212,7 +212,7 @@ function getPostsByPage($page = 1, $perPage = 10, $filter = 'latest') {
         $allPostsData = array_values($allPostsData); // 重新索引数组
     } elseif ($filter === 'type5') {
         $allPostsData = array_filter($allPostsData, function($post) {
-            return strpos($post['content'] ?? '', '#追星#') !== false;
+            return strpos($post['content'] ?? '', '#投稿#') !== false;
         });
         $allPostsData = array_values($allPostsData); // 重新索引数组
     }
@@ -310,6 +310,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit;
 }
 
+// 获取用户最新信息（用于多端同步头像）
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'get_user_info') {
+    $id = trim($_POST['id'] ?? '');
+    if (empty($id)) {
+        echo json_encode(['status' => 'error', 'msg' => '缺少用户ID']);
+        exit;
+    }
+    
+    $rootData = json_decode(file_get_contents($rootJsonPath), true);
+    $found = false;
+    $userInfo = [];
+    foreach ($rootData as $user) {
+        if (isset($user['id']) && $user['id'] === $id) {
+            $found = true;
+            $userInfo = [
+                'id' => $user['id'],
+                'pname' => $user['pname'],
+                'gender' => $user['gender'],
+                'portrait' => $user['portrait']
+            ];
+            break;
+        }
+    }
+    
+    if ($found) {
+        echo json_encode(['status' => 'success', 'data' => $userInfo]);
+    } else {
+        echo json_encode(['status' => 'error', 'msg' => '用户不存在']);
+    }
+    exit;
+}
+
 //获取帖子列表（分页）
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'get_posts') {
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
@@ -342,8 +374,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             
             // 判断帖子标记
             $isToday = (date('Y-m-d', strtotime($post['pdate'])) == $today);
-            $hasSpark = ($post['plikes'] >= 50);
-            //上面这行是判断是否有火花标记，50赞以上就有
+            $hasSpark = ($post['plikes'] >= 100);
+            //上面这行是判断是否有火花标记，100赞以上就有20261016
             //注意！！！这里更改要同步更改js代码中postDetailContent的部分
             $isAuth = (strpos($post['pname'], '元宝') !== false || strpos($post['pname'], '豆包') !== false);
     ?>
@@ -360,7 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <?php endif; ?>
                 </div>
                 <div class="post-date">
-                    <?php echo $post['pdate']; ?>
+                    <?php echo date('Y-m-d H:i', strtotime($post['pdate'])); ?>
                     <?php if (!empty($device)): ?>
                         <span class="post-device"><?php echo $device; ?></span>
                     <?php endif; ?>
@@ -404,6 +436,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <?php foreach ($post['images'] as $index => $image): ?>
                     <div class="post-image-item <?php echo $imageClass; ?>" data-image-src="<?php echo $image; ?>" data-index="<?php echo $index; ?>">
                         <img src="<?php echo $image; ?>" alt="帖子" class="post-image" loading="lazy" onerror="this.src='a.svg'" draggable="false">
+                        <!-- 新增：双击放大提示 -->
+                        <div class="image-zoom-hint">
+                            <i class="fas fa-search-plus"></i> <span>双击查看完整图片</span>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -415,6 +451,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                 <i class="far fa-heart action-icon"></i>
                 <span class="like-count"><?php echo $post['plikes']; ?></span> 
             </button>
+            <!-- 热度图标（非按钮，展示用） -->
+            <span class="heat-indicator" title="热度=点赞数×30">
+                <i class="fas fa-fire"></i>
+                <span class="heat-count"><?php echo $post['plikes'] * 30; ?></span>
+            </span>
             <button class="action-btn view-comments-btn" data-pid="<?php echo $post['pid']; ?>" data-count="<?php echo $commentCount; ?>">
             <i class="far fa-comment action-icon"></i>
             <span class="comment-count"><?php echo $commentCount; ?></span>
@@ -437,12 +478,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     ">
                 <i class="fas fa-exclamation-triangle action-icon"></i> 举报
             </button>
-            <?php if (isset($userInfo) && $userInfo['pname'] === $post['pname']): ?>
-            <!-- 仅当当前登录用户是作者时才显示删除按钮 -->
-            <button class="action-btn post-delete-btn" data-pid="<?php echo $post['pid']; ?>">
-                <i class="fas fa-trash-alt action-icon"></i> 删除
+            <button class="action-btn post-report-btn" onclick="location.href='./service/problem/problem.php'">
+                <i class="fas fa-comment-dots action-icon"></i> 反馈
             </button>
-            <?php endif; ?>
         </div>
     </div>
         </div>
@@ -567,8 +605,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $portrait = trim($_POST['portrait']);
     $device = isset($_POST['device']) && $_POST['device'] === 'show' ? $_POST['device_name'] : '';
     
-    if (empty($content)) {
-        echo json_encode(['status' => 'error', 'msg' => '帖子内容不能为空!']);
+        // === 新增：多端同步，强制使用 root.json 中的最新头像 ===
+    $uid = isset($_POST['id']) ? trim($_POST['id']) : '';
+    if (!empty($uid)) {
+        $rootData = json_decode(file_get_contents($rootJsonPath), true);
+        if (is_array($rootData)) {
+            foreach ($rootData as $u) {
+                if (isset($u['id']) && $u['id'] === $uid) {
+                    $pname = $u['pname'];       // 强制更正昵称
+                    $portrait = $u['portrait']; // 强制更正头像
+                    break;
+                }
+            }
+        }
+    }
+    // === 结束 ===
+
+    // 判断是否有上传图片
+    $hasImages = isset($_FILES['post_images']) && !empty($_FILES['post_images']['name'][0]);
+    
+    if (empty($content) && !$hasImages) {
+        echo json_encode(['status' => 'error', 'msg' => '帖子内容和图片不能同时为空!']);
         exit;
     }
     
@@ -670,8 +727,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $portrait = trim($_POST['portrait']);
     $device = isset($_POST['device']) && $_POST['device'] === 'show' ? $_POST['device_name'] : '';
     
-    if (empty($comContent) || empty($pid)) {
-        echo json_encode(['status' => 'error', 'msg' => '评论内容不能为空']);
+    // === 新增：多端同步，强制使用 root.json 中的最新头像 ===
+    $uid = isset($_POST['id']) ? trim($_POST['id']) : '';
+    if (!empty($uid)) {
+        $rootData = json_decode(file_get_contents($rootJsonPath), true);
+        if (is_array($rootData)) {
+            foreach ($rootData as $u) {
+                if (isset($u['id']) && $u['id'] === $uid) {
+                    $pname = $u['pname'];
+                    $portrait = $u['portrait'];
+                    break;
+                }
+            }
+        }
+    }
+    // === 结束 ===
+    
+    // 判断是否有上传图片
+    $hasImages = isset($_FILES['comment_images']) && !empty($_FILES['comment_images']['name'][0]);
+    
+    if ((empty($comContent) && !$hasImages) || empty($pid)) {
+        echo json_encode(['status' => 'error', 'msg' => '评论内容和图片不能同时为空']);
         exit;
     }
     
@@ -985,9 +1061,10 @@ if (!isset($staticVer)) {
     <?php if (isset($_GET['pid'])): ?>
 <script>window.targetPid = '<?php echo htmlspecialchars($_GET['pid']); ?>';</script>
 <?php endif; ?>
-    <script src="/repository/main.js?v=<?php echo $staticVer; ?>"></script>
+    <!-- 先加载 CSS（阻塞渲染，避免 FOUC），JS 用 defer 等 DOM 就绪后执行 -->
     <link rel="stylesheet" href="/repository/awesome/css/all.min.css" onerror="this.href='https://cdn.staticfile.org/font-awesome/6.4.0/css/all.min.css'">
     <link rel="stylesheet" href="/repository/main.css?v=<?php echo $staticVer; ?>">
+    <script src="/repository/main.js?v=<?php echo $staticVer; ?>" defer></script>
     <!--?v=尖括号?php echo $staticVer; ?尖括号是用来保证JS文件和CSS文件的版本处于最新，但是要在上文定义它-->
     <style>
         /* 搜索框清除按钮样式 */
@@ -1094,6 +1171,14 @@ if (!isset($staticVer)) {
     </style>
 </head>
 <body>
+    <!-- 页面加载遮罩：JS 初始化完成后消失，避免 CSS/JS 未就绪时的布局抖动 -->
+    <div id="appLoading" aria-hidden="true">
+        <div class="app-loading-inner">
+            <div class="app-loading-spinner"></div>
+            <div class="app-loading-text">加载中...</div>
+        </div>
+    </div>
+
     <!-- 通知组块 -->
     <div class="ios-glass-notice" id="dailyNotice">
         <div class="notice-content" id="noticeContent">
@@ -1218,16 +1303,21 @@ if (!isset($staticVer)) {
             <h3 class="modal-title">发布动态</h3>
             
             <div class="modal-scrollable">  
+                <form id="postForm" enctype="multipart/form-data">
                 <!-- 压缩图片提示（前端不再显示，由后台自动处理，但保留此元素以备将来使用） -->
                 <div class="compress-tip" id="compressTip" style="display: none;">
                     <i class="fas fa-compress-alt"></i>
                     <span>检测到大图片，系统将自动压缩...</span>
                 </div>
                 
-                <form id="postForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="postContent">武校圈</label>
-                        <textarea id="postContent" name="content" required placeholder="请输入你想分享的内容..." maxlength="2000"></textarea>
+                        <div class="textarea-wrapper">
+                            <textarea id="postContent" name="content" placeholder="请输入你想分享的内容..." maxlength="2000"></textarea>
+                            <button type="button" class="textarea-clear-btn" id="postContentClear" title="清空输入" style="display: none;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
                         <div class="char-counter" id="postContentCounter">0 / 2000</div>
                     </div>
 
@@ -1270,7 +1360,7 @@ if (!isset($staticVer)) {
                         <div class="suggestions-title">tips:可自己添加标签，再次轻触已选标签可撤回相应已输入标签</div>
                         <div class="suggestion-tags" id="postSuggestionTags">
                             <div class="suggestion-tag" data-tag="#故事集#">#故事集#</div>
-                            <div class="suggestion-tag" data-tag="#追星#">#追星#</div>
+                            <div class="suggestion-tag" data-tag="#投稿#">#投稿#</div>
                             <div class="suggestion-tag" data-tag="#交友#">#交友#</div>
                             <div class="suggestion-tag" data-tag="#游戏#">#游戏#</div>
                             <div class="suggestion-tag" data-tag="#emo#">#emo#</div>
@@ -1339,7 +1429,7 @@ if (!isset($staticVer)) {
                 <form id="commentForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="commentContent">武校圈</label>
-                        <textarea id="commentContent" name="com_content" required placeholder="请输入你的评论..." maxlength="500"></textarea>
+                        <textarea id="commentContent" name="com_content" placeholder="请输入你的评论..." maxlength="500"></textarea>
                          <div class="char-counter" id="commentContentCounter">0 / 500</div>
                     </div>
                     <!-- 评论表情选择区域 -->
@@ -1521,25 +1611,11 @@ if (!isset($staticVer)) {
                 <div class="service-text">文件传输助手</div>
             </div>
 
-            <div class="service-button" onclick="location.href='/service/file/'">
-                <div class="service-icon">
-                    <i class="fas fa-file"></i>
-                </div>
-                <div class="service-text">公共文件存储系统</div>
-            </div>
-
-            <div class="service-button" onclick="location.href='/service/ancloud/'">
-                <div class="service-icon">
-                    <i class="fas fa-file"></i>
-                </div>
-                <div class="service-text">Ancloud</div>
-            </div>
-
             <div class="service-button" onclick="location.href='/service/music-player/player.php'">
                 <div class="service-icon">
                     <i class="fas fa-music"></i>
                 </div>
-                <div class="service-text">Anmusic</div>
+                <div class="service-text">乐库</div>
             </div>
 
             <div class="service-button" onclick="window.open('https://free.xn--fiqs8s/', '_blank')">
@@ -1563,13 +1639,6 @@ if (!isset($staticVer)) {
                 <div class="service-text">菜鸟工具</div>
             </div>
 
-            <div class="service-button" onclick="window.open('http://music.alger.fun/', '_blank')">
-                <div class="service-icon">
-                    <i class="fas fa-music"></i>
-            </div>
-                <div class="service-text">在线音乐-千万曲库</div>
-            </div>
-
             <div class="service-button" onclick="location.href='/service/jb/report_submit.php'">
                 <div class="service-icon">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -1588,17 +1657,23 @@ if (!isset($staticVer)) {
                 <div class="service-icon">
                     <i class="fas fa-cog"></i>
                 </div>
-            <div class="service-text">开发者</div>
+            <div class="service-text">管理员</div>
             </div>
 
 
         </div>
         </div>
         
+        <!--
+        <div style="background-color: red;color:white;">
+        <strong>公告：公告版块正在开发</strong>
+        </div>
+        -->
+
         <!-- section1.5 切换栏 -->
         <div id="section1_5">
-            <button class="tab-button active" id="latestTab">最新</button>
-            <button class="tab-button" id="type5Tab">追星</button>
+            <button class="tab-button active" id="latestTab">全部</button>
+            <button class="tab-button" id="type5Tab">投稿</button>
             <button class="tab-button" id="type4Tab">故事集</button>
             <button class="tab-button" id="type1Tab">交友</button>
             <button class="tab-button" id="type2Tab">emo</button>
@@ -1608,7 +1683,7 @@ if (!isset($staticVer)) {
         <!-- 帖子 section4 -->
         <div id="section4">
             <div class="section4-header">
-                <div class="current-tab" id="currentTab">最新</div>
+                <div class="current-tab" id="currentTab">全部动态</div>
                 <div class="refresh-btn" id="refreshBtn">刷新</div>
             </div>
             
@@ -1649,7 +1724,7 @@ if (!isset($staticVer)) {
                     <div class="recommend-tag" data-keyword="故事集">#故事集#</div>
                     <div class="recommend-tag" data-keyword="分享">#分享#</div>
                     <div class="recommend-tag" data-keyword="交友">#交友#</div>
-                    <div class="recommend-tag" data-keyword="追星">#追星#</div>
+                    <div class="recommend-tag" data-keyword="投稿">#投稿#</div>
                     <div class="recommend-tag" data-keyword="emo">#emo#</div>
                     <div class="recommend-tag" data-keyword="游戏">#游戏#</div>
                     
@@ -1697,7 +1772,7 @@ if (!isset($staticVer)) {
     <div id="postTipOverlay" class="post-tip-overlay">
     <div class="liquid-glass-tip">
     <div class="tip-arrow"></div>
-    <p>发布帖子（轻触关闭）</p>
+    <p>点击折叠按钮切换栏（轻触关闭）</p>
     </div>
     </div>
 
@@ -1901,47 +1976,28 @@ if (toggleSearchBtn && searchSection) {
 }
 </script>
 <script>
-// 重写 performSearch 以在搜索时自动展开搜索区域
-(function() {
-    // 等待 main.js 加载完成
-    if (typeof window.performSearch === 'function') {
-        const originalPerformSearch = window.performSearch;
-        window.performSearch = function(keyword) {
-            // 展开搜索区域（如果折叠）
-            const searchSection = document.getElementById('searchSectionContainer');
-            const toggleBtn = document.getElementById('toggleSearchBtn');
-            if (searchSection && searchSection.style.display === 'none') {
-                searchSection.style.display = 'block';
-                if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> 收起搜索';
-                // 可选：同步更新折叠状态变量（isSearchCollapsed）
-                // 由于我们无法直接访问 isSearchCollapsed，但可以忽略，因为下次点击按钮时会重置。
-                // 更好的做法：通过自定义事件或全局变量，但为了简单，我们只修改显示。
-                // 如果用户点击按钮展开/收起，状态会被按钮逻辑管理。
-                // 这里只负责展开，不会破坏按钮的切换逻辑。
-            }
-            // 调用原函数
-            originalPerformSearch.call(this, keyword);
-        };
-    } else {
-        // 如果 main.js 未加载或函数未定义，可以设置一个定时器重试
-        console.warn('performSearch 尚未定义，稍后重试');
-        setTimeout(function() {
-            if (typeof window.performSearch === 'function') {
-                const original = window.performSearch;
-                window.performSearch = function(keyword) {
-                    // 同上展开逻辑
-                    const searchSection = document.getElementById('searchSectionContainer');
-                    const toggleBtn = document.getElementById('toggleSearchBtn');
-                    if (searchSection && searchSection.style.display === 'none') {
-                        searchSection.style.display = 'block';
-                        if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> 收起搜索';
-                    }
-                    original.call(this, keyword);
-                };
-            }
-        }, 500);
+// 等待 DOM 与所有 defer 脚本（含 main.js）就绪后再重写 performSearch
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof window.performSearch !== 'function') {
+        console.warn('main.js 加载异常，performSearch 未被定义');
+        return;
     }
-})();
+
+    const originalPerformSearch = window.performSearch;
+    window.performSearch = function(keyword) {
+        // 若搜索区域处于折叠状态，先展开
+        const searchSection = document.getElementById('searchSectionContainer');
+        const toggleBtn = document.getElementById('toggleSearchBtn');
+        if (searchSection && searchSection.style.display === 'none') {
+            searchSection.style.display = 'block';
+            if (toggleBtn) {
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> 收起搜索';
+            }
+        }
+        // 调用原函数
+        originalPerformSearch.call(this, keyword);
+    };
+});
 </script>
 </body>
 </html>

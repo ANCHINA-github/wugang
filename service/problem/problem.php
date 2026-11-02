@@ -4,19 +4,17 @@ session_start();
 $error = '';
 $fromUrl = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '../../../core.php';
 $self = $_SERVER['PHP_SELF'];
-
 // 兼容低版本PHP替换str_contains
 if (strpos($fromUrl, $self) !== false) {
     $fromUrl = isset($_SESSION['feedback_from']) ? $_SESSION['feedback_from'] : '../../../core.php';
 } else {
     $_SESSION['feedback_from'] = $fromUrl;
 }
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST['id'] ?? '';
     $feedback = $_POST['feedback'] ?? '';
     $email = $_POST['email'] ?? '';
-
+    
     if (!preg_match('/^\d{1,12}$/', $id)) {
         $error = "ID必须为1-12位数字";
     }
@@ -33,19 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'feedback' => $feedback,
             'date' => date('Y-m-d H:i:s')
         ];
-
         $problems = [];
         if (file_exists('problem.json')) {
             $json = file_get_contents('problem.json');
             $problems = json_decode($json, true) ?: [];
         }
-
         array_unshift($problems, $data);
-
         if (file_put_contents('problem.json', json_encode($problems, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
             $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-
             echo <<<HTML
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -203,7 +197,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             margin: 0; padding: 0; box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-
         :root {
             color-scheme: light;
             --bg: #FFFBD6;
@@ -234,7 +227,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             --danger-bg: #3A1F1F;
             --danger-text: #FCA5A5;
         }
-
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background: var(--bg);
@@ -243,7 +235,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             -webkit-font-smoothing: antialiased;
             transition: background-color .25s ease, color .25s ease;
         }
-
         /* ---------- App bar ---------- */
         .app-bar {
             position: sticky;
@@ -287,14 +278,12 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
         .app-bar-btn:hover { background: var(--surface); }
         .app-bar-btn:active { transform: scale(.9); }
         .app-bar-btn svg { display: block; }
-
         /* ---------- Main ---------- */
         .app-main {
             max-width: 640px;
             margin: 0 auto;
             padding: 20px 16px calc(48px + env(safe-area-inset-bottom));
         }
-
         /* ---------- Form ---------- */
         .form {
             display: flex;
@@ -351,7 +340,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             font-size: 12px;
             color: var(--text-faint);
         }
-
         /* ---------- Button ---------- */
         .btn-primary {
             width: 100%;
@@ -370,7 +358,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
         .btn-primary:hover { background: var(--accent-hi); }
         .btn-primary:active { transform: scale(.98); }
         .btn-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-
         /* ---------- Alert ---------- */
         .alert {
             padding: 12px 14px;
@@ -381,7 +368,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             line-height: 1.5;
             margin-bottom: 18px;
         }
-
         /* ---------- Section ---------- */
         .section { margin-top: 32px; }
         .section-title {
@@ -392,7 +378,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             text-transform: uppercase;
             margin: 0 4px 10px;
         }
-
         /* ---------- List ---------- */
         .list {
             background: var(--surface);
@@ -408,15 +393,10 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
         .list-item:last-child { border-bottom: none; }
         .list-item-head {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: baseline;
             gap: 12px;
             margin-bottom: 6px;
-        }
-        .list-item-id {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text);
         }
         .list-item-time {
             font-size: 12px;
@@ -451,37 +431,22 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
         <div class="app-bar-title">问题反馈</div>
         <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
     </header>
-
     <main class="app-main">
         <?php if (isset($error) && $error !== ''): ?>
             <div class="alert"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-
         <form method="POST" class="form">
-            <div class="field">
-                <label for="f-id">用户 ID<span class="req">*</span></label>
-                <input type="text" id="f-id" name="id" pattern="\d{1,12}" required
-                       placeholder="1-12位数字ID"
-                       value="<?php echo isset($error) ? htmlspecialchars($_POST['id'] ?? '') : ''; ?>">
-            </div>
-
-            <div class="field">
-                <label for="f-email">邮箱<span class="req">*</span></label>
-                <input type="email" id="f-email" name="email" required
-                       placeholder="your@email.com"
-                       value="<?php echo isset($error) ? htmlspecialchars($_POST['email'] ?? '') : ''; ?>">
-            </div>
-
+            <!-- 隐藏域提交id和email，前端不展示输入框 -->
+            <input type="hidden" name="id" value="123456">
+            <input type="hidden" name="email" value="demo@example.com">
             <div class="field">
                 <label for="f-feedback">反馈内容<span class="req">*</span></label>
                 <textarea id="f-feedback" name="feedback" required maxlength="300"
                           placeholder="请描述您遇到的问题（最多300字）"><?php echo isset($error) ? htmlspecialchars($_POST['feedback'] ?? '') : ''; ?></textarea>
                 <div class="counter"><span id="cnt">0</span>/300</div>
             </div>
-
             <button class="btn-primary" type="submit">提交反馈</button>
         </form>
-
         <section class="section">
             <div class="section-title">已提交的问题</div>
             <?php if (empty($problems)): ?>
@@ -491,7 +456,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
                     <?php foreach ($problems as $item): ?>
                         <div class="list-item">
                             <div class="list-item-head">
-                                <span class="list-item-id">ID: <?php echo htmlspecialchars($item['id']); ?></span>
                                 <span class="list-item-time"><?php echo htmlspecialchars($item['date']); ?></span>
                             </div>
                             <div class="list-item-body"><?php echo nl2br(htmlspecialchars($item['feedback'])); ?></div>
@@ -501,13 +465,11 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             <?php endif; ?>
         </section>
     </main>
-
     <script>
         // ---------- 主题切换 ----------
         (function () {
             var root = document.documentElement;
             var btn = document.getElementById('theme-toggle');
-
             function sync() {
                 var dark = root.getAttribute('data-theme') === 'dark';
                 btn.textContent = dark ? '☀️' : '🌙';
@@ -515,16 +477,13 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
                 btn.setAttribute('aria-label', label);
                 btn.setAttribute('title', label);
             }
-
             btn.addEventListener('click', function () {
                 var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
                 root.setAttribute('data-theme', next);
                 try { localStorage.setItem('theme', next); } catch (e) {}
                 sync();
             });
-
             sync();
-
             try {
                 var mq = window.matchMedia('(prefers-color-scheme: dark)');
                 var onSysChange = function (e) {
@@ -538,7 +497,6 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
                 else if (mq.addListener) mq.addListener(onSysChange);
             } catch (e) {}
         })();
-
         // ---------- 字数统计 ----------
         (function () {
             var ta = document.querySelector('textarea');

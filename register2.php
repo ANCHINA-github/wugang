@@ -43,17 +43,23 @@ function sanitizeInput($data) {
     return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
 }
 
+// 密码：6~20 位，只允许英文和数字
 function validatePassword($password) {
-    if (strlen($password) < 4) {
-        return '密码不对';
+    $len = strlen($password);
+    if ($len < 6 || $len > 20) {
+        return '密码长度需为6-20位';
+    }
+    if (!preg_match('/^[A-Za-z0-9]+$/', $password)) {
+        return '密码只能包含英文和数字';
     }
     return true;
 }
 
+// 昵称：1~14 个字，允许中文/英文/数字/下划线
 function validateUsername($username) {
     $charLen = mb_strlen($username, 'UTF-8');
-    if ($charLen < 2 || $charLen > 8) {
-        return '昵称需2-8个字';
+    if ($charLen < 1 || $charLen > 14) {
+        return '昵称需1-14个字';
     }
     if (!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9_]+$/u', $username)) {
         return '昵称只能包含中文、英文、数字和下划线';
@@ -221,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($passwordValidation !== true) {
             $errors[] = $passwordValidation;
         } elseif ($password !== $confirmPwd) {
-            $errors[] = '密码不对';
+            $errors[] = '两次输入的密码不一致';
         }
 
         if (!in_array($gender, ['男', '女', '保密'])) {
@@ -271,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         unset($_SESSION['temp_portrait']);
                     }
 
-                    $msg = '注册成功！您的QQ号码 ' . $qq . ' 已绑定，请使用QQ号登录。系统ID：' . $newSystemId . '（可用于找回账号）';
+                    $msg = '注册成功！您的QQ号码 ' . $qq . ' 已绑定，请使用QQ号登录。';
                     $msgType = 'success';
                 } else {
                     $msg = '注册失败，无法写入用户数据文件。';
@@ -820,8 +826,7 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 <div class="user-id" id="qqNumber"><?= htmlspecialchars($formData['qq']); ?></div>
 
                 <div class="meta">
-                    系统内部 ID：<?= htmlspecialchars($newSystemId); ?><br>
-                    仅用于找回账号
+                    系统内部 ID：<?= htmlspecialchars($newSystemId); ?>
                 </div>
 
                 <div class="meta" style="margin-top: 16px;">
@@ -851,23 +856,24 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 }, 2000);
             </script>
         <?php else: ?>
-            <p class="lead">创建一个新账号，用于登录「武冈」</p>
+            <p class="lead">创建一个新账号，用于登录「武校圈」</p>
 
             <form id="registerForm" class="form" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="action" value="register">
                 <input type="hidden" id="portraitInput" name="portrait" value="<?= htmlspecialchars($formData['portrait']); ?>">
 
                 <div class="field">
-                    <label for="pname">昵称<span class="req">*</span></label>
+                    <label for="pname">昵称<span class="req">*（永久不可变更）</span></label>
                     <input type="text" id="pname" name="pname"
                            value="<?= htmlspecialchars($formData['pname']); ?>"
-                           required placeholder="2-8个字，支持中文/英文/数字/下划线"
+                           required placeholder="1-14个字，支持中文/英文/数字/下划线"
+                           maxlength="14"
                            oninput="checkUsernameAvailability()">
                     <div id="usernameFeedback" class="field-feedback"></div>
                 </div>
 
                 <div class="field">
-                    <label for="qq">QQ号码<span class="req">*</span></label>
+                    <label for="qq">QQ号<span class="req">*（永久不可变更）</span></label>
                     <input type="text" id="qq" name="qq"
                            value="<?= htmlspecialchars($formData['qq']); ?>"
                            required placeholder="5~12位数字，不能以0开头"
@@ -877,19 +883,23 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 </div>
 
                 <div class="field">
-                    <label for="password">密码<span class="req">*</span></label>
-                    <input type="password" id="password" name="password" required placeholder="至少4位">
+                    <label for="password">密码<span class="req">*（切勿填写QQ密码；注册后可替换）</span></label>
+                    <input type="password" id="password" name="password" required
+                           placeholder="6-20位英文或数字"
+                           maxlength="20">
                     <div id="passwordLengthFeedback" class="field-feedback"></div>
                 </div>
 
                 <div class="field">
                     <label for="confirmPwd">确认密码<span class="req">*</span></label>
-                    <input type="password" id="confirmPwd" name="confirmPwd" required placeholder="再次输入密码">
+                    <input type="password" id="confirmPwd" name="confirmPwd" required
+                           placeholder="再次输入密码"
+                           maxlength="20">
                     <div id="passwordMatchFeedback" class="field-feedback"></div>
                 </div>
 
                 <div class="field">
-                    <label>性别<span class="req">*</span></label>
+                    <label>性别<span class="req">*（永久不可变更）</span></label>
                     <div class="segmented">
                         <label class="segmented-item">
                             <input type="radio" name="gender" value="男" <?= $formData['gender'] === '男' ? 'checked' : ''; ?> required>
@@ -907,7 +917,7 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 </div>
 
                 <div class="field">
-                    <label>头像</label>
+                    <label>头像<span class="req">（注册后可替换）</span></label>
                     <div class="portrait-row">
                         <img id="currentPortraitPreview" class="portrait-preview"
                              src="<?= htmlspecialchars($formData['portrait']); ?>" alt="头像预览" loading="lazy">
@@ -1076,7 +1086,7 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 }
             });
 
-            // 实时验证
+            // 实时验证表单
             function validateForm() {
                 const username = document.getElementById('pname').value.trim();
                 const qq = document.getElementById('qq').value.trim();
@@ -1084,12 +1094,18 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 const confirmPwd = document.getElementById('confirmPwd').value;
                 const gender = document.querySelector('input[name="gender"]:checked');
 
-                const isUsernameValid = (mbStrLen(username) >= 2 && mbStrLen(username) <= 8)
+                // 昵称 1-14 字
+                const isUsernameValid = (mbStrLen(username) >= 1 && mbStrLen(username) <= 14)
                     && /^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(username);
 
+                // QQ号
                 const isQQValid = /^[1-9][0-9]{4,11}$/.test(qq);
 
-                const isPasswordValid = password.length >= 4 && confirmPwd.length >= 4;
+                // 密码 6-20 位，只允许英文和数字
+                const passwordRegex = /^[A-Za-z0-9]+$/;
+                const isPasswordValid =
+                    password.length >= 6 && password.length <= 20 && passwordRegex.test(password) &&
+                    confirmPwd.length >= 6 && confirmPwd.length <= 20 && passwordRegex.test(confirmPwd);
 
                 const isGenderValid = !!gender;
 
@@ -1099,9 +1115,10 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 return isFormValid;
             }
 
+            // 按 Unicode 字符计数（中英文都算 1 个字）
             function mbStrLen(str) {
                 if (!str) return 0;
-                return str.replace(/[^\x00-\xff]/g, 'aa').length / 2;
+                return Array.from(str).length;
             }
 
             const allInputs = form.querySelectorAll('input');
@@ -1120,6 +1137,37 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
                 submitBtn.textContent = '注册中…';
             });
 
+            // 密码实时反馈
+            document.getElementById('password').addEventListener('input', function () {
+                const feedback = document.getElementById('passwordLengthFeedback');
+                const val = this.value;
+                if (val === '') { feedback.innerHTML = ''; return; }
+                if (val.length < 6) {
+                    feedback.innerHTML = '<span class="fb-err">✗ 密码至少6位</span>';
+                    return;
+                }
+                if (val.length > 20) {
+                    feedback.innerHTML = '<span class="fb-err">✗ 密码不能超过20位</span>';
+                    return;
+                }
+                if (!/^[A-Za-z0-9]+$/.test(val)) {
+                    feedback.innerHTML = '<span class="fb-err">✗ 密码只能包含英文和数字</span>';
+                    return;
+                }
+                feedback.innerHTML = '<span class="fb-ok">✓ 密码格式正确</span>';
+            });
+
+            document.getElementById('confirmPwd').addEventListener('input', function () {
+                const feedback = document.getElementById('passwordMatchFeedback');
+                const pwd = document.getElementById('password').value;
+                if (this.value === '') { feedback.innerHTML = ''; return; }
+                if (this.value === pwd) {
+                    feedback.innerHTML = '<span class="fb-ok">✓ 两次密码一致</span>';
+                } else {
+                    feedback.innerHTML = '<span class="fb-err">✗ 两次密码不一致</span>';
+                }
+            });
+
             validateForm();
         });
 
@@ -1127,14 +1175,14 @@ $fromUrlJs  = json_encode($fromUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLAS
         function checkUsernameAvailability() {
             const username = document.getElementById('pname').value.trim();
             const feedback = document.getElementById('usernameFeedback');
-            const len = username ? username.replace(/[^\x00-\xff]/g, 'aa').length / 2 : 0;
+            const len = username ? Array.from(username).length : 0;
 
             if (username === '') {
                 feedback.innerHTML = '';
                 return;
             }
-            if (len < 2 || len > 8) {
-                feedback.innerHTML = '<span class="fb-err">✗ 昵称需2-8个字</span>';
+            if (len < 1 || len > 14) {
+                feedback.innerHTML = '<span class="fb-err">✗ 昵称需1-14个字</span>';
                 return;
             }
             if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(username)) {

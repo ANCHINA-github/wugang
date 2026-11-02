@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="light dark">
+    <title>笔记本</title>
+    <link rel="stylesheet" href="repository/awesome/css/all.min.css">
+    <script>
+        (function () {
+            var t = null;
+            try { t = localStorage.getItem('theme'); } catch (e) {}
+            if (t !== 'dark' && t !== 'light') {
+                t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            color-scheme: light;
+            --bg: #FFFBD6;
+            --text: #1F2937;
+            --text-secondary: #6B7280;
+            --text-faint: #9CA3AF;
+            --separator: rgba(255, 255, 255, .5);
+
+            --glass-bg: rgba(255, 255, 255, .55);
+            --glass-bg-hover: rgba(255, 255, 255, .75);
+            --glass-border: rgba(255, 255, 255, .8);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, .12), 0 2px 8px rgba(0, 0, 0, .04);
+            --glass-shadow-hover: 0 12px 40px rgba(31, 38, 135, .2), 0 4px 12px rgba(0, 0, 0, .06);
+            --glass-inset: inset 0 1px 0 rgba(255, 255, 255, .9);
+
+            --appbar-bg: rgba(255, 251, 214, .65);
+            --modal-bg: rgba(255, 255, 255, .9);
+
+            --accent: #4F46E5;
+            --accent-hi: #4338CA;
+            --accent-grad: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #EC4899 100%);
+            --accent-ring: rgba(79, 70, 229, .2);
+            --accent-soft: rgba(79, 70, 229, .1);
+
+            --danger-bg: rgba(254, 226, 226, .8);
+            --danger-text: #DC2626;
+            --overlay: rgba(0, 0, 0, .35);
+
+            --blob-1: rgba(251, 191, 36, .55);
+            --blob-2: rgba(236, 72, 153, .42);
+            --blob-3: rgba(56, 189, 248, .42);
+            --blob-4: rgba(139, 92, 246, .38);
+        }
+        html[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #121212;
+            --text: #E8E8E8;
+            --text-secondary: #A0A0A0;
+            --text-faint: #707070;
+            --separator: rgba(255, 255, 255, .06);
+
+            --glass-bg: rgba(40, 40, 40, .55);
+            --glass-bg-hover: rgba(56, 56, 56, .7);
+            --glass-border: rgba(255, 255, 255, .08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, .5), 0 2px 8px rgba(0, 0, 0, .3);
+            --glass-shadow-hover: 0 12px 40px rgba(0, 0, 0, .65), 0 4px 12px rgba(0, 0, 0, .4);
+            --glass-inset: inset 0 1px 0 rgba(255, 255, 255, .06);
+
+            --appbar-bg: rgba(18, 18, 18, .65);
+            --modal-bg: rgba(30, 30, 30, .92);
+
+            --accent: #818CF8;
+            --accent-hi: #A5B4FC;
+            --accent-grad: linear-gradient(135deg, #818CF8 0%, #A78BFA 50%, #F472B6 100%);
+            --accent-ring: rgba(129, 140, 248, .35);
+            --accent-soft: rgba(129, 140, 248, .15);
+
+            --danger-bg: rgba(58, 31, 31, .8);
+            --danger-text: #FCA5A5;
+            --overlay: rgba(0, 0, 0, .6);
+
+            --blob-1: rgba(251, 146, 60, .28);
+            --blob-2: rgba(236, 72, 153, .28);
+            --blob-3: rgba(56, 189, 248, .22);
+            --blob-4: rgba(139, 92, 246, .3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 16px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color .3s ease, color .3s ease;
+        }
+
+        /* ---------- 背景装饰光斑 ---------- */
+        .bg-decor {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .bg-decor span {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            will-change: transform;
+        }
+        .blob-1 {
+            width: 320px; height: 320px;
+            background: var(--blob-1);
+            top: -80px; left: -60px;
+            animation: float1 22s ease-in-out infinite;
+        }
+        .blob-2 {
+            width: 380px; height: 380px;
+            background: var(--blob-2);
+            top: 25%; right: -120px;
+            animation: float2 26s ease-in-out infinite;
+        }
+        .blob-3 {
+            width: 300px; height: 300px;
+            background: var(--blob-3);
+            bottom: 10%; left: -80px;
+            animation: float3 24s ease-in-out infinite;
+        }
+        .blob-4 {
+            width: 340px; height: 340px;
+            background: var(--blob-4);
+            bottom: -100px; right: 10%;
+            animation: float1 30s ease-in-out infinite reverse;
+        }
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(60px, 40px) scale(1.1); }
+        }
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(-60px, 50px) scale(1.08); }
+        }
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50%      { transform: translate(50px, -40px) scale(1.12); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .bg-decor span { animation: none; }
+        }
+
+        /* ---------- App bar ---------- */
+        .app-bar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            height: 56px;
+            padding: 0 8px;
+            padding-top: env(safe-area-inset-top);
+            background: var(--appbar-bg);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 1px 0 rgba(255, 255, 255, .2), 0 4px 16px rgba(0, 0, 0, .03);
+            transition: background-color .3s ease, border-color .3s ease;
+        }
+        .app-bar-title {
+            flex: 1;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: .2px;
+            color: var(--text);
+        }
+        .app-bar-btn {
+            flex: 0 0 auto;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            border-radius: 12px;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color .2s ease, transform .1s ease;
+        }
+        .app-bar-btn:hover { background: var(--glass-bg); }
+        .app-bar-btn:active { transform: scale(.9); }
+        .app-bar-btn svg { display: block; }
+
+        /* ---------- Main ---------- */
+        .app-main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 16px 16px calc(96px + env(safe-area-inset-bottom));
+        }
+
+        .lead {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            letter-spacing: .2px;
+        }
+
+        /* ---------- 空状态 ---------- */
+        .empty {
+            text-align: center;
+            padding: 56px 24px;
+            color: var(--text-faint);
+        }
+        .empty-icon {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow), var(--glass-inset);
+        }
+        .empty-icon i {
+            font-size: 40px;
+            background: var(--accent-grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: var(--accent);
+        }
+        .empty-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+        .empty-desc {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 14px;
+            background: var(--accent-grad);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: .3px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px var(--accent-ring), 0 2px 6px rgba(0, 0, 0, .1);
+            transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px var(--accent-ring), 0 4px 10px rgba(0, 0, 0, .15);
+            filter: brightness(1.05);
+        }
+        .btn-primary:active { transform: scale(.97); }
+        .btn-primary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+        /* ---------- 笔记卡片 ---------- */
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .note-card {
+            position: relative;
+            background: var(--glass-bg);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 16px 40px 16px 18px;
+            cursor: pointer;
+            box-shadow: var(--glass-shadow), var(--glass-inset);
+            transition: background-color .25s ease, transform .2s ease,
+                        box-shadow .25s ease, border-color .25s ease;
+        }
+        .note-card:hover {
+            background: var(--glass-bg-hover);
+            box-shadow: var(--glass-shadow-hover), var(--glass-inset);
+            transform: translateY(-2px);
+        }
+        .note-card:active { transform: scale(.99); }
+
+        .note-time {
+            font-size: 11px;
+            color: var(--text-faint);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: .3px;
+        }
+        .note-time i {
+            font-size: 10px;
+            opacity: .8;
+        }
+
+        .note-preview {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.65;
+            word-break: break-word;
+            white-space: pre-wrap;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4;
+            overflow: hidden;
+        }
+
+        .note-chevron {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-faint);
+            font-size: 13px;
+            opacity: .6;
+        }
+
+        /* ---------- FAB ---------- */
+        .fab {
+            position: fixed;
+            right: 20px;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            background: var(--accent-grad);
+            color: #fff;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px var(--accent-ring), 0 4px 12px rgba(0, 0, 0, .18);
+            z-index: 60;
+            transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+        }
+        .fab:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 12px 30px var(--accent-ring), 0 6px 16px rgba(0, 0, 0, .25);
+            filter: brightness(1.05);
+        }
+        .fab:active { transform: scale(.92); }
+        .fab:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+        /* ---------- Modal ---------- */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background-color: var(--overlay);
+            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            transition: opacity .22s ease;
+            padding: 0;
+        }
+        .modal.active { opacity: 1; }
+
+        .modal-card {
+            background: var(--modal-bg);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
+            backdrop-filter: blur(30px) saturate(180%);
+            color: var(--text);
+            width: 100%;
+            max-width: 640px;
+            height: 85vh;
+            height: 85dvh;
+            display: flex;
+            flex-direction: column;
+            border-radius: 24px 24px 0 0;
+            border-top: 1px solid var(--glass-border);
+            box-shadow: 0 -12px 48px rgba(0, 0, 0, .25);
+            transform: translateY(30px);
+            transition: transform .3s cubic-bezier(.2, .8, .3, 1);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .modal.active .modal-card { transform: translateY(0); }
+
+        .modal-head {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--separator);
+            flex: 0 0 auto;
+        }
+        .modal-head h3 {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: .2px;
+        }
+        .modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 24px;
+            line-height: 1;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color .2s ease, color .2s ease, transform .1s ease;
+        }
+        .modal-close:hover { background: var(--glass-bg); color: var(--danger-text); }
+        .modal-close:active { transform: scale(.9); }
+
+        .modal-card textarea {
+            flex: 1 1 auto;
+            width: 100%;
+            padding: 16px 18px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--text);
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            line-height: 1.7;
+            min-height: 120px;
+        }
+        .modal-card textarea::placeholder { color: var(--text-faint); }
+
+        .char-count {
+            padding: 0 18px 10px;
+            text-align: right;
+            font-size: 11px;
+            color: var(--text-faint);
+            flex: 0 0 auto;
+        }
+        .char-count.near-limit { color: var(--danger-text); }
+
+        .modal-foot {
+            display: flex;
+            gap: 10px;
+            padding: 12px 16px 14px;
+            border-top: 1px solid var(--separator);
+            flex: 0 0 auto;
+        }
+        .modal-foot button {
+            flex: 1;
+            padding: 13px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            transition: background-color .2s ease, transform .1s ease, color .2s ease, filter .2s ease;
+        }
+        .btn-danger {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+        .btn-danger:hover { background: var(--danger-text); color: #fff; }
+        html[data-theme="dark"] .btn-danger:hover { color: #1a0a0a; }
+        .btn-danger:active { transform: scale(.98); }
+
+        .modal-foot .btn-primary {
+            flex: 2;
+            padding: 13px;
+        }
+
+        /* ---------- Toast ---------- */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: calc(90px + env(safe-area-inset-bottom));
+            transform: translateX(-50%) translateY(20px);
+            background: var(--accent-grad);
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: .3px;
+            box-shadow: 0 8px 24px var(--accent-ring), 0 4px 12px rgba(0, 0, 0, .15);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .25s ease, transform .25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 480px) {
+            .app-main { padding-left: 12px; padding-right: 12px; }
+            .blob-1, .blob-2, .blob-3, .blob-4 { filter: blur(48px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-decor" aria-hidden="true">
+        <span class="blob-1"></span>
+        <span class="blob-2"></span>
+        <span class="blob-3"></span>
+        <span class="blob-4"></span>
+    </div>
+
+    <header class="app-bar">
+        <button type="button" class="app-bar-btn" id="back-btn" aria-label="返回">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.2"
+                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <div class="app-bar-title">笔记本</div>
+        <button type="button" id="theme-toggle" class="app-bar-btn" aria-label="切换深色模式">🌙</button>
+    </header>
+
+    <main class="app-main">
+        <p class="lead" id="lead">随手的文字，都记在这里</p>
+
+        <div id="empty-state" class="empty" hidden>
+            <div class="empty-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="empty-title">还没有笔记</div>
+            <div class="empty-desc">点击右下角 + 开始记录</div>
+            <button type="button" class="btn-primary" id="btn-add-empty">
+                <i class="fas fa-plus"></i> 写第一条
+            </button>
+        </div>
+
+        <div id="notes-list" class="notes-list"></div>
+    </main>
+
+    <button type="button" class="fab" id="fab-add" aria-label="新建笔记">
+        <i class="fas fa-plus"></i>
+    </button>
+
+    <div class="modal" id="edit-modal">
+        <div class="modal-card">
+            <div class="modal-head">
+                <h3 id="modal-title">新建笔记</h3>
+                <button type="button" class="modal-close" id="modal-close" aria-label="关闭">&times;</button>
+            </div>
+            <textarea id="note-content" maxlength="5000" placeholder="写点什么…" enterkeyhint="enter"></textarea>
+            <div class="char-count"><span id="char-count">0</span> / 5000</div>
+            <div class="modal-foot">
+                <button type="button" class="btn-danger" id="btn-delete" hidden>删除</button>
+                <button type="button" class="btn-primary" id="btn-save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i> <span id="toast-text">已保存</span>
+    </div>
+
+    <script>
+        // 全局错误兜底：如果初始化出错，弹窗提示
+        window.onerror = function (msg, url, line) {
+            console.error('[笔记本错误]', msg, url, line);
+            return false;
+        };
+
+        // ---------- 主题切换 ----------
+        (function () {
+            var root = document.documentElement;
+            var btn = document.getElementById('theme-toggle');
+            if (!btn) return;
+
+            function sync() {
+                var dark = root.getAttribute('data-theme') === 'dark';
+                btn.textContent = dark ? '☀️' : '🌙';
+                var label = dark ? '切换到浅色模式' : '切换到深色模式';
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+            }
+
+            btn.addEventListener('click', function () {
+                var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) {}
+                sync();
+            });
+
+            sync();
+
+            try {
+                var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                var onSysChange = function (e) {
+                    var saved = null;
+                    try { saved = localStorage.getItem('theme'); } catch (err) {}
+                    if (saved) return;
+                    root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    sync();
+                };
+                if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+                else if (mq.addListener) mq.addListener(onSysChange);
+            } catch (e) {}
+        })();
+
+        // ---------- 返回 ----------
+        (function () {
+            var btn = document.getElementById('back-btn');
+            if (!btn) return;
+            var FALLBACK = 'core.php';
+
+            btn.addEventListener('click', function () {
+                var ref = document.referrer;
+                var target = FALLBACK;
+                if (ref) {
+                    try {
+                        var u = new URL(ref);
+                        if (u.host === location.host && u.pathname !== location.pathname) {
+                            target = ref;
+                        }
+                    } catch (e) {}
+                }
+                location.href = target;
+            });
+        })();
+
+        // ---------- 笔记本逻辑 ----------
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                initNotebook();
+            } catch (err) {
+                console.error('笔记本初始化失败：', err);
+                alert('笔记本初始化失败：' + err.message + '\n请按 F12 查看控制台。');
+            }
+        });
+
+        function initNotebook() {
+            var STORAGE_KEY = 'notebook_notes';
+            var MAX_LENGTH = 5000;
+
+            var listEl       = document.getElementById('notes-list');
+            var emptyEl      = document.getElementById('empty-state');
+            var leadEl       = document.getElementById('lead');
+            var fabAdd       = document.getElementById('fab-add');
+            var btnAddEmpty  = document.getElementById('btn-add-empty');
+
+            var modal        = document.getElementById('edit-modal');
+            var modalTitle   = document.getElementById('modal-title');
+            var modalClose   = document.getElementById('modal-close');
+            var contentEl    = document.getElementById('note-content');
+            var charCountEl  = document.getElementById('char-count');
+            var btnSave      = document.getElementById('btn-save');
+            var btnDelete    = document.getElementById('btn-delete');
+            var toast        = document.getElementById('toast');
+            var toastText    = document.getElementById('toast-text');
+
+            // 检查关键元素
+            if (!listEl || !emptyEl || !fabAdd || !modal || !contentEl || !btnSave) {
+                console.error('缺少关键 DOM 元素', {
+                    listEl, emptyEl, fabAdd, modal, contentEl, btnSave
+                });
+                return;
+            }
+
+            var currentId = null;
+            var toastTimer = null;
+
+            function showToast(msg) {
+                toastText.textContent = msg || '已保存';
+                toast.classList.add('show');
+                if (toastTimer) clearTimeout(toastTimer);
+                toastTimer = setTimeout(function () {
+                    toast.classList.remove('show');
+                }, 1600);
+            }
+
+            function loadNotes() {
+                try {
+                    var raw = localStorage.getItem(STORAGE_KEY);
+                    if (!raw) return [];
+                    var arr = JSON.parse(raw);
+                    return Array.isArray(arr) ? arr : [];
+                } catch (e) {
+                    console.warn('读取笔记失败', e);
+                    return [];
+                }
+            }
+
+            function saveNotes(notes) {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+                    return true;
+                } catch (e) {
+                    console.error('保存失败', e);
+                    var msg = '保存失败：';
+                    if (e.name === 'QuotaExceededError' || e.code === 22) {
+                        msg += '浏览器存储已满，请删除一些旧笔记后重试。';
+                    } else if (e.name === 'SecurityError') {
+                        msg += '当前模式（如无痕浏览）禁用了本地存储。';
+                    } else {
+                        msg += e.message || '未知错误';
+                    }
+                    alert(msg);
+                    return false;
+                }
+            }
+
+            function genId() {
+                return 'n_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+            }
+            function pad(n) { return n < 10 ? '0' + n : String(n); }
+            function formatTime(ts) {
+                var diff = Date.now() - ts;
+                if (diff < 60 * 1000) return '刚刚';
+                if (diff < 60 * 60 * 1000) return Math.floor(diff / 60000) + ' 分钟前';
+                if (diff < 24 * 60 * 60 * 1000) return Math.floor(diff / 3600000) + ' 小时前';
+                if (diff < 7 * 24 * 60 * 60 * 1000) return Math.floor(diff / 86400000) + ' 天前';
+                var d = new Date(ts);
+                return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+            }
+            function escapeHtml(s) {
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function render() {
+                var notes = loadNotes();
+                notes.sort(function (a, b) { return b.updated - a.updated; });
+
+                listEl.innerHTML = '';
+
+                if (notes.length === 0) {
+                    emptyEl.hidden = false;
+                    listEl.hidden = true;
+                    leadEl.textContent = '随手的文字，都记在这里';
+                    return;
+                }
+
+                emptyEl.hidden = true;
+                listEl.hidden = false;
+                leadEl.textContent = '共 ' + notes.length + ' 条笔记';
+
+                notes.forEach(function (note) {
+                    var card = document.createElement('div');
+                    card.className = 'note-card';
+                    card.setAttribute('role', 'button');
+                    card.setAttribute('tabindex', '0');
+                    card.innerHTML =
+                        '<i class="fas fa-chevron-right note-chevron"></i>' +
+                        '<div class="note-time">' +
+                            '<i class="fas fa-clock"></i>' + escapeHtml(formatTime(note.updated)) +
+                        '</div>' +
+                        '<div class="note-preview">' + escapeHtml(note.content) + '</div>';
+
+                    card.addEventListener('click', function () { openEditor(note); });
+                    card.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            openEditor(note);
+                        }
+                    });
+
+                    listEl.appendChild(card);
+                });
+            }
+
+            function updateCharCount() {
+                var len = contentEl.value.length;
+                charCountEl.textContent = len;
+                var box = charCountEl.parentNode;
+                if (len >= MAX_LENGTH - 200) box.classList.add('near-limit');
+                else box.classList.remove('near-limit');
+            }
+
+            function openEditor(note) {
+                currentId = note ? note.id : null;
+                modalTitle.textContent = note ? '编辑笔记' : '新建笔记';
+                contentEl.value = note ? note.content : '';
+                contentEl.dataset.original = note ? note.content : '';
+                btnDelete.hidden = !note;
+                updateCharCount();
+
+                modal.style.display = 'flex';
+                void modal.offsetWidth;
+                modal.classList.add('active');
+
+                setTimeout(function () {
+                    try { contentEl.focus(); } catch (e) {}
+                }, 280);
+            }
+
+            function closeEditor(force) {
+                var changed = contentEl.value !== (contentEl.dataset.original || '');
+                if (!force && changed && contentEl.value.trim() !== '') {
+                    if (!confirm('有未保存的更改，确定关闭吗？')) return;
+                }
+                modal.classList.remove('active');
+                setTimeout(function () {
+                    modal.style.display = 'none';
+                    contentEl.value = '';
+                    contentEl.dataset.original = '';
+                    currentId = null;
+                }, 240);
+            }
+
+            function saveNote() {
+                var content = contentEl.value.trim();
+                if (!content) {
+                    alert('笔记内容不能为空');
+                    try { contentEl.focus(); } catch (e) {}
+                    return;
+                }
+
+                var notes = loadNotes();
+                var now = Date.now();
+
+                if (currentId) {
+                    var idx = -1;
+                    for (var i = 0; i < notes.length; i++) {
+                        if (notes[i].id === currentId) { idx = i; break; }
+                    }
+                    if (idx !== -1) {
+                        notes[idx].content = content;
+                        notes[idx].updated = now;
+                    } else {
+                        // 笔记在别处被删了，当作新建保存
+                        notes.push({
+                            id: currentId,
+                            content: content,
+                            created: now,
+                            updated: now
+                        });
+                    }
+                } else {
+                    notes.push({
+                        id: genId(),
+                        content: content,
+                        created: now,
+                        updated: now
+                    });
+                }
+
+                if (saveNotes(notes)) {
+                    render();
+                    showToast('已保存');
+                    closeEditor(true);
+                }
+            }
+
+            function deleteNote() {
+                if (!currentId) {
+                    alert('没有可删除的笔记');
+                    return;
+                }
+                if (!confirm('确定要删除这条笔记吗？删除后不可恢复。')) return;
+                var notes = loadNotes().filter(function (n) { return n.id !== currentId; });
+                if (saveNotes(notes)) {
+                    render();
+                    showToast('已删除');
+                    closeEditor(true);
+                }
+            }
+
+            // 事件绑定
+            fabAdd.addEventListener('click', function () { openEditor(null); });
+            if (btnAddEmpty) {
+                btnAddEmpty.addEventListener('click', function () { openEditor(null); });
+            }
+            modalClose.addEventListener('click', function () { closeEditor(false); });
+            btnSave.addEventListener('click', saveNote);
+            btnDelete.addEventListener('click', deleteNote);
+            contentEl.addEventListener('input', updateCharCount);
+
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) closeEditor(false);
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (!modal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeEditor(false);
+                if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    saveNote();
+                }
+            });
+
+            window.addEventListener('storage', function (e) {
+                if (e.key === STORAGE_KEY && !modal.classList.contains('active')) {
+                    render();
+                }
+            });
+
+            render();
+        }
+    </script>
+</body>
+</html>

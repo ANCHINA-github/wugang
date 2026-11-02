@@ -1,8 +1,17 @@
 // 全局变量
-const userInfo = JSON.parse(localStorage.getItem('userInfo')) || null;
+let userInfo = JSON.parse(localStorage.getItem('userInfo')) || null;
+// 发帖草稿的 localStorage 键名
+const POST_DRAFT_KEY = 'wugang_post_draft';
 let currentTab = 'latest'; // 默认显示
 let lastRefreshTime = 0;
 let replyUserName = ''; // 记录楼中楼要@的用户名
+
+// ==================== 时间格式化工具 ====================
+// 将 "2023-10-27 14:32:15" 截断为 "2023-10-27 14:32"
+function formatDateStr(dateStr) {
+    if (!dateStr) return '';
+    return dateStr.length >= 16 ? dateStr.substring(0, 16) : dateStr;
+}
 
 // 分页相关变量
 let currentPage = 1;
@@ -18,6 +27,55 @@ let restoreTargetPid = null;
 let postsListHidden = false;
 let intersectionObserver = null;
 let isFetching = false; // 防止并发请求
+
+// ==================== 恢复位置提示辅助函数（顶层全局） ====================
+function showRestoreTip(mainText, subText) {
+    const postsList = document.getElementById('postsList');
+    if (!postsList || !postsList.parentNode) return;
+
+    let tip = document.getElementById('restoreLocateTip');
+    if (!tip) {
+        tip = document.createElement('div');
+        tip.id = 'restoreLocateTip';
+        tip.className = 'restore-locate-tip';
+        postsList.parentNode.insertBefore(tip, postsList);
+    }
+
+    tip.innerHTML = `
+        <div class="restore-spinner"></div>
+        <div class="restore-text">
+            ${mainText || '正在定位上次浏览的帖子...'}
+            ${subText ? `<span class="restore-sub">${subText}</span>` : ''}
+        </div>
+    `;
+    tip.style.display = 'flex';
+}
+
+function hideRestoreTip() {
+    const tip = document.getElementById('restoreLocateTip');
+    if (tip && tip.parentNode) {
+        tip.parentNode.removeChild(tip);
+    }
+}
+
+function resetRestoreOnFail() {
+    if (!isRestoringPosition) return;
+    isRestoringPosition = false;
+    const postsList = document.getElementById('postsList');
+    if (postsList) postsList.style.opacity = '1';
+    postsListHidden = false;
+    hideRestoreTip();
+}
+
+function resetLoadMoreBtn() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.innerHTML = '<span>查看更多·贪婪.jpg</span>';
+        loadMoreBtn.disabled = false;
+    }
+}
+// ==================== 辅助函数结束 ====================
+
 
 // 防止重复提交的全局锁
 const submitLock = {
@@ -50,6 +108,8 @@ let searchSuggestionTimer = null;
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化用户信息
     initUserInfo();
+    // 新增：静默向服务器拉取一次最新资料（用于多设备同步头像）
+    syncUserInfoSilently();
     // 初始化搜索功能
     initSearch();
     // 初始化模态框事件
@@ -72,6 +132,12 @@ document.addEventListener('DOMContentLoaded', function() {
     initCharCounters();
     // 初始化表情选择
     initEmojiPickers();
+    // 初始化发帖草稿留存
+    initPostDraft();
+    // 初始化分享按钮（全局只注册一次）
+    initShareEvent();
+    // 初始化评论分享/举报（全局只注册一次）
+    initCommentActions();
     
     // 查看评论按钮（委托）
 document.addEventListener('click', function(e) {
@@ -141,16 +207,38 @@ document.addEventListener('click', function(e) {
         if (!wrapper) return;
         const dropdown = wrapper.querySelector('.more-dropdown');
         if (!dropdown) return;
-        // 切换 open 类
-        dropdown.classList.toggle('open');
+
+        // 先关闭其他已打开的下拉，并移除卡片层级
+        document.querySelectorAll('.more-dropdown.open').forEach(function(d) {
+            if (d !== dropdown) {
+                d.classList.remove('open');
+                const c = d.closest('.post-card');
+                if (c) c.classList.remove('dropdown-open');
+            }
+        });
+
+        // 切换当前下拉
+        const isOpen = dropdown.classList.toggle('open');
+
+        // 同步提升/取消当前帖子卡片层级
+        const card = toggleBtn.closest('.post-card');
+        if (card) {
+            if (isOpen) {
+                card.classList.add('dropdown-open');
+            } else {
+                card.classList.remove('dropdown-open');
+            }
+        }
     }
 });
 
-// 点击其他区域关闭所有下拉菜单（点击页面空白处关闭）
+// 点击其他区域关闭所有下拉菜单
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.more-actions-wrapper')) {
         document.querySelectorAll('.more-dropdown.open').forEach(function(dropdown) {
             dropdown.classList.remove('open');
+            const card = dropdown.closest('.post-card');
+            if (card) card.classList.remove('dropdown-open');
         });
     }
 });
@@ -220,8 +308,38 @@ if (urlPid) {
     // 初始化 Intersection Observer
     initIntersectionObserver();
 
-    
+    // 隐藏页面加载遮罩（初始化已完成）
+    hideAppLoading();
 });
+
+// ==================== 页面加载遮罩隐藏 ====================
+function hideAppLoading() {
+    const loading = document.getElementById('appLoading');
+    if (!loading) return;
+
+    // 如果正在恢复历史位置，等恢复流程结束后再隐藏
+    if (isRestoringPosition) {
+        const check = setInterval(() => {
+            if (!isRestoringPosition) {
+                clearInterval(check);
+                loading.classList.add('hide');
+                setTimeout(() => loading.remove(), 400);
+            }
+        }, 100);
+        // 兜底：最多等 8 秒
+        setTimeout(() => {
+            clearInterval(check);
+            if (loading.parentNode) {
+                loading.classList.add('hide');
+                setTimeout(() => loading.remove(), 400);
+            }
+        }, 8000);
+        return;
+    }
+
+    loading.classList.add('hide');
+    setTimeout(() => loading.remove(), 400);
+}
 
 // 初始化推荐标签区域
 function initRecommendTags() {
@@ -306,6 +424,12 @@ function checkScrollPosition() {
 function loadMorePosts() {
     if (isLoading || !hasMorePosts || isRestoringPosition) return;
     
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.innerHTML = '<span class="spinner"></span> 加载中...';
+        loadMoreBtn.disabled = true;
+    }
+    
     currentPage++;
     loadPosts(currentPage, postsPerPage, currentTab, false);
 }
@@ -343,6 +467,7 @@ function loadPosts(page, perPage, filter, clearExisting = false, callback = null
             isFetching = false;
             isLoading = false;
             loadingIndicator.style.display = 'none';
+            resetLoadMoreBtn();  // 恢复「加载更多」按钮
             
             if (xhr.status === 200) {
                 try {
@@ -388,9 +513,11 @@ function loadPosts(page, perPage, filter, clearExisting = false, callback = null
                 } catch (e) {
                     console.error('解析帖子数据失败:', e);
                     showGlobalTip('加载帖子失败，请刷新重试', 'error');
+                    resetRestoreOnFail();
                 }
             } else {
                 showGlobalTip('网络错误，请检查连接后重试', 'error');
+                resetRestoreOnFail();
             }
         }
     };
@@ -399,6 +526,8 @@ function loadPosts(page, perPage, filter, clearExisting = false, callback = null
         isFetching = false;
         isLoading = false;
         loadingIndicator.style.display = 'none';
+        resetLoadMoreBtn();
+        resetRestoreOnFail();
         showGlobalTip('加载超时，请稍后重试', 'error');
     };
     
@@ -406,6 +535,8 @@ function loadPosts(page, perPage, filter, clearExisting = false, callback = null
         isFetching = false;
         isLoading = false;
         loadingIndicator.style.display = 'none';
+        resetLoadMoreBtn();
+        resetRestoreOnFail();
         showGlobalTip('网络连接失败，请检查网络', 'error');
     };
     
@@ -416,8 +547,21 @@ function loadPosts(page, perPage, filter, clearExisting = false, callback = null
 function loadPostsUntilTarget(targetPid, startPage, perPage, filter) {
     let currentPage = startPage;
 
+    // 一开始就显示定位提示
+    showRestoreTip('正在定位上次浏览的帖子...', '正在加载，请稍候');
+
     function loadNextPage() {
-        if (!isRestoringPosition) return;
+        if (!isRestoringPosition) {
+            hideRestoreTip();
+            return;
+        }
+
+        // 更新提示文案：加上进度感
+        if (currentPage === startPage) {
+            showRestoreTip('正在定位上次浏览的帖子...', '正在加载，请稍候');
+        } else {
+            showRestoreTip(`正在继续加载第 ${currentPage} 页...`, '帖子较久远，请耐心等待');
+        }
 
         loadPosts(currentPage, perPage, filter, false, function(result) {
             // 检查当前页是否包含目标帖子
@@ -426,9 +570,6 @@ function loadPostsUntilTarget(targetPid, startPage, perPage, filter) {
             if (found) {
                 // 找到目标帖子，停止恢复状态
                 isRestoringPosition = false;
-                // 设置当前页码为找到的页
-                // currentPage 已经是目标页，无需修改
-                // 更新 hasMorePosts 状态（从 result 中获取）
                 hasMorePosts = result.has_more;
                 
                 // 增强：轮询检测元素出现，确保DOM已渲染
@@ -436,13 +577,13 @@ function loadPostsUntilTarget(targetPid, startPage, perPage, filter) {
                     const targetElement = document.querySelector(`.post-card[data-pid="${targetPid}"]`);
                     if (targetElement) {
                         clearInterval(checkElement);
-                        // 使用无参数的 scrollIntoView 提高兼容性
                         targetElement.scrollIntoView();
                         const postsList = document.getElementById('postsList');
                         if (postsList) {
                             postsList.style.opacity = '1';
                         }
                         postsListHidden = false;
+                        hideRestoreTip();
                     }
                 }, 50);
                 
@@ -454,6 +595,7 @@ function loadPostsUntilTarget(targetPid, startPage, perPage, filter) {
                         postsList.style.opacity = '1';
                     }
                     postsListHidden = false;
+                    hideRestoreTip();
                 }, 2500); // 2.5秒后强制显示
             } else {
                 // 未找到，继续加载下一页
@@ -468,6 +610,7 @@ function loadPostsUntilTarget(targetPid, startPage, perPage, filter) {
                         postsList.style.opacity = '1';
                     }
                     postsListHidden = false;
+                    hideRestoreTip();
                     showGlobalTip('未找到上次浏览的帖子，已显示最新内容', 'info');
                 }
             }
@@ -539,41 +682,7 @@ function bindPostsEvents() {
     });
     
 
-// 分享按钮 - 全局事件委托（适配所有动态加载的帖子，不会失效）
-document.addEventListener('click', function(e) {
-    // 匹配分享按钮
-    const shareBtn = e.target.closest('.post-share-btn');
-    if (!shareBtn) return;
 
-    e.stopPropagation();
-    // 获取当前帖子卡片
-    const postCard = shareBtn.closest('.post-card');
-    if (!postCard) return;
-
-    // 读取卡片上预存的数据（你原有的 data 属性，原生自带）
-    const userName = postCard.dataset.pname || '';
-    const content = postCard.dataset.content || '';
-    // 改成你自己的域名
-    const siteUrl = 'an.kijk.top';
-
-    // 拼接分享文本
-    let shareText = '';
-    if(userName && content){
-        shareText = `${userName}：${content}更多内容请访问${siteUrl}`;
-    }else if(userName){
-        shareText = `${userName}更多内容请访问${siteUrl}`;
-    }else{
-        shareText = `更多内容请访问${siteUrl}`;
-    }
-
-    // 调用你项目自带的复制函数
-    const copyResult = copyToClipboard(shareText);
-    if(copyResult){
-        showGlobalTip('已复制！请前往其他平台分享', 'success');
-    }else{
-        showGlobalTip('复制失败，请手动复制', 'error');
-    }
-});
     
     // 绑定内容展开按钮事件
     document.querySelectorAll('.expand-content-btn').forEach(btn => {
@@ -836,7 +945,7 @@ function showPostDetail(postCard) {
     const pid = postCard.getAttribute('data-pid');
     const pname = postCard.getAttribute('data-pname');
     const portrait = postCard.getAttribute('data-portrait');
-    const pdate = postCard.getAttribute('data-pdate');
+    const pdate = formatDateStr(postCard.getAttribute('data-pdate'));
     const device = postCard.getAttribute('data-device');
     const content = postCard.getAttribute('data-content');
     const likes = postCard.getAttribute('data-likes');
@@ -853,10 +962,12 @@ function showPostDetail(postCard) {
     const comments = [];
     commentItems.forEach(comment => {
         const cid = comment.getAttribute('data-cid');
-        const comContent = comment.querySelector('.comment-content').innerHTML;
+        const comContentEl = comment.querySelector('.comment-content');
+        const comContent = comContentEl.innerHTML;                // 用于显示
+        const comContentText = comContentEl.textContent.trim();   // 用于分享
         const comPname = comment.querySelector('.comment-username').textContent;
         const comPortrait = comment.querySelector('.comment-avatar').src;
-        const comDate = comment.querySelector('.comment-date').textContent.split(' ')[0];
+        const comDate = formatDateStr(comment.querySelector('.comment-date').textContent.trim());
         const clikes = comment.querySelector('.comment-like-count').textContent;
         
         // 获取评论图片
@@ -869,6 +980,7 @@ function showPostDetail(postCard) {
         comments.push({
             cid,
             content: comContent,
+            contentText: comContentText,
             pname: comPname,
             portrait: comPortrait,
             date: comDate,
@@ -904,7 +1016,7 @@ function showPostDetail(postCard) {
                         ${device ? `<span class="post-device">${device}</span>` : ''}
                     </div>
                     <div class="post-badges">
-                        ${likes >= 50 ? 
+                        ${likes >= 100 ? 
                             '<span class="post-badge badge-spark"><i class="fas fa-fire"></i> 火花</span>' : ''}
                     </div>
                 </div>
@@ -922,6 +1034,10 @@ function showPostDetail(postCard) {
             html += `
                 <div class="post-image-item ${imageClass}" data-image-src="${image}" data-index="${index}">
                     <img src="${image}" alt="帖子图片" class="post-image" onerror="this.src='a.svg'" draggable="false">
+                    <!-- 阅读模式下改为点击放大 -->
+                    <div class="image-zoom-hint">
+                        <i class="fas fa-search-plus"></i> <span>点击放大</span>
+                    </div>
                 </div>
             `;
         });
@@ -936,6 +1052,11 @@ function showPostDetail(postCard) {
                 <i class="${likedPosts.includes(pid) ? 'fas' : 'far'} fa-heart action-icon"></i>
                 <span class="like-count">${likes}</span> 
             </button>
+            <!-- 热度图标（非按钮，展示用） -->
+            <span class="heat-indicator" title="热度=点赞数×30">
+                <i class="fas fa-fire"></i>
+                <span class="heat-count">${(parseInt(likes) || 0) * 30}</span>
+            </span>
         </div>
     `;
     
@@ -975,6 +1096,15 @@ function showPostDetail(postCard) {
                             <button class="comment-like-btn ${isLiked ? 'liked' : ''}" data-type="comment" data-id="${comment.cid}">
                                 <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
                                 <span class="comment-like-count">${comment.likes}</span>
+                            </button>
+                            <button class="comment-share-btn"
+                                    data-uname="${escapeAttr(comment.pname)}"
+                                    data-content="${escapeAttr(comment.contentText || '')}">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button class="comment-report-btn"
+                                    data-uname="${escapeAttr(comment.pname)}">
+                                <i class="fas fa-exclamation-triangle"></i>
                             </button>
                         </div>
                     </div>
@@ -1087,7 +1217,8 @@ function initCommentsCollapse() {
 
         // ========== 新增：点击评论区域 触发回复 ==========
         const commentItem = e.target.closest('.comment-item');
-        if (commentItem) {
+        // 分享/举报按钮不触发 @回复
+        if (commentItem && !e.target.closest('.comment-share-btn') && !e.target.closest('.comment-report-btn')) {
             e.stopPropagation();
             // 1. 获取被回复的用户名
             const unameEl = commentItem.querySelector('.comment-username');
@@ -1227,13 +1358,16 @@ function createCommentElement(comment) {
         deviceHTML = `<span class="comment-device">${comDevice}</span>`;
     }
     
+    // 分享用纯文本（去掉 HTML 标签），举报用昵称
+    const shareText = String(comment.com_content || '').replace(/\s+/g, ' ').trim();
+
     commentDiv.innerHTML = `
         <img src="${comment.com_portrait || 'default-avatar.png'}" alt="评论用户头像" class="comment-avatar">
         <div class="comment-content-wrap">
             <div class="comment-header">
                 <div class="comment-username">${comment.com_pname}</div>
                 <div class="comment-date">
-                    ${comment.com_date}
+                    ${formatDateStr(comment.com_date)}
                     ${deviceHTML}
                 </div>
             </div>
@@ -1245,6 +1379,15 @@ function createCommentElement(comment) {
                 <button class="comment-like-btn ${isLiked ? 'liked' : ''}" data-type="comment" data-id="${comment.com_cid}">
                     <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
                     <span class="comment-like-count">${comment.clikes || 0}</span>
+                </button>
+                <button class="comment-share-btn"
+                        data-uname="${escapeAttr(comment.com_pname || '')}"
+                        data-content="${escapeAttr(shareText)}">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="comment-report-btn"
+                        data-uname="${escapeAttr(comment.com_pname || '')}">
+                    <i class="fas fa-exclamation-triangle"></i>
                 </button>
             </div>
         </div>`;
@@ -2062,7 +2205,6 @@ document.addEventListener('click', function(e) {
         postModalClose.addEventListener('click', function() {
             hideModal('postModal');
             const postTip = document.getElementById('postTip');
-            const postContent = document.getElementById('postContent');
             const postSubmitBtn = document.getElementById('postSubmitBtn');
             const postImagePreview = document.getElementById('postImagePreview');
             const postImageCount = document.getElementById('postImageCount');
@@ -2073,12 +2215,11 @@ document.addEventListener('click', function(e) {
             const compressTip = document.getElementById('compressTip');
             const postDeviceOptions = document.getElementById('postDeviceOptions');
             const postDeviceHeader = document.getElementById('postDeviceHeader');
-            
+
+            // 保留 postContent.value 和计数器，不清空（草稿功能）
+            // 只重置提交反馈、图片、进度条、设备选择器展开状态
+
             if (postTip) postTip.textContent = '';
-            if (postContent) {
-            postContent.value = '';
-            postContent.dispatchEvent(new Event('input'));
-            }
             if (postSubmitBtn) {
                 postSubmitBtn.disabled = false;
                 postSubmitBtn.textContent = '发布';
@@ -2092,7 +2233,7 @@ document.addEventListener('click', function(e) {
             if (compressTip) compressTip.style.display = 'none';
             if (postDeviceOptions) postDeviceOptions.classList.remove('expanded');
             if (postDeviceHeader) postDeviceHeader.classList.remove('expanded');
-            
+
             submitLock.post = false;
         });
     }
@@ -2355,9 +2496,12 @@ if (commentshowModal) {
             const device = postDevice.value;
             const deviceName = postDeviceNameValue ? postDeviceNameValue.value : '';
 
-            if (!content) {
+            // 判断是否有图片
+            const hasImages = postImagesInput && postImagesInput.files.length > 0;
+
+            if (!content && !hasImages) {
                 if (postTip) {
-                    postTip.textContent = '帖子内容不能为空';
+                    postTip.textContent = '帖子内容和图片不能同时为空';
                     postTip.classList.remove('success-tip');
                 }
                 return;
@@ -2398,6 +2542,8 @@ if (commentshowModal) {
             formData.append('portrait', portrait);
             formData.append('device', device);
             formData.append('device_name', deviceName);
+            // 传uid给后端，让后端自动更正最新头像
+            formData.append('id', userInfo ? userInfo.id : ''); 
             
             if (postImagesInput) {
                 const postImages = postImagesInput.files;
@@ -2435,13 +2581,14 @@ if (commentshowModal) {
                                 if (postTip) postTip.classList.add('success-tip');
                                 showGlobalTip('发布成功！', 'success');
                                 
-                                // 20260611新增：清除上次浏览位置，刷新后回到顶部
+                                // 清除上次浏览位置，刷新后回到顶部
                                 sessionStorage.removeItem('lastViewedPostId');
+                                // 发布成功，清除发帖草稿
+                                localStorage.removeItem(POST_DRAFT_KEY);
 
                                 setTimeout(() => {
                                     location.reload();
                                 }, 300);
-                                //控制动态发布后几秒执行页面刷新
                             } else {
                                 if (postTip) postTip.classList.remove('success-tip');
                                 let errorMsg = res.msg;
@@ -2533,9 +2680,12 @@ if (commentshowModal) {
             const device = commentDevice ? commentDevice.value : 'show';
             const deviceName = commentDeviceNameValue ? commentDeviceNameValue.value : '';
 
-            if (!comContent || !pid) {
+            // 判断是否有图片
+            const hasImages = commentImagesInput && commentImagesInput.files.length > 0;
+
+            if ((!comContent && !hasImages) || !pid) {
                 if (commentTip) {
-                    commentTip.textContent = '评论内容不能为空';
+                    commentTip.textContent = '评论内容和图片不能同时为空';
                     commentTip.classList.remove('success-tip');
                 }
                 return;
@@ -2577,6 +2727,8 @@ if (commentshowModal) {
             formData.append('portrait', portrait);
             formData.append('device', device);
             formData.append('device_name', deviceName);
+            // 传uid给后端，让后端自动更正最新头像
+            formData.append('id', userInfo ? userInfo.id : '');
             
             if (commentImagesInput) {
                 const commentImages = commentImagesInput.files;
@@ -2719,6 +2871,125 @@ function copyToClipboard(text) {
     }
 }
 
+// ==================== 分享文本生成：20字截断 + 保留关键词 ====================
+function buildShareText(userName, content) {
+    const MAX_LEN = 20;
+    const SITE_URL = 'http://anchina.xyz';
+
+    // 折叠换行和多余空白，避免分享出去格式很乱
+    const raw = (content || '').replace(/\s+/g, ' ').trim();
+
+    // 提取所有 #关键词#
+    const keywords = [...new Set(raw.match(/#[^#]+#/g) || [])];
+
+    let summary = raw;
+
+    // 超过 20 个字才截断
+    if (Array.from(raw).length > MAX_LEN) {
+        summary = Array.from(raw).slice(0, MAX_LEN).join('');
+
+        // 如果截断处刚好切断了 #关键词#，去掉末尾残缺部分
+        const hashCount = (summary.match(/#/g) || []).length;
+        if (hashCount % 2 === 1) {
+            const lastHash = summary.lastIndexOf('#');
+            if (lastHash !== -1) {
+                summary = summary.slice(0, lastHash);
+            }
+        }
+
+        // 去掉末尾多余标点/空格
+        summary = summary.replace(/[\s，。！？、,.!?;；:：]+$/g, '').trim();
+
+        // 加省略号
+        summary = summary ? summary + '...' : '...';
+
+        // 把没有出现在摘要里的关键词补到后面，保证关键词不丢
+        const missingKeywords = keywords.filter(kw => !summary.includes(kw));
+        if (missingKeywords.length > 0) {
+            summary += ' ' + missingKeywords.join(' ');
+        }
+    }
+
+    const prefix = userName ? `${userName}：` : '';
+    return `${prefix}${summary ? summary + ' ' : ''}查看该动态${SITE_URL}`;
+}
+
+// 分享按钮事件：只注册一次
+function initShareEvent() {
+    document.addEventListener('click', function(e) {
+        const shareBtn = e.target.closest('.post-share-btn');
+        if (!shareBtn) return;
+
+        e.stopPropagation();
+
+        const postCard = shareBtn.closest('.post-card');
+        if (!postCard) return;
+
+        const userName = postCard.dataset.pname || '';
+        const content = postCard.dataset.content || '';
+
+        const shareText = buildShareText(userName, content);
+        const copyResult = copyToClipboard(shareText);
+
+        if (copyResult) {
+            showGlobalTip('已复制！请前往其他平台分享', 'success');
+        } else {
+            showGlobalTip('复制失败，请手动复制', 'error');
+        }
+    });
+}
+
+// ==================== HTML 属性值安全转义 ====================
+function escapeAttr(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// ==================== 评论分享 & 举报（全局事件委托） ====================
+function initCommentActions() {
+    document.addEventListener('click', function(e) {
+        // 评论分享
+        const shareBtn = e.target.closest('.comment-share-btn');
+        if (shareBtn) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            const userName = shareBtn.dataset.uname || '';
+            const content = shareBtn.dataset.content || '';
+            const shareText = buildShareText(userName, content);
+
+            if (copyToClipboard(shareText)) {
+                showGlobalTip('已复制！请前往其他平台分享', 'success');
+            } else {
+                showGlobalTip('复制失败，请手动复制', 'error');
+            }
+            return;
+        }
+
+        // 评论举报
+        const reportBtn = e.target.closest('.comment-report-btn');
+        if (reportBtn) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            const selfNameEl = document.getElementById('panelPname');
+            const selfName = selfNameEl ? selfNameEl.innerText.trim() : '';
+            const targetName = reportBtn.dataset.uname || '';
+
+            const url = './service/jb/report_submit.php?self=' +
+                encodeURIComponent(selfName) +
+                '&target=' +
+                encodeURIComponent(targetName);
+            location.href = url;
+            return;
+        }
+    });
+}
+
 // 初始化标签切换事件
 function initTabEvents() {
     const latestTab = document.getElementById('latestTab');
@@ -2813,12 +3084,12 @@ function initTabEvents() {
         type4Tab.classList.toggle('active', currentTab === 'type4');
         type5Tab.classList.toggle('active', currentTab === 'type5');
         if (currentTabText) {
-            currentTabText.textContent = currentTab === 'latest' ? '最新' : 
-                                        currentTab === 'type1' ? '交友' : 
-                                        currentTab === 'type2' ? 'emo' : 
-                                        currentTab === 'type3' ? '游戏' :
-                                        currentTab === 'type4' ? '日常' : 
-                                        currentTab === 'type5' ? '表白' : '';
+            currentTabText.textContent = currentTab === 'latest' ? '全部动态' : 
+                                        currentTab === 'type1' ? '交友-谨防诈骗' : 
+                                        currentTab === 'type2' ? '失恋博物馆' : 
+                                        currentTab === 'type3' ? '电子竞技的魅力' :
+                                        currentTab === 'type4' ? '陌生人的故事' : 
+                                        currentTab === 'type5' ? '校园投稿' : '';
         }
     }
     
@@ -2879,6 +3150,7 @@ function handleLikeClick(e) {
         return;
     }
     
+    const btn = this;   // ← 保存按钮引用，供 ontimeout 等异步回调使用
     const type = this.getAttribute('data-type');
     const id = this.getAttribute('data-id');
     const heartIcon = this.querySelector('.fa-heart');
@@ -2920,6 +3192,15 @@ function handleLikeClick(e) {
         }
     }
     
+    // 帖子点赞时，同步更新热度值（热度 = 当前点赞数 × 30）
+    if (type === 'post') {
+        const heatEl = this.parentElement.querySelector('.heat-indicator .heat-count');
+        if (heatEl) {
+            const newLikes = parseInt(countSpan.textContent) || 0;
+            heatEl.textContent = newLikes * 30;
+        }
+    }
+    
     submitLock.like = true;
     
     // 添加动画效果
@@ -2950,6 +3231,11 @@ function handleLikeClick(e) {
                             heartIcon.classList.add('far');
                             countSpan.textContent = currentCount;
                         }
+                        // 回滚热度（用 btn，不能用 this，this 此时指向 xhr）
+                        if (type === 'post') {
+                            const heatEl = btn.parentElement.querySelector('.heat-indicator .heat-count');
+                            if (heatEl) heatEl.textContent = currentCount * 30;
+                        }
                         showGlobalTip(res.msg, 'error');
                     } else {
                         showGlobalTip(action === 'add' ? '点赞成功！' : '已取消点赞', 'success');
@@ -2968,6 +3254,11 @@ function handleLikeClick(e) {
                     heartIcon.classList.add('far');
                     countSpan.textContent = currentCount;
                 }
+                // 回滚热度（用 btn，不能用 this）
+                if (type === 'post') {
+                    const heatEl = btn.parentElement.querySelector('.heat-indicator .heat-count');
+                    if (heatEl) heatEl.textContent = currentCount * 30;
+                }
                 showGlobalTip('网络错误，请稍后重试', 'error');
             }
         }
@@ -2983,6 +3274,11 @@ function handleLikeClick(e) {
             heartIcon.classList.remove('fas');
             heartIcon.classList.add('far');
             countSpan.textContent = currentCount;
+        }
+        // 回滚热度
+        if (type === 'post') {
+            const heatEl = btn.parentElement.querySelector('.heat-indicator .heat-count');
+            if (heatEl) heatEl.textContent = currentCount * 30;
         }
         showGlobalTip('点赞超时，请稍后重试', 'error');
     };
@@ -3186,7 +3482,10 @@ function renderModalComments(comments, pid) {
     // 点击评论区域回复@用户
     container.querySelectorAll('.comment-item').forEach(item => {
         item.addEventListener('click', function(e) {
-            if (e.target.closest('.comment-like-btn') || e.target.closest('.comment-image-item')) return;
+            if (e.target.closest('.comment-like-btn') ||
+                e.target.closest('.comment-image-item') ||
+                e.target.closest('.comment-share-btn') ||
+                e.target.closest('.comment-report-btn')) return;
             const unameEl = this.querySelector('.comment-username');
             if (!unameEl) return;
             const replyName = unameEl.textContent.trim();
@@ -3239,17 +3538,6 @@ function initCharCounters() {
 // ==================== 表情选择器 ====================
 function initEmojiPickers() {
     document.querySelectorAll('.emoji-list').forEach(container => {
-        // 点标题折叠/展开
-const title = container.previousElementSibling; // .emoji-title
-if (title && title.classList.contains('emoji-title')) {
-    title.style.cursor = 'pointer';
-    title.addEventListener('click', () => {
-        container.classList.toggle('collapsed');
-        // 同步给父级 .emoji-area，用于箭头旋转
-        const area = container.closest('.emoji-area');
-        if (area) area.classList.toggle('collapsed', container.classList.contains('collapsed'));
-    });
-}
         const inputId = container.getAttribute('data-target');
         const input = document.getElementById(inputId);
         if (!input) return;
@@ -3257,7 +3545,27 @@ if (title && title.classList.contains('emoji-title')) {
         // 初始化时强制折叠，不依赖 HTML 的初始类
         container.classList.add('collapsed');
 
-        // 用事件委托，避免逐个绑定
+        // 点标题折叠/展开
+        const title = container.previousElementSibling; // .emoji-title
+        if (title && title.classList.contains('emoji-title')) {
+            title.style.cursor = 'pointer';
+            title.addEventListener('click', () => {
+                container.classList.toggle('collapsed');
+                // 同步给父级 .emoji-area，用于箭头旋转
+                const area = container.closest('.emoji-area');
+                if (area) area.classList.toggle('collapsed', container.classList.contains('collapsed'));
+            });
+        }
+
+        // 关键修复 1：拦截 pointerdown，阻止 textarea 因点击 emoji 而失焦
+        // pointerdown 早于浏览器切换焦点，preventDefault 能保住原焦点和光标位置
+        container.addEventListener('pointerdown', function(e) {
+            if (e.target.closest('.emoji-item')) {
+                e.preventDefault();
+            }
+        });
+
+        // 点击 emoji 插入
         container.addEventListener('click', function(e) {
             const item = e.target.closest('.emoji-item');
             if (!item) return;
@@ -3280,19 +3588,23 @@ if (title && title.classList.contains('emoji-title')) {
 }
 
 function insertAtCursor(input, text) {
-    // ✅ 若设置过 maxlength，则按它做上限保护
+    // maxlength 上限保护
     const max = parseInt(input.getAttribute('maxlength') || '0', 10);
 
-    const start = (typeof input.selectionStart === 'number')
-        ? input.selectionStart
-        : input.value.length;
-    const end = (typeof input.selectionEnd === 'number')
-        ? input.selectionEnd
-        : input.value.length;
+    // 关键修复 2：判断输入框当前是否已聚焦
+    const isFocused = document.activeElement === input;
 
-    const before = input.value.substring(0, start);
-    const after = input.value.substring(end);
-    const nextValue = before + text + after;
+    let start, end;
+    if (isFocused) {
+        // 已聚焦：插到当前光标处
+        start = (typeof input.selectionStart === 'number') ? input.selectionStart : input.value.length;
+        end   = (typeof input.selectionEnd   === 'number') ? input.selectionEnd   : input.value.length;
+    } else {
+        // 未聚焦：插到末尾，不再抢焦点，避免弹软键盘
+        start = end = input.value.length;
+    }
+
+    const nextValue = input.value.substring(0, start) + text + input.value.substring(end);
 
     if (max > 0 && Array.from(nextValue).length > max) {
         // 已经满了，给个提示
@@ -3304,10 +3616,111 @@ function insertAtCursor(input, text) {
 
     input.value = nextValue;
 
-    const newPos = start + text.length;
-    try {
-        input.selectionStart = input.selectionEnd = newPos;
-    } catch (err) {}
+    // 只有原本聚焦的情况，才更新光标位置（不会触发键盘弹出）
+    if (isFocused) {
+        const newPos = start + text.length;
+        try {
+            input.setSelectionRange(newPos, newPos);
+        } catch (err) {}
+    }
+    // 注意：这里不再调用 input.focus()
+}
+//========================end=====================================
 
-    input.focus();
+// ==================== 发帖草稿留存 ====================
+function initPostDraft() {
+    const postContent = document.getElementById('postContent');
+    const clearBtn = document.getElementById('postContentClear');
+    if (!postContent) return;
+
+    // 更新清除按钮显示状态
+    function updateClearBtnVisibility() {
+        if (!clearBtn) return;
+        clearBtn.style.display = postContent.value.trim() !== '' ? 'flex' : 'none';
+    }
+
+    // 1) 页面加载时恢复草稿
+    const savedDraft = localStorage.getItem(POST_DRAFT_KEY);
+    if (savedDraft) {
+        postContent.value = savedDraft;
+        // 触发 input 事件，让计数器刷新
+        postContent.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    updateClearBtnVisibility();
+
+    // 2) 输入时保存草稿（防抖 300ms）
+    let saveTimer = null;
+    postContent.addEventListener('input', function() {
+        updateClearBtnVisibility();
+
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(() => {
+            const value = postContent.value;
+            if (value.trim()) {
+                localStorage.setItem(POST_DRAFT_KEY, value);
+            } else {
+                // 手动清空 → 同步清掉草稿
+                localStorage.removeItem(POST_DRAFT_KEY);
+            }
+        }, 300);
+    });
+
+    // 3) 一键清除按钮
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            postContent.value = '';
+            localStorage.removeItem(POST_DRAFT_KEY);
+            // 触发 input 事件 → 刷新计数器 + 隐藏清除按钮
+            postContent.dispatchEvent(new Event('input', { bubbles: true }));
+            updateClearBtnVisibility();
+            postContent.focus();
+        });
+    }
+}
+//-------------------------------------------------end-
+// ==================== 多端静默同步用户信息 ====================
+function syncUserInfoSilently() {
+    if (!userInfo || !userInfo.id) return;
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'core.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                const res = JSON.parse(xhr.responseText);
+                if (res.status === 'success' && res.data) {
+                    const newInfo = res.data;
+                    // 检查头像或昵称是否发生变化
+                    if (userInfo.portrait !== newInfo.portrait || userInfo.pname !== newInfo.pname || userInfo.gender !== newInfo.gender) {
+                        // 1. 更新全局变量
+                        userInfo.portrait = newInfo.portrait;
+                        userInfo.pname = newInfo.pname;
+                        userInfo.gender = newInfo.gender;
+                        
+                        // 2. 更新本地存储
+                        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+                        
+                        // 3. 更新页面上已显示的头像和信息面板
+                        initUserInfo();
+                        
+                        // 4. 如果此时有未提交的表单，同步更新隐藏域
+                        const postPortrait = document.getElementById('postPortrait');
+                        if (postPortrait) postPortrait.value = userInfo.portrait;
+                        const postPname = document.getElementById('postPname');
+                        if (postPname) postPname.value = userInfo.pname;
+                        
+                        const commentPortrait = document.getElementById('commentPortrait');
+                        if (commentPortrait) commentPortrait.value = userInfo.portrait;
+                        const commentPname = document.getElementById('commentPname');
+                        if (commentPname) commentPname.value = userInfo.pname;
+                    }
+                }
+            } catch(e) {
+                console.error('同步用户信息失败', e);
+            }
+        }
+    };
+    xhr.send(`action=get_user_info&id=${encodeURIComponent(userInfo.id)}`);
 }

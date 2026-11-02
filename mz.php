@@ -1,13 +1,14 @@
 <?php
 /**
- * 帖子点赞数自动刷赞脚本
+ * 帖子 + 评论点赞数自动刷赞脚本
  * 运行方式：通过 cron 每5小时执行一次，或通过 HTTP 访问触发
  * 时间窗口：北京时间 00:00, 05:00, 10:00, 15:00, 20:00
- * 
+ *
  * 规则：
- * - 每隔5小时检测一次 ./posts.json 中 plikes 的值
- * - 如果 plikes < 20，则随机改为 45-55 之间的整数
- * - 如果 plikes >= 20，不做任何更改
+ * - 每隔5小时检测一次 ./posts.json
+ * - 帖子：plikes < 100，则随机改为 100-300 之间的整数
+ * - 评论：clikes < 10，则随机改为 20-60 之间的整数
+ * - 已达到阈值的帖子/评论不做任何更改
  * - 5小时间隔从北京时间零点整开始计算，剩余4小时作废
  */
 
@@ -18,6 +19,16 @@ date_default_timezone_set('Asia/Shanghai');
 $postsFile = './posts.json';
 $lockFile = './posts_update.lock';
 $logFile = './update_likes.log';
+
+// ========== 帖子刷赞配置 ==========
+$postLikeThreshold = 100;   // 帖子 plikes 小于该值才修改
+$postLikeMin = 100;         // 帖子新点赞最小值
+$postLikeMax = 300;         // 帖子新点赞最大值
+
+// ========== 评论刷赞配置 ==========
+$commentLikeThreshold = 10; // 评论 clikes 小于该值才修改
+$commentLikeMin = 20;       // 评论新点赞最小值
+$commentLikeMax = 60;       // 评论新点赞最大值
 
 // 检查文件是否存在
 if (!file_exists($postsFile)) {
@@ -54,45 +65,71 @@ try {
     $timeWindow = floor($currentHour / 5) * 5;
     $timeWindowStr = sprintf('%02d:00', $timeWindow);
 
-    $modifiedCount = 0;
-    $totalCount = count($posts);
-    $unchangedCount = 0;
+    // 帖子统计
+    $postModifiedCount = 0;
+    $postUnchangedCount = 0;
+    $totalPostCount = count($posts);
 
-    // 遍历所有帖子，仅检查并修改 plikes 字段
+    // 评论统计
+    $commentModifiedCount = 0;
+    $commentUnchangedCount = 0;
+    $totalCommentCount = 0;
+
+    // 遍历所有帖子
     foreach ($posts as $index => &$post) {
-        // 跳过没有 plikes 字段的条目
-        if (!isset($post['plikes'])) {
-            continue;
+        $pid = isset($post['pid']) ? $post['pid'] : 'index_' . $index;
+
+        // ---------- 处理帖子 plikes ----------
+        if (isset($post['plikes'])) {
+            $currentLikes = (int)$post['plikes'];
+
+            if ($currentLikes < $postLikeThreshold) {
+                $newLikes = mt_rand($postLikeMin, $postLikeMax);
+                $post['plikes'] = $newLikes;
+                $postModifiedCount++;
+
+                writeLog("修改帖子 [pid={$pid}] plikes: {$currentLikes} -> {$newLikes}");
+            } else {
+                $postUnchangedCount++;
+            }
         }
 
-        $currentLikes = (int)$post['plikes'];
+        // ---------- 处理评论 clikes ----------
+        if (isset($post['comments']) && is_array($post['comments'])) {
+            foreach ($post['comments'] as $cIndex => &$comment) {
+                if (!isset($comment['clikes'])) {
+                    continue;
+                }
 
-        // 判断条件：plikes < 20 才修改
-        if ($currentLikes < 20) {
-            // 随机生成 21-65 之间的整数
-            $newLikes = mt_rand(21, 65);
-            $post['plikes'] = $newLikes;
-            $modifiedCount++;
+                $totalCommentCount++;
+                $currentCommentLikes = (int)$comment['clikes'];
 
-            // 记录修改详情
-            $pid = isset($post['pid']) ? $post['pid'] : 'index_' . $index;
-            writeLog("修改帖子 [pid={$pid}] plikes: {$currentLikes} -> {$newLikes}");
-        } else {
-            $unchangedCount++;
+                if ($currentCommentLikes < $commentLikeThreshold) {
+                    $newCommentLikes = mt_rand($commentLikeMin, $commentLikeMax);
+                    $comment['clikes'] = $newCommentLikes;
+                    $commentModifiedCount++;
+
+                    $cid = isset($comment['com_cid']) ? $comment['com_cid'] : 'index_' . $cIndex;
+                    writeLog("修改评论 [pid={$pid}, cid={$cid}] clikes: {$currentCommentLikes} -> {$newCommentLikes}");
+                } else {
+                    $commentUnchangedCount++;
+                }
+            }
+            unset($comment);
         }
-        // 如果 plikes >= 20，不做任何更改，保持原值
     }
+    unset($post);
 
     // 如果有修改，写回文件
-    if ($modifiedCount > 0) {
+    if ($postModifiedCount > 0 || $commentModifiedCount > 0) {
         // 保持原始格式：中文不转义，保留缩进，保留反斜杠
         $newJson = json_encode(
-            $posts, 
-            JSON_PRETTY_PRINT | 
-            JSON_UNESCAPED_UNICODE | 
+            $posts,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE |
             JSON_UNESCAPED_SLASHES
         );
-        
+
         if ($newJson === false) {
             throw new Exception('JSON 编码错误：' . json_last_error_msg());
         }
@@ -108,17 +145,18 @@ try {
             throw new Exception('无法替换原文件');
         }
 
-        writeLog("时间窗口 {$timeWindowStr}：成功修改 {$modifiedCount} 条帖子，{$unchangedCount} 条无需修改，总计 {$totalCount} 条");
-        echo "执行完成：修改 {$modifiedCount} 条帖子，跳过 {$unchangedCount} 条\n";
+        writeLog("时间窗口 {$timeWindowStr}：成功修改 {$postModifiedCount} 条帖子、{$commentModifiedCount} 条评论；无需修改 {$postUnchangedCount} 条帖子、{$commentUnchangedCount} 条评论；总计 {$totalPostCount} 条帖子、{$totalCommentCount} 条评论");
+        echo "执行完成：修改 {$postModifiedCount} 条帖子、{$commentModifiedCount} 条评论；跳过 {$postUnchangedCount} 条帖子、{$commentUnchangedCount} 条评论\n";
     } else {
-        writeLog("时间窗口 {$timeWindowStr}：无需修改，所有 {$totalCount} 条帖子 plikes 均 >= 20");
-        echo "执行完成：所有 {$totalCount} 条帖子均无需修改\n";
+        writeLog("时间窗口 {$timeWindowStr}：无需修改，所有 {$totalPostCount} 条帖子 plikes 均 >= {$postLikeThreshold}，所有 {$totalCommentCount} 条评论 clikes 均 >= {$commentLikeThreshold}");
+        echo "执行完成：所有 {$totalPostCount} 条帖子、{$totalCommentCount} 条评论均无需修改\n";
     }
 
 } catch (Exception $e) {
     writeLog('执行异常：' . $e->getMessage());
     flock($fp, LOCK_UN);
     fclose($fp);
+    @unlink($lockFile);
     exit(1);
 }
 
@@ -137,7 +175,7 @@ function writeLog($message) {
     global $logFile;
     $timestamp = date('Y-m-d H:i:s');
     $logLine = "[{$timestamp}] {$message}" . PHP_EOL;
-    
+
     // 同时输出到文件和标准错误
     error_log($logLine, 3, $logFile);
     error_log($logLine);

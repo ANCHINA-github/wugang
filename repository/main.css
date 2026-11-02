@@ -31,7 +31,7 @@
     --border-radius-lg: 16px;
     --transition: all 0.3s ease;
     --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0);/*阴影设置为透明，减少渲染2026100923.27*/
-    --whitesmoke:whitesmoke;
+    --whitesmoke:whitesmoke;/*决定发帖、评论、发布评论模态框的透明度*/
     --modal-title-color: #000000ff;
 }
 
@@ -40,7 +40,7 @@
     :root {
         --bg-gradient-start: #121212;
         --bg-gradient-end: #121212;
-        --glass-bg: rgba(30, 30, 40, 0.893);/*在这里更改导航栏、切换栏、搜索框、推荐搜索、页脚、模态框的颜色*/
+        --glass-bg: rgba(30, 30, 40, 0);/*在这里更改导航栏、切换栏、搜索框、推荐搜索、页脚、模态框的颜色*/
         --glass-border: rgb(81, 81, 81);
         --text-primary: #f0f0f0;
         --text-secondary: #b0b0b0;
@@ -64,7 +64,7 @@
         --button-hover: rgba(40, 40, 40, 0.8);
         --button-disabled: #555555;
         --glass-shadow: 0 4px 30px rgba(255, 255, 255, 0);/*阴影设置为透明，减少渲染2026100923.27*/
-        --whitesmoke: rgba(30, 30, 40, 0.893);;
+        --whitesmoke: rgb(30, 30, 40);/*决定发帖、评论、发布评论模态框的透明度*/
         --modal-title-color: whitesmoke;
     }
     .logo {
@@ -458,7 +458,6 @@ body>video {
     gap: 8px;
 }
 
-/* 修改：帖子图片展示区域 - 增大预览图尺寸，正方形显示 */
 .post-images-container {
     display: flex;
     flex-wrap: wrap;
@@ -467,19 +466,39 @@ body>video {
     width: 100%;
 }
 
+/* ========== 单张图片 single ========== */
 .post-image-item.single {
     width: calc(100% - 20px);
     max-width: 600px;
     height: auto;
-    aspect-ratio: 16/9;
+    max-height: 480px;
     overflow: hidden;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     margin: 0 auto;
     border-radius: var(--border-radius-sm);
+    position: relative;
+}
+.post-image-item.single::after {
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:70px;
+    background: linear-gradient(transparent, var(--card-bg));
+    pointer-events:none;
+}
+/* 单图内部图片：高度auto，不强制填满盒子 */
+.post-image-item.single .post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    object-position: center top;
 }
 
+/* ========== 多张图片 multiple，强制正方形网格 ========== */
 .post-image-item.multiple {
     width: calc(33.33% - 6px);
     aspect-ratio: 1/1;
@@ -488,14 +507,30 @@ body>video {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
     border-radius: var(--border-radius-sm);
+    /* 防御，绝不被内容撑开盒子 */
+    max-height: unset;
+    position: static;
 }
-
-
-.post-image {
+/* 重点！多张图的图片必须宽高100%，填满正方形盒子 */
+.post-image-item.multiple .post-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+}
+
+/* 禁止multiple出现渐变遮罩 */
+.post-image-item.multiple::after {
+    display: none !important;
+}
+
+
+
+.post-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* cover：填满容器，超出上下裁剪，列表预览用 */
+    object-position: center top; /* ！！！竖图优先显示图片顶部内容，而不是中间 */
 }
 
 .comment-images-container {
@@ -1507,6 +1542,49 @@ body>video {
     font-size: 22px !important;
 }
 
+/* ========== 热度图标（展示用，非按钮） ========== */
+.heat-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--accent-orange);
+    padding: 5px 10px;
+    font-size: 15px;
+    cursor: default;
+    user-select: none;
+}
+
+.heat-indicator i.fa-fire {
+    font-size: 20px !important;
+    color: var(--accent-orange);
+}
+
+.heat-indicator .heat-count {
+    font-size: 16px;
+    color: var(--accent-orange);
+    font-weight: 500;
+    margin-left: 2px;
+}
+
+/* 移动端放大一点 */
+@media (max-width: 768px) {
+    .heat-indicator i.fa-fire {
+        font-size: 22px !important;
+    }
+    .heat-indicator .heat-count {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heat-indicator i.fa-fire {
+        font-size: 20px !important;
+    }
+    .heat-indicator .heat-count {
+        font-size: 14px;
+    }
+}
+
 .comments-list {
     display: flex;
     flex-direction: column;
@@ -1519,6 +1597,13 @@ body>video {
     padding: 0 5px;
     background:#41bbcb00;
     border-radius: 10PX;
+}
+
+/* ========== 评论项分割线 ========== */
+.comment-item:not(:last-child) {
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .comment-avatar {
@@ -1612,6 +1697,32 @@ body>video {
     color: var(--text-tertiary);
     cursor: not-allowed;
     background: transparent;
+}
+
+/* 评论分享/举报按钮 */
+.comment-share-btn,
+.comment-report-btn {
+    border: none;
+    background: var(--input-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.comment-share-btn:hover {
+    color: var(--accent-blue);
+}
+
+.comment-report-btn:hover {
+    color: var(--accent-red);
 }
 
 /*.comments-container、.comments-list 等样式仍可保留，不会影响其他元素（因为已在帖子卡片中删除）。若想精简，可删除这些样式*/
@@ -2362,13 +2473,13 @@ body>video {
 
     .post-image-item.multiple {
         width: calc(33.33% - 6px);
+        aspect-ratio:1/1;
     }
-
-    .comment-image-item {
-        width: 85px;
-        height: 85px;
+    .post-image-item.multiple .post-image {
+        width:100%;
+        height:100%;
+        object-fit:cover;
     }
-
     .compress-tip {
         font-size: 12px;
         padding: 6px 10px;
@@ -2498,17 +2609,18 @@ body>video {
         padding: 1px 3px;
     }
 
-    .post-image-item.multiple {
-        width: calc(50% - 4px);
-    }
-
     .post-image-item.single {
         width: calc(100% - 10px);
+        max-height: 360px;
     }
-
-    .comment-image-item {
-        width: 85px;
-        height: 85px;
+    .post-image-item.multiple {
+        width: calc(50% - 4px);
+        aspect-ratio:1/1;
+    }
+    .post-image-item.multiple .post-image {
+        width:100%;
+        height:100%;
+        object-fit:cover;
     }
 
     .upload-placeholder {
@@ -2963,4 +3075,253 @@ body>video {
 }
 .emoji-area.collapsed .emoji-arrow {
     transform: rotate(-90deg);
+}
+/* ========== 发帖输入框一键清除按钮 ========== */
+.textarea-wrapper {
+    position: relative;
+}
+
+.textarea-clear-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: var(--hover-bg);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    z-index: 2;
+    padding: 0;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.textarea-clear-btn:hover {
+    background: var(--accent-red);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+.textarea-clear-btn:active {
+    transform: scale(0.92);
+}
+/*=====================================*/
+/* 下拉菜单打开时，提升当前帖子卡片的层级，避免被后续帖子遮挡 */
+.post-card.dropdown-open {
+    position: relative;
+    z-index: 999;
+}
+/* ========== 恢复位置时的定位提示 ========== */
+.restore-locate-tip {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 60px 20px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+    min-height: 180px;
+    animation: fadeIn 0.3s ease;
+}
+
+.restore-spinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid rgba(74, 144, 226, 0.2);
+    border-top-color: var(--accent-blue);
+    border-radius: 50%;
+    animation: spin 0.9s ease-in-out infinite;
+}
+
+.restore-text {
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+}
+
+.restore-text .restore-sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+/* ========== 防止 JS 未执行时的布局抖动 ========== */
+/* 这些元素最终由 JS 控制显示/隐藏，默认先隐藏，避免"裸状态"闪现 */
+#section3Container { display: none; }
+.bottom-login-prompt { display: none; }
+
+/* ========== 页面加载遮罩 ========== */
+#appLoading {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-gradient-start, #FFFBD6);
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+#appLoading.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+.app-loading-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+.app-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(74, 144, 226, 0.2);
+    border-top-color: var(--accent-blue, #4a90e2);
+    border-radius: 50%;
+    animation: appLoadingSpin 0.9s linear infinite;
+}
+.app-loading-text {
+    font-size: 14px;
+    color: var(--text-tertiary, #999);
+    letter-spacing: 0.5px;
+}
+@keyframes appLoadingSpin {
+    to { transform: rotate(360deg); }
+}
+@media (prefers-color-scheme: dark) {
+    #appLoading { background: var(--bg-gradient-start, #121212); }
+}
+/* ========== 图片右下角：双击放大提示 ========== */
+/* 确保所有图片容器都能相对定位 */
+.post-image-item {
+    position: relative !important;
+}
+
+/* 提示框样式 */
+.image-zoom-hint {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    background: rgba(0, 0, 0, 0.5); /* 半透明黑底 */
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    color: #ffffff;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 10;
+    pointer-events: none; /* 核心：让鼠标事件穿透，不影响双击图片 */
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+}
+
+/* 鼠标悬停时稍微明显一点 */
+.post-image-item:hover .image-zoom-hint {
+    opacity: 1;
+}
+
+/* 图标样式 */
+.image-zoom-hint i {
+    font-size: 12px;
+}
+
+/* 针对多图模式（小方块）的特别优化：隐藏文字，只留放大镜，防止遮挡图片 */
+.post-image-item.multiple .image-zoom-hint {
+    padding: 4px;
+    border-radius: 50%;
+    right: 4px;
+    bottom: 4px;
+}
+
+.post-image-item.multiple .image-zoom-hint span {
+    display: none; /* 小图里只显示图标 */
+}
+
+/* 手机端适配：字稍微小一点 */
+@media (max-width: 480px) {
+    .image-zoom-hint {
+        font-size: 11px;
+        padding: 3px 6px;
+    }
+    .post-image-item.single .image-zoom-hint {
+        right: 5px;
+        bottom: 5px;
+    }
+}
+/* ==================================================== */
+/* ========== 发帖、评论、评论区模态框全屏化改造 ========== */
+/* ==================================================== */
+
+/* 三个模态框全屏铺满 */
+#postModal .modal-content,
+#commentModal .modal-content,
+#commentshowModal .modal-content {
+    height: 100% !important;
+    max-height: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important; /* 去掉圆角 */
+    padding: 20px 15px 20px 15px !important; /* 底部留白由滚动区控制 */
+    display: flex;
+    flex-direction: column;
+    /* 适配现代手机浏览器地址栏高度 */
+    height: 100dvh !important; 
+}
+
+/* 内部滚动区域自适应撑满剩余空间 */
+#postModal .modal-scrollable,
+#commentModal .modal-scrollable {
+    max-height: none !important;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 40px; /* 底部留出安全距离，防止误触 */
+}
+
+/* 评论区列表自适应撑满 */
+#commentshowModal .modal-comments-list {
+    max-height: none !important;
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 0 !important; /* 移除原有的 77px 间距 */
+}
+
+/* 确保关闭按钮在全屏下依然显眼 */
+#postModal .modal-close-btn,
+#commentModal .modal-close-btn,
+#commentshowModal .modal-close-btn {
+    top: 15px;
+    right: 15px;
+    z-index: 100;
+}
+
+/* 全屏下的底部按钮优化（取消部分不需要的间距） */
+#postModal .btn,
+#commentModal .btn {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-shrink: 0; /* 防止按钮被挤压 */
+}
+
+/* 因为全屏了，原本 .bottom-modal 自带的 padding-bottom: 100px 要去掉 */
+.modal-mask.bottom-modal #postModal .modal-content,
+.modal-mask.bottom-modal #commentModal .modal-content {
+    padding-bottom: 20px !important;
+}
+
+/* 适配 iOS 底部安全区（刘海屏、小黑条） */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    #postModal .modal-content,
+    #commentModal .modal-content,
+    #commentshowModal .modal-content {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+    }
 }

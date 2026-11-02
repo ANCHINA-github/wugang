@@ -1,21 +1,20 @@
 <?php
 /**
  * 找回密码页面 - App 风格
- * 功能：输入ID和昵称，匹配后显示密码
+ * 功能：输入 QQ号 和昵称，匹配后显示密码
+ * 注意：系统 ID 不可用于找回密码（防止被猜到其他用户账号）
  */
 session_start();
 
 // ========== 记录/获取来源页 ==========
-$fallbackUrl = 'core.php';                 // 没有任何来源时的兜底
+$fallbackUrl = 'core.php';
 $self        = $_SERVER['PHP_SELF'];
 $referer     = $_SERVER['HTTP_REFERER'] ?? '';
 $fromUrl     = $_SESSION['recover_from'] ?? $fallbackUrl;
 
-// 只接受“非本页”且“同站”的来源
 if ($referer !== '' && strpos($referer, $self) === false) {
     $refHost = parse_url($referer, PHP_URL_HOST);
     $curHost = $_SERVER['HTTP_HOST'] ?? '';
-    // 相对路径时 $refHost 为 null，也放行
     if ($refHost === null || $refHost === '' || strcasecmp($refHost, $curHost) === 0) {
         $_SESSION['recover_from'] = $referer;
         $fromUrl = $referer;
@@ -27,11 +26,12 @@ $foundPassword = '';
 $debugInfo = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+    $id    = isset($_POST['id']) ? trim($_POST['id']) : '';
     $pname = isset($_POST['pname']) ? trim($_POST['pname']) : '';
 
-    if (!preg_match('/^\d{10}$/', $id)) {
-        $message = 'ID 必须为10位数字。';
+    // 只接受真实 QQ 号：5~11 位、不以 0 开头
+    if (!preg_match('/^[1-9]\d{4,10}$/', $id)) {
+        $message = 'QQ号必须为 5~11 位数字，且不能以 0 开头。';
     } elseif ($pname === '') {
         $message = '昵称不能为空。';
     } else {
@@ -59,7 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $found = null;
                     foreach ($users as $user) {
-                        if (isset($user['id'], $user['pname']) && $user['id'] === $id && $user['pname'] === $pname) {
+                        // 只匹配 id(QQ号) + pname(昵称)，绝不匹配 system_id
+                        if (isset($user['id'], $user['pname'])
+                            && (string)$user['id'] === $id
+                            && $user['pname'] === $pname) {
                             $found = $user;
                             break;
                         }
@@ -67,10 +70,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if ($found) {
                         $foundPassword = $found['password'];
                     } else {
-                        $message = "未找到匹配的用户，请检查ID和昵称是否完全一致（包括大小写和空格）。";
+                        $message = "未找到匹配的用户，请检查 QQ号 和昵称是否完全一致（包括大小写和空格）。";
+                        // 调试信息（上线时建议关掉）
                         $debugInfo .= "当前用户列表：";
                         foreach ($users as $u) {
-                            $debugInfo .= " [ID:{$u['id']}, 昵称:{$u['pname']}]";
+                            $debugInfo .= " [QQ:{$u['id']}, 昵称:{$u['pname']}]";
                         }
                     }
                 }
@@ -364,7 +368,7 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
     </header>
 
     <main class="app-main">
-        <p class="lead">输入 QQ 号和昵称来验证身份</p>
+        <p class="lead">输入 QQ号 和昵称来验证身份</p>
 
         <?php if ($message !== ''): ?>
             <div class="banner error"><?php echo htmlspecialchars($message); ?></div>
@@ -381,10 +385,10 @@ $fromUrlEsc = htmlspecialchars($fromUrl, ENT_QUOTES, 'UTF-8');
             <div class="field">
                 <label for="id">QQ号<span class="req">*</span></label>
                 <input type="text" id="id" name="id"
-                       inputmode="numeric" pattern="\d{10}" maxlength="10"
-                       placeholder="例如 0000000001"
+                       inputmode="numeric" pattern="[1-9]\d{4,10}" maxlength="11"
+                       placeholder="例如 9*******3"
                        value="<?php echo isset($_POST['id']) ? htmlspecialchars($_POST['id']) : ''; ?>"
-                       oninput="value=value.replace(/[^0-9]/g,'')"
+                       oninput="value=value.replace(/[^0-9]/g,'').replace(/^0+/, '')"
                        required>
             </div>
 
